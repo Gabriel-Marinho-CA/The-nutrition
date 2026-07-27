@@ -1,0 +1,21 @@
+ {
+    "sections": {
+      "recently_viewed_card_PTVApz": {
+        "type": "recently-viewed-card",
+        "name": "Recently viewed card",
+        "settings": {
+          "text_alignment": "left",
+          "image_ratio": "square",
+          "show_video": false,
+          "show_secondary_image": false,
+          "show_vendor": true,
+          "show_product_rating": true,
+          "enable_quick_add_button": true
+        }
+      }
+    },
+    "order": [      
+      "recently_viewed_card_PTVApz"
+    ]
+  }
+  

@@ -1,0 +1,259 @@
+{% if cart != empty %}
+  <style>
+    [data-section-id="{{ section.id }}"]
+      {
+
+          {% if section.settings.margin-top %}
+              --section-gap-top: {{ section.settings.margin-top }}px;
+          {% endif %}
+
+          {% if section.settings.margin-bottom %}
+              --section-gap-bottom: {{ section.settings.margin-bottom }}px;
+          {% endif %}
+
+      {%- if section.settings.show_mobile_spacing -%}
+          --section-gap-top-mobile: {{ section.settings.margin-top-mobile }}px;
+      {%- endif -%}
+
+      {%- if section.settings.show_mobile_spacing -%}
+          --section-gap-bottom-mobile: {{ section.settings.margin-bottom-mobile }}px;
+      {%- endif -%}
+
+      }
+  </style>
+  <div
+    data-section-id="{{ section.id }}"
+    class="wt-cart__wrapper cart-page"
+    id="main-cart-footer"
+    data-id="{{ section.id }}"
+  >
+    <div>
+      <div class="wt-cart__footer">
+        {% render 'cart-additional-features', context: 'page' %}
+
+        {%- comment -%}
+          Additional service checkbox — DOM mirrors the cart-drawer footer
+          (snippets/cart-drawer.liquid → `<div class="wt-cart__subtitle">…cart-checkbox…</div>`).
+          The shared `cart-checkbox.liquid` snippet handles both product-based
+          (AJAX add/remove) and attribute-based modes; the same
+          `cart-service-checkbox.js` web component drives both surfaces.
+        {%- endcomment -%}
+        <div class="wt-cart__subtitle">
+          {%- if settings.cart_show_additional_service -%}
+            {%- render 'cart-checkbox' -%}
+          {%- endif -%}
+        </div>
+
+        <div class="wt-cart__subtitle__tax">
+          {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+            {{
+              'sections.cart.taxes_included_and_shipping_policy_html'
+              | t: link: shop.shipping_policy.url, tabindex: 0
+            }}
+          {%- elsif cart.taxes_included -%}
+            {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+          {%- elsif shop.shipping_policy.body != blank -%}
+            {{
+              'sections.cart.taxes_and_shipping_policy_at_checkout_html'
+              | t: link: shop.shipping_policy.url, tabindex: 0
+            }}
+          {%- else -%}
+            {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+          {%- endif -%}
+        </div>
+        <div class="wt-cart__footer__body">
+          {% for block in section.blocks %}
+            {%- case block.type -%}
+              {%- when '@app' -%}
+                {% render block %}
+              {%- when 'custom_liquid' -%}
+                {{ block.settings.custom_liquid }}
+              {%- when 'subtotal' -%}
+                <div class="js-contents">
+                  {%- comment -%}
+                    Subtotal block — DOM mirrors the cart-drawer footer
+                    (snippets/cart-footer.liquid). The `.wt-cart__savings`
+                    sits *inside* `.wt-cart__subtotal` so the existing
+                    drawer styles apply identically on the page.
+                  {%- endcomment -%}
+                  <div class="wt-cart__subtotal " {{ block.shopify_attributes }}>
+                    <div class="wt-cart__subtotal__label">
+                      <span class="text">{{ 'sections.cart.subtotal' | t }}</span>
+                    </div>
+                    <div class="wt-cart__subtotal__value">
+                      {{ cart.total_price | money_with_currency }}
+                    </div>
+                    {%- if settings.cart_show_savings and cart.total_discount > 0 -%}
+                      {%- assign savings_formatted = cart.total_discount | money-%}
+                      {%- assign savings_label = settings.cart_savings_label | replace: '||savings||', savings_formatted -%}
+                      <div class="wt-cart__savings">
+                        <span class="wt-cart__savings__label">{{ savings_label }}</span>
+                        <span class="wt-cart__savings__original">{{ cart.original_total_price | money }}</span>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  {%- if cart.cart_level_discount_applications.size > 0 -%}
+                    <div>
+                      <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                        {%- for discount in cart.cart_level_discount_applications -%}
+                          <li class="discounts__discount discounts__discount--position">
+                            {%- render 'icon-discount' -%}
+                            {{ discount.title }}
+                            (-{{ discount.total_allocated_amount | money }})
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- else -%}
+                <div class="wt-cart__actions" {{ block.shopify_attributes }}>
+                  <noscript>
+                    <button
+                      aria-label="{{ 'sections.cart.update' | t }}"
+                      type="submit"
+                      class="cart__update-button button button--secondary"
+                      form="cart"
+                    >
+                      {{ 'sections.cart.update' | t }}
+                    </button>
+                  </noscript>
+
+                  <button
+                    aria-label="{{ 'sections.cart.checkout' | t }}"
+                    type="submit"
+                    class="wt-cart__cta cart__checkout"
+                    name="checkout"
+                    {% if cart == empty %}
+                      disabled
+                    {% endif %}
+                    form="cart"
+                  >
+                    {% if settings.enable-lock-icon %}
+                      {% render 'icon-lock' %}
+                    {% endif %}
+                    {{ 'sections.cart.checkout' | t }}
+                  </button>
+
+                  <a
+                    href="{{ routes.all_products_collection_url }}"
+                    class="wt-button wt-button--secondary wt-button--full-width wt-cart__back-link"
+                  >
+                    {{ 'general.continue_shopping' | t }}
+                    {% comment %} {% render 'icons', id: 'arrow-right' %} {% endcomment %}
+                  </a>
+                </div>
+
+                {%- if additional_checkout_buttons -%}
+                  <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+                    {{ content_for_additional_checkout_buttons }}
+                  </div>
+                {%- endif -%}
+            {%- endcase -%}
+          {% endfor %}
+
+          {%- comment -%}
+            Payment badge — shared snippet, identical rendering to the
+            cart-drawer footer (snippets/cart-footer.liquid). Sits at the
+            end of `.wt-cart__footer__body`, after the action buttons.
+          {%- endcomment -%}
+          {%- render 'cart-payment-badge' -%}
+
+          <div id="cart-errors"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-footer.name",
+  "class": "cart__footer-wrapper",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.global.section_spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin-top",
+      "min": 0,
+      "max": 100,
+      "unit": "px",
+      "step": 4,
+      "default": 40,
+      "label": "t:sections.settings.settings.distance-top.label"
+    },
+    {
+      "type": "range",
+      "id": "margin-bottom",
+      "min": 0,
+      "max": 100,
+      "unit": "px",
+      "step": 4,
+      "default": 0,
+      "label": "t:sections.settings.settings.distance-bottom.label",
+      "info": "t:sections.settings.settings.distance-bottom.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_spacing",
+      "label": "t:sections.settings.settings.show-mobile-spacing.label"
+    },
+    {
+      "type": "range",
+      "id": "margin-top-mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 20,
+      "unit": "px",
+      "label": "t:sections.settings.settings.distance-top-mobile.label",
+      "visible_if": "{{ section.settings.show_mobile_spacing }}"
+    },
+    {
+      "type": "range",
+      "id": "margin-bottom-mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 20,
+      "unit": "px",
+      "label": "t:sections.settings.settings.distance-bottom-mobile.label",
+      "visible_if": "{{ section.settings.show_mobile_spacing }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "custom_liquid",
+      "name": "t:sections.custom-liquid.name",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "t:sections.custom-liquid.settings.custom_liquid.label",
+          "info": "t:sections.custom-liquid.settings.custom_liquid.info"
+        }
+      ]
+    },
+    {
+      "type": "subtotal",
+      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
+      "limit": 1
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.main-cart-footer.blocks.buttons.name",
+      "limit": 1
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

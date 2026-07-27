@@ -1,0 +1,653 @@
+{% doc %}
+  @prompt
+    Crie uma seção de selos de confiança (trust badges) com 5 blocos horizontais, 
+    estilo minimalista e premium, para uma marca de suplementos nutricionais chamada 
+    The Nutrition.
+    
+    Cada bloco deve ter: um ícone de linha fina (outline, sem preenchimento, estilo 
+    elegante), um título curto em 2 linhas, tudo alinhado ao centro.
+    
+    Os 5 selos são:
+    1. Ícone de certificado/selo + "Qualidade Certificada"
+    2. Ícone de frasco/tubo de ensaio + "Testado em Laboratório"
+    3. Ícone de folha/natureza + "Ingredientes Puros"
+    4. Ícone de fábrica/escudo + "Produzido no Brasil"
+    5. Ícone de check/aprovação + "Aprovado por Nutricionistas"
+    
+    Estilo visual: fundo branco, ícones e texto em preto ou cinza escuro, 
+    separadores verticais finos entre os blocos, tipografia sans-serif moderna, 
+    uppercase no texto, espaçamento generoso, sem cores vibrantes — visual clean 
+    e sofisticado como marcas de skincare/wellness premium., Ajuste a seção "Features Banner" que já existe na home, logo abaixo do Slideshow, 
+    com as seguintes alterações:
+    
+    1. ESPAÇAMENTO SUPERIOR: remova todo o espaçamento/distância entre esta seção e a 
+    seção Slideshow acima dela, para que a barra branca fique colada diretamente 
+    embaixo da imagem do slideshow, sem nenhum respiro entre as duas seções.
+    
+    2. ESPAÇAMENTO INFERIOR: mantenha um espaçamento de 30px entre esta seção e a 
+    próxima seção abaixo dela (Shop By Category), para criar uma separação visual clara.
+    
+    3. ALTURA DA SEÇÃO: aumente o padding vertical interno da seção (espaço acima e 
+    abaixo do conteúdo de ícones e texto) para que a barra branca fique mais alta e 
+    com mais respiro visual, dando uma sensação premium e espaçosa, similar a seções 
+    de trust badges de marcas de skincare/wellness de alto padrão.
+    
+    4. ÍCONES EDITÁVEIS: garanta que cada um dos ícones desta seção continue sendo 
+    individualmente editável através do painel de configurações, permitindo trocar 
+    cada ícone por outro da biblioteca do tema ou fazer upload de um ícone customizado 
+    (SVG ou PNG) a qualquer momento, sem afetar os demais blocos.
+    
+    5. COMPORTAMENTO MOBILE: mantenha a visualização em carrossel deslizável (com 
+    setas de navegação) no mobile, exibindo 2 itens visíveis por vez, como já está 
+    configurado atualmente., não consigo ver o bloco, antes eu conseguia, depois dessa alteração ele sumiu, os ícones precisam ser alteráveis a qualquer momento, quero que esse elemento esteja grudado com o slideshow, sem nenhum espaço entre eles
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-trust-badges-{{ ai_gen_id }} {
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_vertical }}px 20px;
+    width: 100%;
+    display: block;
+    margin-top: {{ block.settings.margin_top }}px;
+    margin-bottom: {{ block.settings.margin_bottom }}px;
+  }
+
+  .ai-trust-badges-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: {{ block.settings.gap }}px;
+    align-items: center;
+  }
+
+  .ai-trust-badge-item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: {{ block.settings.icon_text_gap }}px;
+    padding: 0 15px;
+    position: relative;
+  }
+
+  .ai-trust-badge-item-{{ ai_gen_id }}:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: {{ block.settings.divider_height }}%;
+    background-color: {{ block.settings.divider_color }};
+    opacity: {{ block.settings.divider_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-trust-badge-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-trust-badge-icon-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-trust-badge-icon-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    stroke: {{ block.settings.icon_color }};
+    fill: none;
+    stroke-width: {{ block.settings.icon_stroke_width }};
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ai-trust-badge-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.text_size }}px;
+    color: {{ block.settings.text_color }};
+    text-transform: {{ block.settings.text_transform }};
+    letter-spacing: {{ block.settings.letter_spacing }}px;
+    line-height: {{ block.settings.line_height }};
+    font-weight: {{ block.settings.font_weight }};
+    max-width: 140px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-trust-badges-container-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+      gap: {{ block.settings.gap_mobile }}px;
+    }
+
+    .ai-trust-badge-item-{{ ai_gen_id }}:nth-child(3n)::after {
+      display: none;
+    }
+
+    .ai-trust-badge-icon-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size_mobile }}px;
+      height: {{ block.settings.icon_size_mobile }}px;
+    }
+
+    .ai-trust-badge-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size_mobile }}px;
+    }
+
+    .ai-trust-badges-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding_vertical_mobile }}px 15px;
+      margin-top: {{ block.settings.margin_top_mobile }}px;
+      margin-bottom: {{ block.settings.margin_bottom_mobile }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-trust-badges-container-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ai-trust-badge-item-{{ ai_gen_id }}:nth-child(3n)::after {
+      display: block;
+    }
+
+    .ai-trust-badge-item-{{ ai_gen_id }}:nth-child(2n)::after {
+      display: none;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-trust-badges-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-trust-badges-container-{{ ai_gen_id }}">
+    
+    <div class="ai-trust-badge-item-{{ ai_gen_id }}">
+      <div class="ai-trust-badge-icon-{{ ai_gen_id }}">
+        {% if block.settings.badge_1_icon %}
+          <img 
+            src="{{ block.settings.badge_1_icon | image_url: width: 200 }}" 
+            alt="{{ block.settings.badge_1_text }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        {% else %}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        {% endif %}
+      </div>
+      <div class="ai-trust-badge-text-{{ ai_gen_id }}">
+        {{ block.settings.badge_1_text }}
+      </div>
+    </div>
+
+    <div class="ai-trust-badge-item-{{ ai_gen_id }}">
+      <div class="ai-trust-badge-icon-{{ ai_gen_id }}">
+        {% if block.settings.badge_2_icon %}
+          <img 
+            src="{{ block.settings.badge_2_icon | image_url: width: 200 }}" 
+            alt="{{ block.settings.badge_2_text }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        {% else %}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M9 2v2.5M15 2v2.5"/>
+            <rect x="3" y="6" width="18" height="15" rx="2"/>
+            <path d="M3 10h18"/>
+            <path d="M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01M15 17h.01"/>
+          </svg>
+        {% endif %}
+      </div>
+      <div class="ai-trust-badge-text-{{ ai_gen_id }}">
+        {{ block.settings.badge_2_text }}
+      </div>
+    </div>
+
+    <div class="ai-trust-badge-item-{{ ai_gen_id }}">
+      <div class="ai-trust-badge-icon-{{ ai_gen_id }}">
+        {% if block.settings.badge_3_icon %}
+          <img 
+            src="{{ block.settings.badge_3_icon | image_url: width: 200 }}" 
+            alt="{{ block.settings.badge_3_text }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        {% else %}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3z"/>
+            <circle cx="12" cy="14" r="2"/>
+          </svg>
+        {% endif %}
+      </div>
+      <div class="ai-trust-badge-text-{{ ai_gen_id }}">
+        {{ block.settings.badge_3_text }}
+      </div>
+    </div>
+
+    <div class="ai-trust-badge-item-{{ ai_gen_id }}">
+      <div class="ai-trust-badge-icon-{{ ai_gen_id }}">
+        {% if block.settings.badge_4_icon %}
+          <img 
+            src="{{ block.settings.badge_4_icon | image_url: width: 200 }}" 
+            alt="{{ block.settings.badge_4_text }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        {% else %}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <rect x="3" y="8" width="18" height="12" rx="2"/>
+            <path d="M7 8V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/>
+            <path d="M12 12v4"/>
+            <path d="M8 16h8"/>
+          </svg>
+        {% endif %}
+      </div>
+      <div class="ai-trust-badge-text-{{ ai_gen_id }}">
+        {{ block.settings.badge_4_text }}
+      </div>
+    </div>
+
+    <div class="ai-trust-badge-item-{{ ai_gen_id }}">
+      <div class="ai-trust-badge-icon-{{ ai_gen_id }}">
+        {% if block.settings.badge_5_icon %}
+          <img 
+            src="{{ block.settings.badge_5_icon | image_url: width: 200 }}" 
+            alt="{{ block.settings.badge_5_text }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        {% else %}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        {% endif %}
+      </div>
+      <div class="ai-trust-badge-text-{{ ai_gen_id }}">
+        {{ block.settings.badge_5_text }}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Selos de confiança",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Selo 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_1_icon",
+      "label": "Ícone customizado"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_text",
+      "label": "Texto",
+      "default": "Qualidade Certificada"
+    },
+    {
+      "type": "header",
+      "content": "Selo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_2_icon",
+      "label": "Ícone customizado"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_text",
+      "label": "Texto",
+      "default": "Testado em Laboratório"
+    },
+    {
+      "type": "header",
+      "content": "Selo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_3_icon",
+      "label": "Ícone customizado"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_text",
+      "label": "Texto",
+      "default": "Ingredientes Puros"
+    },
+    {
+      "type": "header",
+      "content": "Selo 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_4_icon",
+      "label": "Ícone customizado"
+    },
+    {
+      "type": "text",
+      "id": "badge_4_text",
+      "label": "Texto",
+      "default": "Produzido no Brasil"
+    },
+    {
+      "type": "header",
+      "content": "Selo 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_5_icon",
+      "label": "Ícone customizado"
+    },
+    {
+      "type": "text",
+      "id": "badge_5_text",
+      "label": "Texto",
+      "default": "Aprovado por Nutricionistas"
+    },
+    {
+      "type": "header",
+      "content": "Espaçamento (Desktop)"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Margem superior",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Margem inferior",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Padding vertical interno",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Espaçamento (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "label": "Margem superior",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "label": "Margem inferior",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical_mobile",
+      "label": "Padding vertical interno",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Cores"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Fundo",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Ícones padrão",
+      "default": "#151515"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Texto",
+      "default": "#151515"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divisores",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "header",
+      "content": "Tamanhos (Desktop)"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Tamanho dos ícones",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Tamanho do texto",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Espaço entre itens",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "icon_text_gap",
+      "label": "Espaço ícone-texto",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Tamanhos (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "label": "Tamanho dos ícones",
+      "min": 25,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "label": "Tamanho do texto",
+      "min": 9,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Espaço entre itens",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Estilo"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Largura máxima",
+      "min": 1000,
+      "max": 1900,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Transformação do texto",
+      "options": [
+        {
+          "value": "none",
+          "label": "Normal"
+        },
+        {
+          "value": "uppercase",
+          "label": "Maiúsculas"
+        },
+        {
+          "value": "lowercase",
+          "label": "Minúsculas"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "label": "Espaçamento entre letras",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0.5
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "label": "Altura da linha",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.4
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Peso da fonte",
+      "options": [
+        {
+          "value": "300",
+          "label": "Leve"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Médio"
+        },
+        {
+          "value": "600",
+          "label": "Semi-negrito"
+        },
+        {
+          "value": "700",
+          "label": "Negrito"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "icon_stroke_width",
+      "label": "Espessura dos ícones padrão",
+      "min": 1,
+      "max": 3,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "divider_height",
+      "label": "Altura dos divisores",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "divider_opacity",
+      "label": "Opacidade dos divisores",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Selos de confiança"
+    }
+  ]
+}
+{% endschema %}
