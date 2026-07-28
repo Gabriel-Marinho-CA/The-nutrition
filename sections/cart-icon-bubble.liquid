@@ -1,5 +1,19 @@
-{% render 'icons', id: 'bag' %}
-{% if cart.item_count > 0 %}
-    <span class="wt-header__panel__counter">{{ cart.item_count }}</span> 
+{% comment %}
+  Conteúdo do ícone de carrinho no header.
+  Espelha o markup dentro de <a id="cart-icon-bubble"> em sections/page-header.liquid:
+  o cart-drawer recarrega esta seção e substitui o innerHTML daquele link.
+{% endcomment %}
+{% if settings.bag_icon %}
+  {{
+    settings.bag_icon
+    | image_url: width: settings.bag_icon.width
+    | image_tag: class: 'svg-icon svg-icon--bag'
+  }}
+{% else %}
+  {% render 'icons', id: 'bag' %}
 {% endif %}
-<span class="wt-header__panel__label">Cart</span>
+
+{% if cart.item_count != 0 %}
+  <span class="wt-header__panel__counter">{{ cart.item_count }}</span>
+{% endif %}
+<span class="wt-header__panel__label">{{ 'templates.cart.cart' | t }}</span>

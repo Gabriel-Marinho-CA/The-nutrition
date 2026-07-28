@@ -1,0 +1,31 @@
+{{ 'component-shipping-bar.css' | asset_url | stylesheet_tag }}
+
+{% if settings.show_free_shipping %}
+  {% assign free_shipping_min = settings.min_free_shipping | times: 100 | default: 0 %}
+  {% assign cart_total = cart.total_price | default: 0 %}
+  {% assign amount_left = free_shipping_min | minus: cart_total %}
+
+  {% if free_shipping_min > 0 %}
+    {% assign progress = cart_total | times: 100 | divided_by: free_shipping_min %}
+    {% if progress > 100 %}
+      {% assign progress = 100 %}
+    {% endif %}
+    <div class="shipping-bar__wrapper" data-shpping="{{ settings.min_free_shipping }}">
+      <div class="shipping-bar__text">
+        <span>
+          {% if cart_total >= free_shipping_min %}
+            Parabéns, você ganhou <b>frete grátis!</b>
+          {% else %}
+            Faltam <b>{{ amount_left | money }}</b> para o frete grátis.
+          {% endif %}
+        </span>
+        <span class="svg-wrapper">
+          {{ 'icon-truck-cart.svg' | inline_asset_content }}
+        </span>
+      </div>
+      <div class="shipping-bar">
+        <div class="shipping-bar__fill" style="--width: {{ progress }}%;"></div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

@@ -1,0 +1,72 @@
+.shipping-bar__wrapper {
+
+    /* === COLORS === (ajuste aqui para a identidade da loja) */
+
+    --inner-bar-background: rgb(var(--color-button));
+    --background-wrapper: rgba(var(--color-foreground), 0.05);
+    --text-color-complete-bar: rgb(var(--color-foreground));
+    --text-color: rgb(var(--color-foreground));
+    --not-complete-inner-bar: rgb(var(--color-background));
+
+    /* === COLORS === */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 2.4rem 1.2rem;
+    background: var(--background-wrapper);
+    border-radius: 0.8rem;
+    margin-bottom: 1.5rem;
+
+    .shipping-bar {
+        background: var(--not-complete-inner-bar);
+        border-radius: 100px;
+        height: 11px;
+        width: 100%;
+        display: flex;
+    }
+
+    .shipping-bar__fill {
+        display: block !important;
+        background: var(--inner-bar-background);
+        height: 100%;
+        border-radius: inherit;
+        transition: width 0.3s;
+        width: var(--width);
+
+        height: 11px;
+    }
+
+    .shipping-bar__text {
+        color: var(--text-color);
+        width: 100%;
+        
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 130%;
+        /* 15.6px */
+        text-align: start;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        color: rgba(var(--color-foreground));
+
+        b {
+            color: var(--text-color-complete-bar);
+        }
+    }
+}
+
+.drawer__inner-empty .shipping-bar__wrapper {
+    position: absolute;
+    top: 6rem;
+    width: calc(100% - 3rem);
+}
+
+
+.cart-drawer__warnings {
+    padding: 16rem 0;
+}

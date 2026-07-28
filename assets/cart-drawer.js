@@ -1,245 +1,175 @@
-class CartDrawerSection extends HTMLElement {
-  cartUpdateUnsubscriber = undefined;
+// ─────────────────────────────────────────────────────────────────────────────
+// Cart drawer (mini cart)
+//
+// Grupos "Compre X Leve Y" (brindes) — defina aqui os grupos da loja.
+// Cada grupo:
+//   mains: variantes que disparam o brinde. `factor` = qtd de brinde por unidade.
+//   bonus: id da variante do brinde.
+// Exemplo:
+//   { mains: [{ id: 1234567890, factor: 1 }], bonus: 9876543210 }
+//
+// Pode ser sobrescrito antes deste script carregar (window.bxgyLinkedGroups = [...]).
+// ─────────────────────────────────────────────────────────────────────────────
+window.bxgyLinkedGroups = window.bxgyLinkedGroups || [];
+
+class CartDrawer extends HTMLElement {
   constructor() {
     super();
 
-    this.cartType = this.dataset.cartType;
-    this.drawerClass = "wt-cart__drawer";
-    this.drawer = this.querySelector(`.${this.drawerClass}`);
-    this.classDrawerActive = `${this.drawerClass}--open`;
-    this.pageOverlayClass = "page-overlay-cart";
-    this.activeOverlayBodyClass = `${this.pageOverlayClass}-on`;
-    this.body = document.body;
-    this.triggerQuery = [
-      `.wt-cart__trigger`,
-      `.wt-cart__back-link`,
-      `.${this.pageOverlayClass}`,
-    ].join(", ");
-    this.triggers = () => document.querySelectorAll(this.triggerQuery);
-    this.isOpen = false;
-    this.isCartPage = window.location.pathname === window.routes.cart_url;
-    this.closeButton = () => this.querySelector(".wt-cart__drawer__close");
-    this.mainTrigger = document.querySelector(".wt-cart__trigger");
-    this.toggleEelements = () =>
-      this.querySelectorAll(this.dataset.toggleTabindex);
-
-    // Stores element that opened the drawer (for focus restore after close)
-    this.openerEl = null;
+    this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
+    this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+    this.setHeaderCartIconAccessibility();
   }
 
   connectedCallback() {
-    if (this.cartType === "page" || this.isCartPage) {
-      document.addEventListener("cart-drawer:refresh", (e) =>
-        this.refreshCartDrawer(e),
-      );
-      return;
-    }
-
-    this.init();
-    this.cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, () => {
-      if (this.isOpen) {
-        setTabindex(this.toggleEelements(), "0");
-        this.closeButton().focus();
-      }
+    // O product-form deste tema apenas publica `cartUpdate`; ele não chama
+    // renderContents(). Reagimos ao evento para atualizar e abrir o drawer.
+    this.cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
+      if (event.source !== 'product-form') return;
+      this.refresh({ open: true });
     });
+
+    this.refreshListener = () => this.refresh({ open: false });
+    document.addEventListener('cart-drawer:refresh', this.refreshListener);
   }
 
   disconnectedCallback() {
-    if (this.cartUpdateUnsubscriber) {
-      this.cartUpdateUnsubscriber();
-    }
+    if (this.cartUpdateUnsubscriber) this.cartUpdateUnsubscriber();
+    if (this.refreshListener) document.removeEventListener('cart-drawer:refresh', this.refreshListener);
   }
 
-  rememberOpener(e) {
-    // Prefer currentTarget (the element with listener), fallback to activeElement
-    const current = e?.currentTarget;
-    const active = document.activeElement;
+  setHeaderCartIconAccessibility() {
+    const cartLink = document.querySelector('#cart-icon-bubble');
+    if (!cartLink) return;
 
-    // If click landed on svg/span inside button, climb up to interactive parent
-    const interactive =
-      current instanceof HTMLElement
-        ? current.closest?.("button, a, [tabindex], input, select") || current
-        : null;
-
-    this.openerEl =
-      interactive instanceof HTMLElement
-        ? interactive
-        : active instanceof HTMLElement
-          ? active
-          : null;
-  }
-
-  restoreFocusToOpener() {
-    const el = this.openerEl;
-    if (!el) return;
-    if (!document.contains(el)) return;
-
-    const isDisabled =
-      el.hasAttribute("disabled") ||
-      el.getAttribute("aria-disabled") === "true";
-    if (isDisabled) return;
-
-    // Wait one frame so DOM/classes settle after closing
-    requestAnimationFrame(() => {
-      el.focus?.();
+    cartLink.setAttribute('role', 'button');
+    cartLink.setAttribute('aria-haspopup', 'dialog');
+    cartLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.open(cartLink);
+    });
+    cartLink.addEventListener('keydown', (event) => {
+      if (event.code.toUpperCase() === 'SPACE') {
+        event.preventDefault();
+        this.open(cartLink);
+      }
     });
   }
 
-  getFocusableElements() {
-    const focusableElementsSelector =
-      "button, [href], input, select, [tabindex]";
-    const focusableElements = () =>
-      Array.from(this.querySelectorAll(focusableElementsSelector)).filter(
-        (el) => !el.hasAttribute("disabled") && el.tabIndex >= 0,
-      );
+  open(triggeredBy) {
+    if (triggeredBy) this.setActiveElement(triggeredBy);
+    const cartDrawerNote = this.querySelector('[id^="Details-"] summary');
+    if (cartDrawerNote && !cartDrawerNote.hasAttribute('role')) this.setSummaryAccessibility(cartDrawerNote);
+    // here the animation doesn't seem to always get triggered. A timeout seem to help
+    setTimeout(() => {
+      this.classList.add('animate', 'active');
+    });
 
-    return {
-      focusableElements,
-      first: focusableElements()[0],
-      last: focusableElements()[focusableElements().length - 1],
-    };
-  }
-
-  temporaryHideFocusVisible() {
-    document.body.classList.add("no-focus-visible");
-  }
-
-  onToggle() {
-    if (this.hasAttribute("open")) {
-      this.removeAttribute("open");
-      this.isOpen = false;
-      // this.mainTrigger.focus();
-      this.temporaryHideFocusVisible();
-      setTabindex(this.toggleEelements(), "-1");
-
-      // Restore focus to the element that opened the drawer
-      this.restoreFocusToOpener();
-    } else {
-      this.setAttribute("open", "");
-      this.isOpen = true;
-      this.closeButton().focus();
-      this.temporaryHideFocusVisible();
-      setTabindex(this.toggleEelements(), "0");
-    }
-  }
-
-  toggleDrawerClasses() {
-    this.onToggle();
-    this.drawer.classList.toggle(this.classDrawerActive);
-    this.body.classList.toggle(this.activeOverlayBodyClass);
-
-    // dispatch a custom event on the document
-    const eventName = this.isOpen
-      ? PUB_SUB_EVENTS.cartDrawerOpen
-      : PUB_SUB_EVENTS.cartDrawerClose;
-
-    document.dispatchEvent(
-      new CustomEvent(eventName, {
-        bubbles: true,
-      }),
+    this.addEventListener(
+      'transitionend',
+      () => {
+        const containerToTrapFocusOn = this.classList.contains('is-empty')
+          ? this.querySelector('.drawer__inner-empty')
+          : document.getElementById('CartDrawer');
+        const focusElement = this.querySelector('.drawer__inner') || this.querySelector('.drawer__close');
+        trapFocus(containerToTrapFocusOn, focusElement);
+      },
+      { once: true }
     );
+
+    document.body.classList.add('overflow-hidden');
   }
 
-  init() {
-    this.addEventListener("keydown", (e) => {
-      const isTabPressed =
-        e.key === "Tab" || e.keyCode === 9 || e.code === "Tab";
-      const { first, last } = this.getFocusableElements();
-
-      if (e.key === "Escape" || e.keyCode === 27 || e.code === "Escape") {
-        if (this.isOpen) {
-          this.toggleDrawerClasses();
-        }
-      }
-
-      if (isTabPressed) {
-        if (e.shiftKey && document.activeElement === first) {
-          last.focus();
-          e.preventDefault();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          first.focus();
-          e.preventDefault();
-        }
-      }
-    });
-
-    this.triggers().forEach((trigger) => {
-      trigger.addEventListener("click", (e) => {
-        e.preventDefault();
-
-        // Save opener only when opening
-        if (!this.isOpen) this.rememberOpener(e);
-
-        this.toggleDrawerClasses();
-      });
-    });
-
-    this.addEventListener("click", (e) => {
-      if (e.target.classList.contains("wt-cart__drawer__close")) {
-        e.preventDefault();
-        this.toggleDrawerClasses();
-      }
-    });
-
-    document.addEventListener("cart-drawer:refresh", (e) =>
-      this.refreshCartDrawer(e),
-    );
+  close() {
+    this.classList.remove('active');
+    removeTrapFocus(this.activeElement);
+    document.body.classList.remove('overflow-hidden');
   }
 
-  renderContents(parsedState, isClosedCart = true) {
+  setSummaryAccessibility(cartDrawerNote) {
+    cartDrawerNote.setAttribute('role', 'button');
+    cartDrawerNote.setAttribute('aria-expanded', 'false');
+
+    if (cartDrawerNote.nextElementSibling.getAttribute('id')) {
+      cartDrawerNote.setAttribute('aria-controls', cartDrawerNote.nextElementSibling.id);
+    }
+
+    cartDrawerNote.addEventListener('click', (event) => {
+      event.currentTarget.setAttribute('aria-expanded', !event.currentTarget.closest('details').hasAttribute('open'));
+    });
+
+    cartDrawerNote.parentElement.addEventListener('keyup', onKeyUpEscape);
+  }
+
+  // Recarrega #CartDrawer + bolha do header a partir das seções, opcionalmente abrindo.
+  async refresh({ open = false } = {}) {
+    try {
+      const [drawerText, bubbleText, cartJson] = await Promise.all([
+        fetch(`${routes.cart_url}?section_id=cart-drawer`).then((r) => r.text()),
+        fetch(`${routes.cart_url}?section_id=cart-icon-bubble`).then((r) => r.text()),
+        fetch('/cart.js').then((r) => r.json()),
+      ]);
+
+      const drawerDoc = new DOMParser().parseFromString(drawerText, 'text/html');
+      const currentDrawer = this.querySelector('#CartDrawer');
+      const newDrawer = drawerDoc.querySelector('#CartDrawer');
+      if (currentDrawer && newDrawer) {
+        currentDrawer.innerHTML = newDrawer.innerHTML;
+        // Re-attach do overlay perdido no innerHTML replace
+        const overlay = currentDrawer.querySelector('#CartDrawer-Overlay');
+        if (overlay) overlay.addEventListener('click', this.close.bind(this));
+      }
+
+      this.classList.toggle('is-empty', cartJson.item_count === 0);
+
+      const bubble = document.getElementById('cart-icon-bubble');
+      const newBubble = new DOMParser().parseFromString(bubbleText, 'text/html').querySelector('.shopify-section');
+      if (bubble && newBubble) bubble.innerHTML = newBubble.innerHTML;
+    } catch (e) {
+      console.error('[cart-drawer] Erro ao atualizar:', e);
+      return;
+    }
+
+    if (open) this.open();
+  }
+
+  renderContents(parsedState) {
+    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
+      this.querySelector('.drawer__inner').classList.remove('is-empty');
+    this.productId = parsedState.id;
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector
         ? document.querySelector(section.selector)
         : document.getElementById(section.id);
-      sectionElement.innerHTML = this.getSectionInnerHTML(
-        parsedState.sections[section.id],
-        section.selector,
-      );
+
+      if (!sectionElement) return;
+      sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
     });
 
-    if (isClosedCart) {
-      setTimeout(() => {
-        this.toggleDrawerClasses();
-        if (this.isOpen) {
-          this.closeButton().focus();
-        }
-      });
-    }
+    setTimeout(() => {
+      this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+      this.open();
+    });
   }
 
-  getSectionInnerHTML(html, selector = ".shopify-section") {
-    return new DOMParser()
-      .parseFromString(html, "text/html")
-      .querySelector(selector).innerHTML;
+  getSectionInnerHTML(html, selector = '.shopify-section') {
+    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
   }
 
   getSectionsToRender() {
     return [
       {
-        id: "cart-drawer",
-        selector: "#CartDrawer",
+        id: 'cart-drawer',
+        selector: '#CartDrawer',
       },
       {
-        id: "cart-icon-bubble",
+        id: 'cart-icon-bubble',
       },
     ];
   }
 
-  refreshCartDrawer(e) {
-    const sectionsToRender = this.getSectionsToRender();
-    fetch(
-      `${window.Shopify.routes.root}?sections=${sectionsToRender[0].id},${sectionsToRender[1].id}`,
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        const parsedState = {
-          sections: response,
-        };
-        this.renderContents(parsedState, false);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+  getSectionDOM(html, selector = '.shopify-section') {
+    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector);
   }
 
   setActiveElement(element) {
@@ -247,38 +177,124 @@ class CartDrawerSection extends HTMLElement {
   }
 }
 
-customElements.define("cart-drawer", CartDrawerSection);
+customElements.define('cart-drawer', CartDrawer);
 
 class CartDrawerItems extends CartItems {
-  onCartUpdate() {
-    fetch(`${routes.cart_url}?section_id=cart-drawer`)
-      .then((response) => response.text())
-      .then((responseText) => {
-        const html = new DOMParser().parseFromString(responseText, "text/html");
-        const source = html.querySelector("cart-drawer-items");
-        if (source) {
-          this.innerHTML = source.innerHTML;
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  }
-
   getSectionsToRender() {
     return [
       {
-        id: "CartDrawer",
-        section: "cart-drawer",
-        selector: ".drawer__inner",
+        id: 'CartDrawer',
+        section: 'cart-drawer',
+        selector: '.drawer__inner',
       },
       {
-        id: "cart-icon-bubble",
-        section: "cart-icon-bubble",
-        selector: ".shopify-section",
+        id: 'cart-icon-bubble',
+        section: 'cart-icon-bubble',
+        selector: '.shopify-section',
       },
     ];
   }
 }
 
-customElements.define("cart-drawer-items", CartDrawerItems);
+customElements.define('cart-drawer-items', CartDrawerItems);
+
+// ── Compre X Leve Y (brindes) ────────────────────────────────────────────────
+// Quantidade de brinde esperada a partir dos produtos principais no carrinho.
+function bxgyExpectedQty(group, cartItems) {
+  let expected = 0;
+  for (const main of group.mains) {
+    const mainQty = cartItems.find((i) => i.variant_id === main.id)?.quantity || 0;
+    expected += window.bxgyIsCumulative ? main.factor * mainQty : mainQty > 0 ? main.factor : 0;
+  }
+  return expected;
+}
+
+// Sincroniza todos os grupos com o estado atual do carrinho.
+// Retorna true se algo foi alterado.
+async function bxgySync(cartItems) {
+  const groups = window.bxgyLinkedGroups || [];
+  let changed = false;
+
+  for (const group of groups) {
+    const expected = bxgyExpectedQty(group, cartItems);
+    const bonusItem = cartItems.find((i) => i.variant_id === group.bonus);
+    const current = bonusItem?.quantity || 0;
+    if (expected === current) continue;
+
+    try {
+      if (bonusItem) {
+        // /cart/change.js exige a key do item (variantId:hash)
+        await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: bonusItem.key, quantity: expected }),
+        });
+      } else if (expected > 0) {
+        await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: group.bonus, quantity: expected }] }),
+        });
+      }
+      changed = true;
+    } catch (e) {
+      console.error('[bxgy] Erro ao ajustar brinde:', e);
+    }
+  }
+
+  return changed;
+}
+
+// Produto adicionado pelo formulário de produto → adiciona/ajusta o brinde.
+subscribe(PUB_SUB_EVENTS.cartUpdate, async (event) => {
+  if (event.source !== 'product-form') return;
+  if (!window.buyXGetYEnabled) return;
+  if (!(window.bxgyLinkedGroups || []).length) return;
+
+  const addedId = parseInt(event.productVariantId, 10);
+  const group = window.bxgyLinkedGroups.find((g) => g.mains.some((m) => m.id === addedId));
+  if (!group) return;
+
+  const cartItems = await fetch('/cart.js')
+    .then((r) => r.json())
+    .then((c) => c.items || []);
+
+  if (await bxgySync(cartItems)) {
+    document.querySelector('cart-drawer')?.refresh({ open: false });
+  }
+});
+
+// Quantidade alterada/removida dentro do carrinho → reajusta os brindes.
+// Varre todos os grupos: remoções não informam o variantId no evento.
+subscribe(PUB_SUB_EVENTS.cartUpdate, async (event) => {
+  if (event.source !== 'cart-items') return;
+  if (!window.buyXGetYEnabled) return;
+  if (!(window.bxgyLinkedGroups || []).length) return;
+
+  // Nem todo tema envia cartData no evento — busca o carrinho quando faltar.
+  const cartItems =
+    event.cartData?.items ||
+    (await fetch('/cart.js')
+      .then((r) => r.json())
+      .then((c) => c.items || []));
+
+  if (await bxgySync(cartItems)) {
+    // onCartUpdate() não atualiza a bolha do header nem o estado vazio do drawer.
+    document.querySelector('cart-drawer')?.refresh({ open: false });
+  }
+});
+
+// No carregamento, remove brindes órfãos (produto principal removido fora do drawer).
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!window.buyXGetYEnabled) return;
+  if (!(window.bxgyLinkedGroups || []).length) return;
+
+  try {
+    const cart = await fetch('/cart.js').then((r) => r.json());
+    await bxgySync(cart.items || []);
+  } catch (e) {
+    console.error('[bxgy] Erro ao validar brindes no carregamento:', e);
+  }
+});
+
+// O <order-bump-slider> vive em `order-bump.js` (módulo ES, por causa do Swiper).

@@ -123,8 +123,13 @@
         "label": "Quantidade",
         "input_label": "Quantidade de {{ product }}",
         "increase": "Aumentar a quantidade de {{ product }}",
-        "decrease": "Diminuir a quantidade de {{ product }}"
+        "decrease": "Diminuir a quantidade de {{ product }}",
+        "note": "Ver regras de quantidade",
+        "multiples_of": "Incrementos de {{ quantity }}",
+        "min_of": "Mínimo de {{ quantity }}",
+        "max_of": "Máximo de {{ quantity }}"
       },
+      "nested_label": "{{ title }}, incluso com {{ parent_title }}",
       "price": {
         "from_price_html": "De {{ price }}",
         "regular_price": "Preço normal",
@@ -175,7 +180,8 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Envio</a> calculado no checkout.",
       "volume_pricing": {
         "note": "TODO",
-        "price_range": "TODO"
+        "price_range": "TODO",
+        "title": "Preço por volume"
       },
       "select_option": "Selecionar opção",
       "select_options": "Selecionar opções"

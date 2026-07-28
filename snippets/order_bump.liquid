@@ -1,0 +1,147 @@
+{% comment %}
+  Order bump do mini cart.
+
+  Os produtos vêm do metafield de lista de produtos `custom.produtos_orderbump`
+  do primeiro item do carrinho que tiver esse metafield preenchido.
+{% endcomment %}
+
+{{ 'component-order-bump.css' | asset_url | stylesheet_tag }}
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'order-bump.js' | asset_url }}"></script>
+
+{%- liquid
+  assign product_form_id = 'product-form-order-bump-' | append: section.id
+  assign cart_product_ids = ''
+  assign bump_products = blank
+  assign bump_found = false
+  for item in cart.items
+    assign cart_product_ids = cart_product_ids | append: item.product_id | append: ','
+    unless bump_found
+      assign title_lower = item.product.title | downcase
+      unless title_lower contains 'brinde'
+        assign meta_products = item.product.metafields.custom.produtos_orderbump.value
+        if meta_products != blank and meta_products.size > 0
+          assign bump_products = meta_products
+          assign bump_found = true
+        endif
+      endunless
+    endunless
+  endfor
+-%}
+
+{%- if bump_products != blank -%}
+  <order-bump-slider class="order-bump">
+    <p style="
+    margin: 0;
+    font-weight: bold;
+    font-size: 12px;
+    padding-left: 1rem;
+">LEVE COM DESCONTO</p>
+    <div class="order-bump__header">
+      <p class="order-bump__title">Adicione também</p>
+      <div class="order-bump__nav">
+        <button class="order-bump__nav-btn order-bump__prev" type="button" aria-label="Anterior">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="order-bump__nav-btn order-bump__next" type="button" aria-label="Próximo">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="swiper order-bump__swiper">
+      <div class="swiper-wrapper">
+        {%- for product in bump_products -%}
+          {%- assign pid_check = product.id | append: ',' -%}
+          {%- unless cart_product_ids contains pid_check -%}
+            {%- assign variant = product.selected_or_first_available_variant -%}
+            <div class="swiper-slide">
+              <div class="order-bump__card">
+                <div class="order-bump__img-wrap">
+                  {%- if product.featured_image -%}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 120 }}"
+                      alt="{{ product.title | escape }}"
+                      width="60"
+                      height="60"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+                </div>
+                <div class="order-bump__info">
+                  <p class="order-bump__name">{{ product.title | escape }}</p>
+
+                <div style="display:flex; align-items:center;gap:5px">
+                  <p class="order-bump__price">{{ variant.price | money }}</p>
+                </div>
+
+                </div>
+                <product-form
+                  class="product-form"
+                  data-hide-errors="false"
+                  data-section-id="{{ section.id }}"
+                >
+                  <div class="product-form__error-message-wrapper" role="alert" hidden>
+                    <span class="svg-wrapper">
+                      {{- 'icon-error.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="product-form__error-message"></span>
+                  </div>
+                  {%- form 'product',
+                    product,
+                    id: product_form_id,
+                    class: 'form',
+                    novalidate: 'novalidate',
+                    data-type: 'add-to-cart-form'
+                  -%}
+                    <input
+                      type="hidden"
+                      name="id"
+                      value="{{ variant.id }}"
+                      {% if variant.available == false or variant == null %}disabled{% endif %}
+                      class="product-variant-id"
+                    >
+                    <button
+                      type="submit"
+                      name="add"
+                      class="product-form__submit button button--full-width order-bump__add-btn button--primary"
+                      {% if variant.available == false or variant == null %}disabled{% endif %}
+                    >Adicionar
+                      {%- render 'loading-spinner' -%}
+                    </button>
+                  {%- endform -%}
+                </product-form>
+              </div>
+            </div>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </order-bump-slider>
+{%- endif -%}

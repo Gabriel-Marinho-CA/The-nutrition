@@ -895,6 +895,72 @@
     ]
   },
   {
+    "name": "Mini cart (cart drawer)",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Frete grátis"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_free_shipping",
+        "default": true,
+        "label": "Exibir barra de frete grátis"
+      },
+      {
+        "type": "number",
+        "id": "min_free_shipping",
+        "default": 200,
+        "label": "Valor mínimo para frete grátis",
+        "info": "Na moeda da loja, sem centavos. Ex.: 200"
+      },
+      {
+        "type": "header",
+        "content": "Parcelamento"
+      },
+      {
+        "type": "checkbox",
+        "id": "installment",
+        "default": false,
+        "label": "Exibir parcelamento no total"
+      },
+      {
+        "type": "number",
+        "id": "installment_number",
+        "default": 12,
+        "label": "Número máximo de parcelas"
+      },
+      {
+        "type": "header",
+        "content": "Brindes (Compre X Leve Y)"
+      },
+      {
+        "type": "checkbox",
+        "id": "buy_x_get_y_enabled",
+        "default": false,
+        "label": "Ativar brindes automáticos",
+        "info": "Os grupos de produto/brinde são definidos em assets/cart-drawer.js (window.bxgyLinkedGroups)."
+      },
+      {
+        "type": "checkbox",
+        "id": "buy_x_get_y_cumulative",
+        "default": false,
+        "label": "Brinde cumulativo por unidade",
+        "info": "Desmarcado: 1 brinde independente da quantidade. Marcado: multiplica pela quantidade."
+      },
+      {
+        "type": "header",
+        "content": "Observações"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_note",
+        "default": false,
+        "label": "Permitir observação do pedido no mini cart"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.cart.name",
     "settings": [
       {

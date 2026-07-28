@@ -170,8 +170,13 @@
         "label": "Quantity",
         "input_label": "Quantity for {{ product }}",
         "increase": "Increase quantity for {{ product }}",
-        "decrease": "Decrease quantity for {{ product }}"
+        "decrease": "Decrease quantity for {{ product }}",
+        "note": "View quantity rules",
+        "multiples_of": "Increments of {{ quantity }}",
+        "min_of": "Minimum of {{ quantity }}",
+        "max_of": "Maximum of {{ quantity }}"
       },
+      "nested_label": "{{ title }}, included with {{ parent_title }}",
       "pickup_availability": {
         "view_store_info": "View store information",
         "check_other_stores": "Check availability at other stores",
@@ -202,7 +207,8 @@
       "shipping_policy_html": "<a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
       "volume_pricing": {
         "note": "TODO",
-        "price_range": "TODO"
+        "price_range": "TODO",
+        "title": "Volume pricing"
       }
     },
     "modal": {
