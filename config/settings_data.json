@@ -126,6 +126,15 @@
               ]
             }
           },
+          "gift_tier_mbTzwE": {
+            "type": "gift_tier",
+            "settings": {
+              "minimum_amount": 399,
+              "gift_products": [
+                "coenzima-q10"
+              ]
+            }
+          },
           "gift_tier_Gijqcz": {
             "type": "gift_tier",
             "settings": {
@@ -148,6 +157,7 @@
         },
         "block_order": [
           "gift_tier_ibbpHN",
+          "gift_tier_mbTzwE",
           "gift_tier_Gijqcz",
           "gift_tier_JXcbp8"
         ],
