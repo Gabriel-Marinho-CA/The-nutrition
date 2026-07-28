@@ -75,6 +75,7 @@
     "type_navigation_font_size_desk": 13,
     "type_button_font_size_desk": 13,
     "fontfaces": "",
+    "buy_x_get_y_enabled": true,
     "cart_type": "drawer",
     "show_view_cart": false,
     "hide_checkout_button": false,
@@ -112,6 +113,49 @@
     "custom-badge-1-input": "New",
     "animations": true,
     "disabled_animations_on_mobile": false,
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "blocks": {
+          "gift_tier_ibbpHN": {
+            "type": "gift_tier",
+            "settings": {
+              "minimum_amount": 299,
+              "gift_products": [
+                "chaveiro-porta-whey-branco-50ml"
+              ]
+            }
+          },
+          "gift_tier_Gijqcz": {
+            "type": "gift_tier",
+            "settings": {
+              "minimum_amount": 699,
+              "gift_products": [
+                "garrafa-termica-com-canudo-branca"
+              ]
+            }
+          },
+          "gift_tier_JXcbp8": {
+            "type": "gift_tier",
+            "settings": {
+              "minimum_amount": 1000,
+              "gift_products": [
+                "garrafa-termica-com-canudo-branca",
+                "chaveiro-porta-whey-branco-50ml"
+              ]
+            }
+          }
+        },
+        "block_order": [
+          "gift_tier_ibbpHN",
+          "gift_tier_Gijqcz",
+          "gift_tier_JXcbp8"
+        ],
+        "settings": {
+          "gift_mode": "highest"
+        }
+      }
+    },
     "content_for_index": [],
     "blocks": {
       "10605107893285769442": {
