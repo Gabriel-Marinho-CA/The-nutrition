@@ -207,9 +207,6 @@ if (!customElements.get("product-form")) {
         window.location = window.routes.cart_url;
       }
 
-        window.location = window.routes.cart_url;
-      }
-
       handleErrorMessage(errorMessage = false) {
         if (this.hideErrors) return;
 
