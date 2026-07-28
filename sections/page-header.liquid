@@ -632,7 +632,19 @@
         </li>
       {%- endif -%}
       <li class="wt-header__panel__item wt-header__panel__item--cart">
-        <a href="{{ routes.cart_url }}" class="wt-header__panel__link wt-icon wt-cart__trigger" id="cart-icon-bubble">
+        {% comment %}
+          Abre o mini cart. O onclick é a fonte única do gatilho: não depende de
+          o listener do cart-drawer.js ter sido registrado. Se o drawer não
+          existir (ex.: template cart, ou JS falhou), o href leva para /cart.
+        {% endcomment %}
+        <a
+          href="{{ routes.cart_url }}"
+          class="wt-header__panel__link wt-icon wt-cart__trigger"
+          id="cart-icon-bubble"
+          role="button"
+          aria-haspopup="dialog"
+          onclick="var d=document.querySelector('cart-drawer'); if (d && typeof d.open === 'function') { event.preventDefault(); d.open(this); }"
+        >
           {% if settings.bag_icon %}
             {{
               settings.bag_icon

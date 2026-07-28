@@ -44,10 +44,10 @@ class CartDrawer extends HTMLElement {
 
     cartLink.setAttribute('role', 'button');
     cartLink.setAttribute('aria-haspopup', 'dialog');
-    cartLink.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.open(cartLink);
-    });
+
+    // O clique é tratado pelo onclick em sections/page-header.liquid — não
+    // registramos listener aqui para não abrir o drawer duas vezes.
+    // Space num <a> não dispara click nativamente; por isso só este handler.
     cartLink.addEventListener('keydown', (event) => {
       if (event.code.toUpperCase() === 'SPACE') {
         event.preventDefault();
