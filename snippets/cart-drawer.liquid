@@ -164,12 +164,15 @@
                         endif
 
                         comment
-                          Brindes: linhas cujo título contém "brinde" aparecem sem preço,
-                          sem link e sem controles de quantidade.
+                          Brindes aparecem sem preço, sem link e sem controles de
+                          quantidade. São detectados pela propriedade _brinde (usada
+                          pelos brindes por nível) ou pelo título conter "brinde".
                         endcomment
                         assign title_downcased = item.product.title | downcase
                         assign is_gift = false
-                        if title_downcased contains 'brinde'
+                        if item.properties['_brinde'] != blank
+                          assign is_gift = true
+                        elsif title_downcased contains 'brinde'
                           assign is_gift = true
                         endif
                       -%}

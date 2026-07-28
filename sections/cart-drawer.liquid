@@ -1,1 +1,84 @@
+{% comment %}
+  Mini cart (cart drawer).
+
+  Renderizada estaticamente em layout/theme.liquid via {% section 'cart-drawer' %}
+  e também buscada por `?section_id=cart-drawer` quando o drawer se atualiza.
+
+  Os blocos "Nível de brinde" alimentam window.giftTiers, consumido por
+  assets/cart-drawer.js. O script fica fora de #CartDrawer de propósito: o
+  refresh do drawer só substitui o innerHTML de #CartDrawer, então a configuração
+  publicada no carregamento da página permanece válida.
+{% endcomment %}
+
+<script>
+  window.giftTierMode = {{ section.settings.gift_mode | default: 'highest' | json }};
+  window.giftTiers = [
+    {%- for block in section.blocks -%}
+      {
+        "min": {{ block.settings.minimum_amount | times: 100 | round | default: 0 }},
+        "variants": [
+          {%- for product in block.settings.gift_products -%}
+            {{ product.selected_or_first_available_variant.id }}{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ];
+</script>
+
 {%- render 'cart-drawer' -%}
+
+{% schema %}
+{
+  "name": "Mini cart",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brindes por valor do carrinho"
+    },
+    {
+      "type": "paragraph",
+      "content": "Cada bloco é um nível: ao atingir o valor mínimo, os produtos escolhidos são adicionados ao carrinho automaticamente. O subtotal considerado ignora os próprios brindes."
+    },
+    {
+      "type": "select",
+      "id": "gift_mode",
+      "label": "Como os níveis se combinam",
+      "options": [
+        {
+          "value": "highest",
+          "label": "Somente o nível mais alto atingido"
+        },
+        {
+          "value": "cumulative",
+          "label": "Todos os níveis atingidos (acumula)"
+        }
+      ],
+      "default": "highest",
+      "info": "Com 'somente o mais alto', o nível de maior valor deve listar todos os brindes que ele concede."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gift_tier",
+      "name": "Nível de brinde",
+      "settings": [
+        {
+          "type": "number",
+          "id": "minimum_amount",
+          "label": "Valor mínimo do carrinho",
+          "default": 299,
+          "info": "Na moeda da loja. Ex.: 299 para R$ 299,00."
+        },
+        {
+          "type": "product_list",
+          "id": "gift_products",
+          "label": "Brindes deste nível",
+          "limit": 12,
+          "info": "É usada a primeira variante disponível de cada produto."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

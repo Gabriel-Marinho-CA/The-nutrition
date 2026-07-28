@@ -221,8 +221,11 @@
 
     {% sections 'footer-group' %}
 
+    {% comment %}
+      Seção (não snippet) para que os blocos de brinde apareçam no editor de temas.
+    {% endcomment %}
     {% if template != 'cart' %}
-      {% render 'cart-drawer' %}
+      {% section 'cart-drawer' %}
     {% else %}
       <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
       {% if settings.enable_discount_progress_bar %}

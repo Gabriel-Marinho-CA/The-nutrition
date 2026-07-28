@@ -245,55 +245,145 @@ async function bxgySync(cartItems) {
   return changed;
 }
 
-// Produto adicionado pelo formulário de produto → adiciona/ajusta o brinde.
-subscribe(PUB_SUB_EVENTS.cartUpdate, async (event) => {
-  if (event.source !== 'product-form') return;
-  if (!window.buyXGetYEnabled) return;
-  if (!(window.bxgyLinkedGroups || []).length) return;
+// ── Brindes por valor do carrinho ────────────────────────────────────────────
+// Os níveis vêm dos blocos da seção `cart-drawer` (ver sections/cart-drawer.liquid),
+// que publica window.giftTiers = [{ min: <centavos>, variants: [id, ...] }].
+window.giftTiers = window.giftTiers || [];
+// 'highest'    → só o nível mais alto atingido concede seus brindes.
+// 'cumulative' → todo nível atingido concede os seus.
+window.giftTierMode = window.giftTierMode || 'highest';
 
-  const addedId = parseInt(event.productVariantId, 10);
-  const group = window.bxgyLinkedGroups.find((g) => g.mains.some((m) => m.id === addedId));
-  if (!group) return;
+// Variantes que são brinde de algum nível.
+function giftTierVariantIds() {
+  const ids = new Set();
+  for (const tier of window.giftTiers) {
+    for (const variantId of tier.variants || []) ids.add(variantId);
+  }
+  return ids;
+}
 
-  const cartItems = await fetch('/cart.js')
+// Tudo que é brinde (níveis + bônus do Compre X Leve Y) — não conta para o subtotal.
+function allGiftVariantIds() {
+  const ids = giftTierVariantIds();
+  for (const group of window.bxgyLinkedGroups || []) ids.add(group.bonus);
+  return ids;
+}
+
+// Subtotal que qualifica para os níveis: exclui os próprios brindes, senão um
+// brinde com preço empurraria o carrinho para o nível seguinte.
+function qualifyingSubtotal(cartItems, giftIds) {
+  return cartItems.reduce((sum, item) => {
+    const isGift = giftIds.has(item.variant_id) || item.properties?._brinde;
+    return isGift ? sum : sum + item.final_line_price;
+  }, 0);
+}
+
+function expectedGiftVariants(cartItems) {
+  const subtotal = qualifyingSubtotal(cartItems, allGiftVariantIds());
+
+  const reached = window.giftTiers
+    .filter((tier) => (tier.variants || []).length > 0 && subtotal >= tier.min)
+    .sort((a, b) => a.min - b.min);
+
+  if (!reached.length) return new Set();
+
+  const granting = window.giftTierMode === 'cumulative' ? reached : [reached[reached.length - 1]];
+  return new Set(granting.flatMap((tier) => tier.variants));
+}
+
+// Cada brinde de nível existe no carrinho com quantidade 0 ou 1.
+async function giftTierSync(cartItems) {
+  if (!window.giftTiers.length) return false;
+
+  const expected = expectedGiftVariants(cartItems);
+  let changed = false;
+
+  for (const variantId of giftTierVariantIds()) {
+    const line = cartItems.find((i) => i.variant_id === variantId);
+    const current = line?.quantity || 0;
+    const wanted = expected.has(variantId) ? 1 : 0;
+    if (current === wanted) continue;
+
+    try {
+      if (line) {
+        await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: line.key, quantity: wanted }),
+        });
+      } else {
+        await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // _brinde marca a linha para o drawer renderizar como brinde mesmo que
+          // o título do produto não contenha "brinde".
+          body: JSON.stringify({ items: [{ id: variantId, quantity: wanted, properties: { _brinde: 'true' } }] }),
+        });
+      }
+      changed = true;
+    } catch (e) {
+      console.error('[brindes] Erro ao ajustar brinde de nível:', e);
+    }
+  }
+
+  return changed;
+}
+
+// Ponto único de sincronização dos dois mecanismos de brinde.
+async function syncCartGifts(cartItems) {
+  let changed = false;
+
+  if (window.buyXGetYEnabled && (window.bxgyLinkedGroups || []).length) {
+    changed = (await bxgySync(cartItems)) || changed;
+  }
+
+  if (window.giftTiers.length) {
+    // Se o bxgy mexeu no carrinho, recarrega antes de avaliar os níveis.
+    const items = changed
+      ? await fetch('/cart.js')
+          .then((r) => r.json())
+          .then((c) => c.items || [])
+      : cartItems;
+    changed = (await giftTierSync(items)) || changed;
+  }
+
+  return changed;
+}
+
+async function fetchCartItems() {
+  return fetch('/cart.js')
     .then((r) => r.json())
     .then((c) => c.items || []);
+}
 
-  if (await bxgySync(cartItems)) {
+// Produto adicionado pelo formulário de produto.
+subscribe(PUB_SUB_EVENTS.cartUpdate, async (event) => {
+  if (event.source !== 'product-form') return;
+
+  if (await syncCartGifts(await fetchCartItems())) {
     document.querySelector('cart-drawer')?.refresh({ open: false });
   }
 });
 
-// Quantidade alterada/removida dentro do carrinho → reajusta os brindes.
-// Varre todos os grupos: remoções não informam o variantId no evento.
+// Quantidade alterada/removida dentro do carrinho.
 subscribe(PUB_SUB_EVENTS.cartUpdate, async (event) => {
   if (event.source !== 'cart-items') return;
-  if (!window.buyXGetYEnabled) return;
-  if (!(window.bxgyLinkedGroups || []).length) return;
 
   // Nem todo tema envia cartData no evento — busca o carrinho quando faltar.
-  const cartItems =
-    event.cartData?.items ||
-    (await fetch('/cart.js')
-      .then((r) => r.json())
-      .then((c) => c.items || []));
+  const cartItems = event.cartData?.items || (await fetchCartItems());
 
-  if (await bxgySync(cartItems)) {
+  if (await syncCartGifts(cartItems)) {
     // onCartUpdate() não atualiza a bolha do header nem o estado vazio do drawer.
     document.querySelector('cart-drawer')?.refresh({ open: false });
   }
 });
 
-// No carregamento, remove brindes órfãos (produto principal removido fora do drawer).
+// No carregamento, corrige brindes órfãos (carrinho alterado fora do drawer).
 document.addEventListener('DOMContentLoaded', async () => {
-  if (!window.buyXGetYEnabled) return;
-  if (!(window.bxgyLinkedGroups || []).length) return;
-
   try {
-    const cart = await fetch('/cart.js').then((r) => r.json());
-    await bxgySync(cart.items || []);
+    await syncCartGifts(await fetchCartItems());
   } catch (e) {
-    console.error('[bxgy] Erro ao validar brindes no carregamento:', e);
+    console.error('[brindes] Erro ao validar brindes no carregamento:', e);
   }
 });
 

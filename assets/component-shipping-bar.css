@@ -60,13 +60,7 @@
     }
 }
 
-.drawer__inner-empty .shipping-bar__wrapper {
-    position: absolute;
-    top: 6rem;
-    width: calc(100% - 3rem);
-}
-
-
-.cart-drawer__warnings {
-    padding: 16rem 0;
-}
+/*
+  As regras de posicionamento da barra no estado vazio foram removidas:
+  a barra não é mais renderizada com o carrinho vazio (ver shipping-bar.liquid).
+*/

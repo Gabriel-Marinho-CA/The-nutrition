@@ -1,6 +1,9 @@
 {{ 'component-shipping-bar.css' | asset_url | stylesheet_tag }}
 
-{% if settings.show_free_shipping %}
+{% comment %}
+  Não exibe nada com o carrinho vazio: o estado vazio do drawer tem layout próprio.
+{% endcomment %}
+{% if settings.show_free_shipping and cart.item_count > 0 %}
   {% assign free_shipping_min = settings.min_free_shipping | times: 100 | default: 0 %}
   {% assign cart_total = cart.total_price | default: 0 %}
   {% assign amount_left = free_shipping_min | minus: cart_total %}
