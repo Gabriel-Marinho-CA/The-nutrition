@@ -589,7 +589,8 @@
         <!-- CTAs -->
 
         <div class="cart__ctas">
-          <button
+          <a
+            href="/cart"
             id="CartDrawer-Checkout"
             class="cart__checkout-button button"
             name="checkout"
@@ -599,7 +600,7 @@
             {% endif %}
           >
             {{ 'sections.cart.checkout' | t }}
-          </button>
+          </a>
 
           <a onclick="this.closest('cart-drawer').close()" class="keep-buying" href="#">Continuar comprando</a>
         </div>
