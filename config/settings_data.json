@@ -130,9 +130,7 @@
             "type": "gift_tier",
             "settings": {
               "minimum_amount": 399,
-              "gift_products": [
-                "coenzima-q10"
-              ]
+              "gift_products": []
             }
           },
           "gift_tier_Gijqcz": {
