@@ -1,1 +1,1009 @@
-{"sections":{"breadcrumbs":{"type":"main-breadcrumbs","disabled":true,"settings":{"full-width-enabled":true,"text_color":"#3c3c3b","background_color":"","margin-top":12,"margin-bottom":12,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"main":{"type":"main-product","blocks":{"c1ba8695-94d2-40ad-ac06-93ec3b8cf38e":{"type":"separator","disabled":true,"settings":{"show-separator-line":false,"color-background":"#fcf8f2","margin-top":8,"margin-bottom":0}},"title":{"type":"title","settings":{"brand":"","enable_vendor_link":false,"size_text":160,"size_text_mobile":100}},"feature_tags_ktxUht":{"type":"feature_tags","disabled":true,"settings":{"metafield":"","limit":4,"text_color":"rgba(0,0,0,0)","border_color":"rgba(0,0,0,0)"}},"separator_reBrRK":{"type":"separator","disabled":true,"settings":{"show-separator-line":false,"color-background":"#000000","margin-top":8,"margin-bottom":8}},"text_LQ6bM9":{"type":"text","name":"DESCRIÇÃO PRODUTO","disabled":true,"settings":{"heading":"","content":"<p>{{ product.metafields.custom.subtitulo.value }}<br\/><\/p>","page":""}},"product_variations_7LBAAU":{"type":"product_variations","settings":{"option_name":"Choose Supplement","picker_type":"swatch","swatch_size":36,"radius":"default","border_radius":0,"option_value_metafield":"custom.color","products":[]}},"variant_picker_WQEbez":{"type":"variant_picker","disabled":true,"settings":{"picker_type":"button","hide_unavailable_options":false,"unavailable_style":"line_through","color_swatch_names":"","variant_picture_swatch_names":"","thumb_size":60,"radius":"default","border_radius":0,"dropdown_swatch_names":"","margin-top":8,"margin-bottom":8,"size_icon":"check_mark","size_link":"","variant_name":"","size_content":"","metafield":"","enable-striped-rows":true}},"separator_xgqTJM":{"type":"separator","settings":{"show-separator-line":false,"color-background":"#000000","margin-top":8,"margin-bottom":4}},"price":{"type":"price","settings":{"show_tax_included":true,"show_shipping_policy":true,"size_text":140,"size_text_mobile":140}},"amp_bundles_amp_volume_discount_bundles_kai87E":{"type":"shopify:\/\/apps\/amp-bundles\/blocks\/amp-volume-discount-bundles\/7161efe5-6fe7-4f63-bef9-72179702263a","settings":{"product":""}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":false,"show_gift_card_recipient":true,"show_qty_selector":true,"full_width_add_to_cart":false,"custom_add_to_cart_label":"","text_color":"#ffffff","background_color":"{{ settings.colors.primary }}","text_color_hover":"","background_color_hover":"{{ settings.colors.button_hover }}"}},"promo_wBVFy3":{"type":"promo","settings":{"content":"<p>Parcele sua compra em até 6X sem Juros<\/p>","text_alignment":"center","color-body-text":"{{ settings.colors.primary }}","background_color":"{{ settings.colors.sold_out }}"}},"collapsible_tab_Q7UFgL":{"type":"collapsible_tab","settings":{"heading":"Benefícios","content":"<p>{{ product.metafields.custom.beneficios | metafield_tag }}<\/p>","metafield_variables":"","page":"","open_by_default":false,"icon":"none","icon_advanced_settings":false,"icon_height_desktop":28,"icon_height":27,"icon_margin_desktop":0,"icon_margin":0}},"separator_gDwzxi":{"type":"separator","settings":{"show-separator-line":true,"color-background":"#f7f7f7","margin-top":0,"margin-bottom":0}},"collapsible_tab_7RDeky":{"type":"collapsible_tab","settings":{"heading":"Pra quem é Indicado","content":"<p>{{ product.metafields.custom.indicado | metafield_tag }}<\/p>","metafield_variables":"","page":"","open_by_default":false,"icon":"none","icon_advanced_settings":false,"icon_height_desktop":28,"icon_height":27,"icon_margin_desktop":0,"icon_margin":0}},"separator_dPTqLU":{"type":"separator","settings":{"show-separator-line":true,"color-background":"#f7f7f7","margin-top":0,"margin-bottom":0}},"collapsible_tab_3rErRt":{"type":"collapsible_tab","settings":{"heading":"Sugestão de uso","content":"<p>{{ product.metafields.custom.como_usar | metafield_tag }}<\/p>","metafield_variables":"","page":"","open_by_default":false,"icon":"none","icon_advanced_settings":false,"icon_height_desktop":28,"icon_height":27,"icon_margin_desktop":0,"icon_margin":0}},"separator_pEEMHg":{"type":"separator","settings":{"show-separator-line":true,"color-background":"#f7f7f7","margin-top":0,"margin-bottom":0}},"collapsible_tab_cAT6Ne":{"type":"collapsible_tab","settings":{"heading":"Composição","content":"<p>{{ product.metafields.custom.ingredientes | metafield_tag }}<\/p>","metafield_variables":"","page":"","open_by_default":false,"icon":"none","icon_advanced_settings":false,"icon_height_desktop":28,"icon_height":27,"icon_margin_desktop":0,"icon_margin":0}},"separator_teAXQX":{"type":"separator","settings":{"show-separator-line":true,"color-background":"#f7f7f7","margin-top":0,"margin-bottom":0}}},"block_order":["c1ba8695-94d2-40ad-ac06-93ec3b8cf38e","title","feature_tags_ktxUht","separator_reBrRK","text_LQ6bM9","product_variations_7LBAAU","variant_picker_WQEbez","separator_xgqTJM","price","amp_bundles_amp_volume_discount_bundles_kai87E","buy_buttons","promo_wBVFy3","collapsible_tab_Q7UFgL","separator_gDwzxi","collapsible_tab_7RDeky","separator_dPTqLU","collapsible_tab_3rErRt","separator_pEEMHg","collapsible_tab_cAT6Ne","separator_teAXQX"],"custom_css":[".rte p:first-child,.rte ul:first-child,.rte li:first-child,.rte ol:first-child {margin-block-start: 0;}"],"settings":{"enable_sticky_buy_button":true,"sticky_button_visibility":"mobile","sticky_button_type":"sticky","sticky_button_select":"secondary","sticky_bg_opacity":100,"sticky_bg_blur":0,"sticky_shadow":false,"sticky_button_show_image":"yes","sticky_button_product_info":"title_and_price","full-width-enabled":true,"desktop-media-size":"normal","desktop-layout":"carousel-vertical","desktop-image-ratio":"square","enable_video_looping":true,"video_controls":false,"video_custom_play_controls":false,"video_custom_mute_controls":false,"enable-preselected-variant":true,"enable-image-zoom":true,"mobile-image":"small","show-thumbnails-mobile":true,"text_color":"{{ settings.colors.primary }}","background_color":"","pdp_nav_icon_bg_color":"#ffffff","pdp_nav_icon_bg_opacity":80,"pdp_nav_icon_color":"","margin-top":40,"margin-bottom":0,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"image_banner_accHpj":{"type":"image-banner","blocks":{"text_YErwnD":{"type":"text","settings":{"text":"","text_style":"body","disable_on_mobile":false}}},"block_order":["text_YErwnD"],"name":"Banner Brinde","settings":{"advanced_heading":false,"heading":"","heading_richtext":"<h2>Image banner<\/h2>","full-width-enabled":false,"container_max_width":0,"slide_height":"fixed_height","desktop_fixed_height":200,"mobile_fixed_height":200,"desktop_image":"shopify:\/\/shop_images\/Desktop_Chaveiro_Whey_09f18e43-cb59-4999-b404-1ad1fa12d218.jpg","desktop_text_vertical_position":"center","desktop_text_horizontal_position":"center","mobile_image":"shopify:\/\/shop_images\/Mobile_Chaveiro_Whey_8a28de45-c91f-4d46-9614-8139aaf1631e.jpg","mobile_text_vertical_position":"center","mobile_text_horizontal_position":"center","out_hero_mobile":false,"out-background-color":"","out-text-color":"","color-heading":"","section-color-overlay":"","section-color-overlay-opacity":100,"color-body-text":"","text-container-color":"","color-overlay-opacity":100,"margin-top":20,"margin-bottom":20,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20,"lcp_optimize":false}},"features_banner_wiKkaQ":{"type":"features-banner","blocks":{"image_TW4tcN":{"type":"image","settings":{"desktop_image":"shopify:\/\/shop_images\/gluten_4d2c28b2-01e9-425c-a0a3-6c69ec07ee4d.png","select_icon":"soc-twitter","heading":"Zero Glúten","text":"","link":""}},"image_m7jjzm":{"type":"image","settings":{"desktop_image":"shopify:\/\/shop_images\/leite_cebf823f-aaf5-4a41-8cb5-8537c3288910.png","select_icon":"user","heading":"Zero Lactose","text":"","link":""}},"image_AkKWrq":{"type":"image","settings":{"desktop_image":"shopify:\/\/shop_images\/lab1_d8a1d6b9-2365-4f72-b79e-7920986cf142.png","select_icon":"search","heading":"Sem corantes artificiais","text":"","link":""}},"image_XPgaAR":{"type":"image","settings":{"desktop_image":"shopify:\/\/shop_images\/acucar_5bfb06c5-c1c5-4b96-9400-f2627b44a557.png","select_icon":"star","heading":"Zero Açúcar","text":"","link":""}}},"block_order":["image_TW4tcN","image_m7jjzm","image_AkKWrq","image_XPgaAR"],"name":"Informações","settings":{"advanced_heading":false,"heading":"","heading_richtext":"<h2>Features banner<\/h2>","size_heading_mobile":50,"size_heading":50,"icon_width_mobile":32,"icon_width_desktop":32,"icon_layout":"center","columns_desktop":"4","icon_layout_mobile":"slider","color_body_icon":"rgba(0,0,0,0)","color_background_icon":"rgba(0,0,0,0)","color_body_text":"rgba(0,0,0,0)","background_color":"#f7f7f7","margin-top":20,"margin-bottom":20,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"image_with_text_fw8xNC":{"type":"image-with-text","blocks":{"heading_gnEpUz":{"type":"heading","settings":{"heading":"{{ product.metafields.custom.titulodestaque1.value }}","disable_on_mobile":false,"size_heading":100,"size_heading_mobile":100}},"text_aTFa33":{"type":"text","settings":{"text":"<p>{{ product.metafields.custom.beneficios | metafield_tag }}<\/p>","text_style":"body","disable_on_mobile":false}}},"block_order":["heading_gnEpUz","text_aTFa33"],"name":"Banner 01","settings":{"advanced_heading":false,"title":"","heading_richtext":"<h2>Image with text<\/h2>","layout":"text_first","desktop-percentage-image-width":52,"full-width-enabled":false,"slide_height":"fixed_height","desktop_fixed_height":240,"mobile_fixed_height":200,"section-color-body-text":"rgba(0,0,0,0)","section-color-overlay":"rgba(0,0,0,0)","section-color-overlay-opacity":100,"color-body-text":"{{ settings.colors.primary }}","color-overlay":"rgba(0,0,0,0)","color-overlay-opacity":100,"desktop_image":"{{ product.metafields.custom.imgdestaqueprincipa1.value }}","desktop_text_vertical_position":"center","desktop_text_horizontal_position":"left","mobile_text_horizontal_position":"center","margin-top":60,"margin-bottom":8,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"separator_kj9WPa":{"type":"separator","name":"Separator","settings":{"advanced_heading":false,"heading":"","heading_richtext":"<h2>Separator<\/h2>","size_heading":100,"size_heading_mobile":100,"show-separator-line":true,"full-width-line":false,"color-background":"#e6e6e6","color-body-text":"rgba(0,0,0,0)","color-section-background":"#ffffff","margin-top":60,"margin-bottom":60,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"image_with_text_YVYUbm":{"type":"image-with-text","blocks":{"heading_x6Jmk3":{"type":"heading","settings":{"heading":"Para quem é Indicado","disable_on_mobile":false,"size_heading":100,"size_heading_mobile":100}},"text_JM97VV":{"type":"text","settings":{"text":"<p>{{ product.metafields.custom.indicado | metafield_tag }}<\/p>","text_style":"body","disable_on_mobile":false}}},"block_order":["heading_x6Jmk3","text_JM97VV"],"name":"Banner 02","settings":{"advanced_heading":false,"title":"","heading_richtext":"<h2>Image with text<\/h2>","layout":"image_first","desktop-percentage-image-width":50,"full-width-enabled":false,"slide_height":"fixed_height","desktop_fixed_height":240,"mobile_fixed_height":200,"section-color-body-text":"rgba(0,0,0,0)","section-color-overlay":"","section-color-overlay-opacity":100,"color-body-text":"{{ settings.colors.primary }}","color-overlay":"rgba(0,0,0,0)","color-overlay-opacity":100,"desktop_image":"{{ product.metafields.custom.imgpraqueme.value }}","desktop_text_vertical_position":"center","desktop_text_horizontal_position":"left","mobile_text_horizontal_position":"center","margin-top":20,"margin-bottom":20,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"separator_gCB7fK":{"type":"separator","name":"Separator","settings":{"advanced_heading":false,"heading":"","heading_richtext":"<h2>Separator<\/h2>","size_heading":100,"size_heading_mobile":100,"show-separator-line":true,"full-width-line":false,"color-background":"#e6e6e6","color-body-text":"rgba(0,0,0,0)","color-section-background":"#ffffff","margin-top":60,"margin-bottom":60,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"image_with_text_mVY3WH":{"type":"image-with-text","blocks":{"heading_GD3Mdm":{"type":"heading","settings":{"heading":"Como usar","disable_on_mobile":false,"size_heading":100,"size_heading_mobile":100}},"text_HKMH8w":{"type":"text","settings":{"text":"<p>{{ product.metafields.custom.como_usar | metafield_tag }}<\/p>","text_style":"body","disable_on_mobile":false}}},"block_order":["heading_GD3Mdm","text_HKMH8w"],"name":"Banner 03","settings":{"advanced_heading":false,"title":"","heading_richtext":"<h2>Image with text<\/h2>","layout":"text_first","desktop-percentage-image-width":50,"full-width-enabled":false,"slide_height":"fixed_height","desktop_fixed_height":240,"mobile_fixed_height":200,"section-color-body-text":"rgba(0,0,0,0)","section-color-overlay":"rgba(0,0,0,0)","section-color-overlay-opacity":100,"color-body-text":"{{ settings.colors.primary }}","color-overlay":"rgba(0,0,0,0)","color-overlay-opacity":100,"desktop_text_vertical_position":"center","desktop_text_horizontal_position":"left","mobile_image":"{{ product.metafields.custom.imgcomousar.value }}","mobile_text_horizontal_position":"center","margin-top":20,"margin-bottom":20,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"benefits_product_RArPDt":{"type":"benefits-product","blocks":{"benefit_fGtcJp":{"type":"benefit","name":"benefit","settings":{"item_heading":"Contém","text":"{{ product.metafields.custom.contem | metafield_tag }}"}},"benefit_VC9nyU":{"type":"benefit","settings":{"item_heading":"Não Contém","text":"{{ product.metafields.custom.nao_contem | metafield_tag }}"}}},"block_order":["benefit_fGtcJp","benefit_VC9nyU"],"custom_css":[],"name":"ANIMAÇÃO 3D PRODUTO","settings":{"advanced_heading":false,"heading":"","heading_richtext":"<h2>Product Benefits<\/h2>","full-width-enabled":false,"video_hosted":"{{ product.metafields.custom.animacao.value }}","section_height_mode":"fixed_height","desktop_section_height":67,"desktop_section_max_height":680,"desktop_width":67,"desktop_max_width":680,"button_label":"","button_link":"","quick_buy_product":"","button_select":"primary","size_heading":100,"size_heading_mobile":100,"color-body-heading":"rgba(0,0,0,0)","color-overlay":"#fff8f3","color-overlay-opacity":100,"color-body-text":"rgba(0,0,0,0)","margin-top":0,"margin-bottom":0,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"page_qMXhLz":{"type":"page","name":"t:sections.page.presets.name","settings":{"page":"{{ product.metafields.custom.tabela_nutricional_html.value }}","compact-size-enabled":true,"size_heading":50,"size_heading_mobile":100,"color-body-text":"{{ settings.colors.primary }}","color-bg-overlay":"","color-overlay-opacity":100,"margin-top":60,"margin-bottom":60,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"custom_liquid_kNjApt":{"type":"custom-liquid","name":"t:sections.custom-liquid.presets.name","settings":{"custom_liquid":"<style>\n\/* Target the first benefit block - \"Contem\" heading *\/\n.wt-benefits-product__icon-item:nth-child(1) .wt-benefits-product__icon-item-heading {\n  color: green;\n}\n\n\/* Target the second benefit block - \"Não Contem\" heading *\/\n.wt-benefits-product__icon-item:nth-child(2) .wt-benefits-product__icon-item-heading {\n  color: red;\n}\n<\/style>"}},"collapsible_menu_ir4Hmw":{"type":"collapsible_menu","blocks":{"collapsible_tab_Dkbb3K":{"type":"collapsible_tab","settings":{"heading":"Artigos","content":"{{ product.metafields.custom.artigos | metafield_tag }}","page":"","icon":"check_mark","icon_advanced_settings":false,"icon_height_desktop":28,"icon_height":27,"icon_margin_desktop":0,"icon_margin":0,"open_by_default":false}}},"block_order":["collapsible_tab_Dkbb3K"],"name":"t:sections.collapsible_menu.presets.name","settings":{"color-body-text":"rgba(0,0,0,0)","background_color":"#f0f0f0","compact-size-enabled":true,"margin-top":20,"margin-bottom":20,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"rich_text_cbgmX8":{"type":"rich-text","blocks":{"heading_V3Fpqk":{"type":"heading","settings":{"advanced_heading":false,"heading":"Continue de onde parou","heading_richtext":"<h2>Your headline here<\/h2>","disable_on_mobile":false,"size_heading":100,"size_heading_mobile":100,"heading_richtext_color":"","heading_richtext_gradient":""}},"text_WbDXkj":{"type":"text","settings":{"text":"<p>Os produtos que você já deu uma olhada.<\/p>","text_style":"body","disable_on_mobile":false}}},"block_order":["heading_V3Fpqk","text_WbDXkj"],"name":"Título - Vistos recentemente","settings":{"section_width":"regular","desktop_text_horizontal_position":"center","full-width-enabled":false,"color-body-text":"{{ settings.colors.secondary_hover }}","background_color":"","background_gradient":"","margin-top":20,"margin-bottom":0,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20,"compact_size":false}},"separator_xAyPnV":{"type":"separator","name":"Separator","settings":{"advanced_heading":false,"heading":"","heading_richtext":"<h2>Separator<\/h2>","size_heading":100,"size_heading_mobile":100,"show-separator-line":true,"full-width-line":false,"color-background":"#e6e6e6","color-body-text":"rgba(0,0,0,0)","color-section-background":"#ffffff","margin-top":0,"margin-bottom":40,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"recently_viewed_products_6RJXYY":{"type":"recently-viewed-products","name":"Produtos vistos recentemente","settings":{"title":"","hide_empty_section":false,"products_to_show":4,"enable_stack_products":false,"number_of_column_desktop":4,"spacing_desktop":"16","make_products_full_width":true,"number_of_column_mobile":2.1,"spacing_mobile":"16","color-body-text":"","background_color":"","margin-top":0,"margin-bottom":20,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"rich_text_piQqqK":{"type":"rich-text","blocks":{"heading_QFimwy":{"type":"heading","settings":{"advanced_heading":false,"heading":"Combina com sua rotina","heading_richtext":"<h2>Your headline here<\/h2>","disable_on_mobile":false,"size_heading":100,"size_heading_mobile":100,"heading_richtext_color":"","heading_richtext_gradient":""}},"text_Gj8P8X":{"type":"text","settings":{"text":"<p>Selecionado com base no que outros High Lifers também levam.<\/p>","text_style":"body","disable_on_mobile":false}}},"block_order":["heading_QFimwy","text_Gj8P8X"],"name":"Título - Recomendados","settings":{"section_width":"regular","desktop_text_horizontal_position":"center","full-width-enabled":false,"color-body-text":"{{ settings.colors.secondary_hover }}","background_color":"","background_gradient":"","margin-top":20,"margin-bottom":0,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20,"compact_size":false}},"separator_4DLUMt":{"type":"separator","name":"Separator","settings":{"advanced_heading":false,"heading":"","heading_richtext":"<h2>Separator<\/h2>","size_heading":100,"size_heading_mobile":100,"show-separator-line":true,"full-width-line":false,"color-background":"#e6e6e6","color-body-text":"rgba(0,0,0,0)","color-section-background":"#ffffff","margin-top":0,"margin-bottom":40,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"product_recommendations_Ve4KpP":{"type":"product-recommendations","name":"Produtos Recomendados","settings":{"heading":"","disable_on_mobile":true,"products_to_show":4,"number_of_column_desktop":4,"make_products_full_width":true,"show_secondary_image_on_hover":true,"number_of_column_mobile":2.1,"text_alignment":"left","image_ratio":"square","show_vendor":false,"enable_vendor_link":false,"show_product_rating":false,"color-body-text":"{{ settings.colors.primary }}","background_color":"","margin-top":0,"margin-bottom":60,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}},"newsletter_pEcrBa":{"type":"newsletter","blocks":{"heading_mLFMeW":{"type":"heading","settings":{"heading":"Fique por dentro das nossas\nnovidades e promoções","heading_disable_on_mobile":false,"size_heading":50,"size_heading_mobile":80}},"paragraph_d8VNPK":{"type":"paragraph","settings":{"paragraph":"","text_disable_on_mobile":false}},"email_form_gTPAyG":{"type":"email_form","settings":{"button_select":"primary","button_label":"","show_consent_checkbox":false,"consent_checkbox_label":"<p>I want to sign up for the Newsletter (information about promotions, discounts, premieres, contests).<\/p>","consent_validation_message":"Please check this box to proceed."}}},"block_order":["heading_mLFMeW","paragraph_d8VNPK","email_form_gTPAyG"],"disabled":true,"settings":{"color-body-text":"#151515","background_color":"#f0f0f0","margin-top":60,"margin-bottom":60,"show_mobile_spacing":false,"margin-top-mobile":20,"margin-bottom-mobile":20}}},"order":["breadcrumbs","main","image_banner_accHpj","features_banner_wiKkaQ","image_with_text_fw8xNC","separator_kj9WPa","image_with_text_YVYUbm","separator_gCB7fK","image_with_text_mVY3WH","benefits_product_RArPDt","page_qMXhLz","custom_liquid_kNjApt","collapsible_menu_ir4Hmw","rich_text_cbgmX8","separator_xAyPnV","recently_viewed_products_6RJXYY","rich_text_piQqqK","separator_4DLUMt","product_recommendations_Ve4KpP","newsletter_pEcrBa"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "main-breadcrumbs",
+      "disabled": true,
+      "settings": {
+        "full-width-enabled": true,
+        "text_color": "#3c3c3b",
+        "background_color": "",
+        "margin-top": 12,
+        "margin-bottom": 12,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e": {
+          "type": "separator",
+          "disabled": true,
+          "settings": {
+            "show-separator-line": false,
+            "color-background": "#fcf8f2",
+            "margin-top": 8,
+            "margin-bottom": 0
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "brand": "",
+            "enable_vendor_link": false,
+            "size_text": 160,
+            "size_text_mobile": 100
+          }
+        },
+        "feature_tags_ktxUht": {
+          "type": "feature_tags",
+          "disabled": true,
+          "settings": {
+            "metafield": "",
+            "limit": 4,
+            "text_color": "rgba(0,0,0,0)",
+            "border_color": "rgba(0,0,0,0)"
+          }
+        },
+        "separator_reBrRK": {
+          "type": "separator",
+          "disabled": true,
+          "settings": {
+            "show-separator-line": false,
+            "color-background": "#000000",
+            "margin-top": 8,
+            "margin-bottom": 8
+          }
+        },
+        "text_LQ6bM9": {
+          "type": "text",
+          "name": "DESCRIÇÃO PRODUTO",
+          "disabled": true,
+          "settings": {
+            "heading": "",
+            "content": "<p>{{ product.metafields.custom.subtitulo.value }}<br/></p>",
+            "page": ""
+          }
+        },
+        "product_variations_7LBAAU": {
+          "type": "product_variations",
+          "settings": {
+            "option_name": "Choose Supplement",
+            "picker_type": "swatch",
+            "swatch_size": 36,
+            "radius": "default",
+            "border_radius": 0,
+            "option_value_metafield": "custom.color",
+            "products": []
+          }
+        },
+        "variant_picker_WQEbez": {
+          "type": "variant_picker",
+          "disabled": true,
+          "settings": {
+            "picker_type": "button",
+            "hide_unavailable_options": false,
+            "unavailable_style": "line_through",
+            "color_swatch_names": "",
+            "variant_picture_swatch_names": "",
+            "thumb_size": 60,
+            "radius": "default",
+            "border_radius": 0,
+            "dropdown_swatch_names": "",
+            "margin-top": 8,
+            "margin-bottom": 8,
+            "size_icon": "check_mark",
+            "size_link": "",
+            "variant_name": "",
+            "size_content": "",
+            "metafield": "",
+            "enable-striped-rows": true
+          }
+        },
+        "separator_xgqTJM": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": false,
+            "color-background": "#000000",
+            "margin-top": 8,
+            "margin-bottom": 4
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_tax_included": true,
+            "show_shipping_policy": true,
+            "size_text": 140,
+            "size_text_mobile": 140
+          }
+        },
+        "custom_liquid_Xa3iFe": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% assign valor_giftback = product.price | times: 10 | divided_by: 100 %}\n\n<div class=\"tn-giftback-badge\">\n  <div class=\"tn-giftback-badge__icon\" aria-hidden=\"true\">\n    <svg\n      width=\"20\"\n      height=\"20\"\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      xmlns=\"http://www.w3.org/2000/svg\"\n    >\n      <path\n        d=\"M20 12V22H4V12\"\n        stroke=\"currentColor\"\n        stroke-width=\"1.5\"\n        stroke-linecap=\"round\"\n        stroke-linejoin=\"round\"\n      />\n      <path\n        d=\"M2 7H22V12H2V7Z\"\n        stroke=\"currentColor\"\n        stroke-width=\"1.5\"\n        stroke-linejoin=\"round\"\n      />\n      <path\n        d=\"M12 7V22\"\n        stroke=\"currentColor\"\n        stroke-width=\"1.5\"\n        stroke-linecap=\"round\"\n      />\n      <path\n        d=\"M12 7H8.5C7.11929 7 6 5.88071 6 4.5C6 3.11929 7.11929 2 8.5 2C11 2 12 7 12 7Z\"\n        stroke=\"currentColor\"\n        stroke-width=\"1.5\"\n        stroke-linejoin=\"round\"\n      />\n      <path\n        d=\"M12 7H15.5C16.8807 7 18 5.88071 18 4.5C18 3.11929 16.8807 2 15.5 2C13 2 12 7 12 7Z\"\n        stroke=\"currentColor\"\n        stroke-width=\"1.5\"\n        stroke-linejoin=\"round\"\n      />\n    </svg>\n  </div>\n\n  <div class=\"tn-giftback-badge__text\">\n    Ganhe <strong>{{ valor_giftback | money }}</strong> de giftback nessa compra\n  </div>\n</div>\n\n<style>\n  .tn-giftback-badge {\n    box-sizing: border-box;\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    width: 100%;\n    margin: 16px 0;\n    padding: 12px 14px;\n    color: #2d2a24;\n    background: #fbfaf7;\n    border: 1px solid #e8e1d2;\n    border-radius: 999px;\n    box-shadow: 0 6px 18px rgba(51, 42, 22, 0.05);\n  }\n\n  .tn-giftback-badge__icon {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    flex: 0 0 36px;\n    width: 36px;\n    height: 36px;\n    color: #846c27;\n    background: #f1ecdf;\n    border-radius: 50%;\n  }\n\n  .tn-giftback-badge__text {\n    min-width: 0;\n    font-size: 14px;\n    line-height: 1.2;\n    color: #2d2a24;\n  }\n\n  .tn-giftback-badge__text strong {\n    color: #745b16;\n    font-size: 17px;\n    font-weight: 700;\n    white-space: nowrap;\n  }\n\n  @media screen and (max-width: 749px) {\n    .tn-giftback-badge {\n      gap: 8px;\n      padding: 10px 12px;\n    }\n\n    .tn-giftback-badge__icon {\n      flex-basis: 32px;\n      width: 32px;\n      height: 32px;\n    }\n\n    .tn-giftback-badge__icon svg {\n      width: 17px;\n      height: 17px;\n    }\n\n    .tn-giftback-badge__text {\n      font-size: 13px;\n      line-height: 1.2;\n    }\n\n    .tn-giftback-badge__text strong {\n      font-size: 15px;\n    }\n  }\n</style>"
+          }
+        },
+        "amp_bundles_amp_volume_discount_bundles_kai87E": {
+          "type": "shopify://apps/amp-bundles/blocks/amp-volume-discount-bundles/7161efe5-6fe7-4f63-bef9-72179702263a",
+          "settings": {
+            "product": ""
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true,
+            "show_qty_selector": true,
+            "full_width_add_to_cart": false,
+            "custom_add_to_cart_label": "",
+            "text_color": "#ffffff",
+            "background_color": "{{ settings.colors.primary }}",
+            "text_color_hover": "",
+            "background_color_hover": "{{ settings.colors.button_hover }}"
+          }
+        },
+        "promo_wBVFy3": {
+          "type": "promo",
+          "settings": {
+            "content": "<p>Parcele sua compra em até 6X sem Juros</p>",
+            "text_alignment": "center",
+            "color-body-text": "{{ settings.colors.primary }}",
+            "background_color": "{{ settings.colors.sold_out }}"
+          }
+        },
+        "collapsible_tab_Q7UFgL": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Benefícios",
+            "content": "<p>{{ product.metafields.custom.beneficios | metafield_tag }}</p>",
+            "metafield_variables": "",
+            "page": "",
+            "open_by_default": false,
+            "icon": "none",
+            "icon_advanced_settings": false,
+            "icon_height_desktop": 28,
+            "icon_height": 27,
+            "icon_margin_desktop": 0,
+            "icon_margin": 0
+          }
+        },
+        "separator_gDwzxi": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": true,
+            "color-background": "#f7f7f7",
+            "margin-top": 0,
+            "margin-bottom": 0
+          }
+        },
+        "collapsible_tab_7RDeky": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Pra quem é Indicado",
+            "content": "<p>{{ product.metafields.custom.indicado | metafield_tag }}</p>",
+            "metafield_variables": "",
+            "page": "",
+            "open_by_default": false,
+            "icon": "none",
+            "icon_advanced_settings": false,
+            "icon_height_desktop": 28,
+            "icon_height": 27,
+            "icon_margin_desktop": 0,
+            "icon_margin": 0
+          }
+        },
+        "separator_dPTqLU": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": true,
+            "color-background": "#f7f7f7",
+            "margin-top": 0,
+            "margin-bottom": 0
+          }
+        },
+        "collapsible_tab_3rErRt": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Sugestão de uso",
+            "content": "<p>{{ product.metafields.custom.como_usar | metafield_tag }}</p>",
+            "metafield_variables": "",
+            "page": "",
+            "open_by_default": false,
+            "icon": "none",
+            "icon_advanced_settings": false,
+            "icon_height_desktop": 28,
+            "icon_height": 27,
+            "icon_margin_desktop": 0,
+            "icon_margin": 0
+          }
+        },
+        "separator_pEEMHg": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": true,
+            "color-background": "#f7f7f7",
+            "margin-top": 0,
+            "margin-bottom": 0
+          }
+        },
+        "collapsible_tab_cAT6Ne": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Composição",
+            "content": "<p>{{ product.metafields.custom.ingredientes | metafield_tag }}</p>",
+            "metafield_variables": "",
+            "page": "",
+            "open_by_default": false,
+            "icon": "none",
+            "icon_advanced_settings": false,
+            "icon_height_desktop": 28,
+            "icon_height": 27,
+            "icon_margin_desktop": 0,
+            "icon_margin": 0
+          }
+        },
+        "separator_teAXQX": {
+          "type": "separator",
+          "settings": {
+            "show-separator-line": true,
+            "color-background": "#f7f7f7",
+            "margin-top": 0,
+            "margin-bottom": 0
+          }
+        }
+      },
+      "block_order": [
+        "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e",
+        "title",
+        "feature_tags_ktxUht",
+        "separator_reBrRK",
+        "text_LQ6bM9",
+        "product_variations_7LBAAU",
+        "variant_picker_WQEbez",
+        "separator_xgqTJM",
+        "price",
+        "custom_liquid_Xa3iFe",
+        "amp_bundles_amp_volume_discount_bundles_kai87E",
+        "buy_buttons",
+        "promo_wBVFy3",
+        "collapsible_tab_Q7UFgL",
+        "separator_gDwzxi",
+        "collapsible_tab_7RDeky",
+        "separator_dPTqLU",
+        "collapsible_tab_3rErRt",
+        "separator_pEEMHg",
+        "collapsible_tab_cAT6Ne",
+        "separator_teAXQX"
+      ],
+      "custom_css": [
+        ".rte p:first-child,.rte ul:first-child,.rte li:first-child,.rte ol:first-child {margin-block-start: 0;}"
+      ],
+      "settings": {
+        "enable_sticky_buy_button": true,
+        "sticky_button_visibility": "mobile",
+        "sticky_button_type": "sticky",
+        "sticky_button_select": "secondary",
+        "sticky_bg_opacity": 100,
+        "sticky_bg_blur": 0,
+        "sticky_shadow": false,
+        "sticky_button_show_image": "yes",
+        "sticky_button_product_info": "title_and_price",
+        "full-width-enabled": true,
+        "desktop-media-size": "normal",
+        "desktop-layout": "carousel-vertical",
+        "desktop-image-ratio": "square",
+        "enable_video_looping": true,
+        "video_controls": false,
+        "video_custom_play_controls": false,
+        "video_custom_mute_controls": false,
+        "enable-preselected-variant": true,
+        "enable-image-zoom": true,
+        "mobile-image": "small",
+        "show-thumbnails-mobile": true,
+        "text_color": "{{ settings.colors.primary }}",
+        "background_color": "",
+        "pdp_nav_icon_bg_color": "#ffffff",
+        "pdp_nav_icon_bg_opacity": 80,
+        "pdp_nav_icon_color": "",
+        "margin-top": 40,
+        "margin-bottom": 0,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "image_banner_accHpj": {
+      "type": "image-banner",
+      "blocks": {
+        "text_YErwnD": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "body",
+            "disable_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "text_YErwnD"
+      ],
+      "name": "Banner Brinde",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Image banner</h2>",
+        "full-width-enabled": false,
+        "container_max_width": 0,
+        "slide_height": "fixed_height",
+        "desktop_fixed_height": 200,
+        "mobile_fixed_height": 200,
+        "desktop_image": "shopify://shop_images/Desktop_Chaveiro_Whey_09f18e43-cb59-4999-b404-1ad1fa12d218.jpg",
+        "desktop_text_vertical_position": "center",
+        "desktop_text_horizontal_position": "center",
+        "mobile_image": "shopify://shop_images/Mobile_Chaveiro_Whey_8a28de45-c91f-4d46-9614-8139aaf1631e.jpg",
+        "mobile_text_vertical_position": "center",
+        "mobile_text_horizontal_position": "center",
+        "out_hero_mobile": false,
+        "out-background-color": "",
+        "out-text-color": "",
+        "color-heading": "",
+        "section-color-overlay": "",
+        "section-color-overlay-opacity": 100,
+        "color-body-text": "",
+        "text-container-color": "",
+        "color-overlay-opacity": 100,
+        "margin-top": 20,
+        "margin-bottom": 20,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20,
+        "lcp_optimize": false
+      }
+    },
+    "features_banner_wiKkaQ": {
+      "type": "features-banner",
+      "blocks": {
+        "image_TW4tcN": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "shopify://shop_images/gluten_4d2c28b2-01e9-425c-a0a3-6c69ec07ee4d.png",
+            "select_icon": "soc-twitter",
+            "heading": "Zero Glúten",
+            "text": "",
+            "link": ""
+          }
+        },
+        "image_m7jjzm": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "shopify://shop_images/leite_cebf823f-aaf5-4a41-8cb5-8537c3288910.png",
+            "select_icon": "user",
+            "heading": "Zero Lactose",
+            "text": "",
+            "link": ""
+          }
+        },
+        "image_AkKWrq": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "shopify://shop_images/lab1_d8a1d6b9-2365-4f72-b79e-7920986cf142.png",
+            "select_icon": "search",
+            "heading": "Sem corantes artificiais",
+            "text": "",
+            "link": ""
+          }
+        },
+        "image_XPgaAR": {
+          "type": "image",
+          "settings": {
+            "desktop_image": "shopify://shop_images/acucar_5bfb06c5-c1c5-4b96-9400-f2627b44a557.png",
+            "select_icon": "star",
+            "heading": "Zero Açúcar",
+            "text": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_TW4tcN",
+        "image_m7jjzm",
+        "image_AkKWrq",
+        "image_XPgaAR"
+      ],
+      "name": "Informações",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Features banner</h2>",
+        "size_heading_mobile": 50,
+        "size_heading": 50,
+        "icon_width_mobile": 32,
+        "icon_width_desktop": 32,
+        "icon_layout": "center",
+        "columns_desktop": "4",
+        "icon_layout_mobile": "slider",
+        "color_body_icon": "rgba(0,0,0,0)",
+        "color_background_icon": "rgba(0,0,0,0)",
+        "color_body_text": "rgba(0,0,0,0)",
+        "background_color": "#f7f7f7",
+        "margin-top": 20,
+        "margin-bottom": 20,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "image_with_text_fw8xNC": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_gnEpUz": {
+          "type": "heading",
+          "settings": {
+            "heading": "{{ product.metafields.custom.titulodestaque1.value }}",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        },
+        "text_aTFa33": {
+          "type": "text",
+          "settings": {
+            "text": "<p>{{ product.metafields.custom.beneficios | metafield_tag }}</p>",
+            "text_style": "body",
+            "disable_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_gnEpUz",
+        "text_aTFa33"
+      ],
+      "name": "Banner 01",
+      "settings": {
+        "advanced_heading": false,
+        "title": "",
+        "heading_richtext": "<h2>Image with text</h2>",
+        "layout": "text_first",
+        "desktop-percentage-image-width": 52,
+        "full-width-enabled": false,
+        "slide_height": "fixed_height",
+        "desktop_fixed_height": 240,
+        "mobile_fixed_height": 200,
+        "section-color-body-text": "rgba(0,0,0,0)",
+        "section-color-overlay": "rgba(0,0,0,0)",
+        "section-color-overlay-opacity": 100,
+        "color-body-text": "{{ settings.colors.primary }}",
+        "color-overlay": "rgba(0,0,0,0)",
+        "color-overlay-opacity": 100,
+        "desktop_image": "{{ product.metafields.custom.imgdestaqueprincipa1.value }}",
+        "desktop_text_vertical_position": "center",
+        "desktop_text_horizontal_position": "left",
+        "mobile_text_horizontal_position": "center",
+        "margin-top": 60,
+        "margin-bottom": 8,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "separator_kj9WPa": {
+      "type": "separator",
+      "name": "Separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": false,
+        "color-background": "#e6e6e6",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 60,
+        "margin-bottom": 60,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "image_with_text_YVYUbm": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_x6Jmk3": {
+          "type": "heading",
+          "settings": {
+            "heading": "Para quem é Indicado",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        },
+        "text_JM97VV": {
+          "type": "text",
+          "settings": {
+            "text": "<p>{{ product.metafields.custom.indicado | metafield_tag }}</p>",
+            "text_style": "body",
+            "disable_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_x6Jmk3",
+        "text_JM97VV"
+      ],
+      "name": "Banner 02",
+      "settings": {
+        "advanced_heading": false,
+        "title": "",
+        "heading_richtext": "<h2>Image with text</h2>",
+        "layout": "image_first",
+        "desktop-percentage-image-width": 50,
+        "full-width-enabled": false,
+        "slide_height": "fixed_height",
+        "desktop_fixed_height": 240,
+        "mobile_fixed_height": 200,
+        "section-color-body-text": "rgba(0,0,0,0)",
+        "section-color-overlay": "",
+        "section-color-overlay-opacity": 100,
+        "color-body-text": "{{ settings.colors.primary }}",
+        "color-overlay": "rgba(0,0,0,0)",
+        "color-overlay-opacity": 100,
+        "desktop_image": "{{ product.metafields.custom.imgpraqueme.value }}",
+        "desktop_text_vertical_position": "center",
+        "desktop_text_horizontal_position": "left",
+        "mobile_text_horizontal_position": "center",
+        "margin-top": 20,
+        "margin-bottom": 20,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "separator_gCB7fK": {
+      "type": "separator",
+      "name": "Separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": false,
+        "color-background": "#e6e6e6",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 60,
+        "margin-bottom": 60,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "image_with_text_mVY3WH": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_GD3Mdm": {
+          "type": "heading",
+          "settings": {
+            "heading": "Como usar",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100
+          }
+        },
+        "text_HKMH8w": {
+          "type": "text",
+          "settings": {
+            "text": "<p>{{ product.metafields.custom.como_usar | metafield_tag }}</p>",
+            "text_style": "body",
+            "disable_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_GD3Mdm",
+        "text_HKMH8w"
+      ],
+      "name": "Banner 03",
+      "settings": {
+        "advanced_heading": false,
+        "title": "",
+        "heading_richtext": "<h2>Image with text</h2>",
+        "layout": "text_first",
+        "desktop-percentage-image-width": 50,
+        "full-width-enabled": false,
+        "slide_height": "fixed_height",
+        "desktop_fixed_height": 240,
+        "mobile_fixed_height": 200,
+        "section-color-body-text": "rgba(0,0,0,0)",
+        "section-color-overlay": "rgba(0,0,0,0)",
+        "section-color-overlay-opacity": 100,
+        "color-body-text": "{{ settings.colors.primary }}",
+        "color-overlay": "rgba(0,0,0,0)",
+        "color-overlay-opacity": 100,
+        "desktop_text_vertical_position": "center",
+        "desktop_text_horizontal_position": "left",
+        "mobile_image": "{{ product.metafields.custom.imgcomousar.value }}",
+        "mobile_text_horizontal_position": "center",
+        "margin-top": 20,
+        "margin-bottom": 20,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "benefits_product_RArPDt": {
+      "type": "benefits-product",
+      "blocks": {
+        "benefit_fGtcJp": {
+          "type": "benefit",
+          "name": "benefit",
+          "settings": {
+            "item_heading": "Contém",
+            "text": "{{ product.metafields.custom.contem | metafield_tag }}"
+          }
+        },
+        "benefit_VC9nyU": {
+          "type": "benefit",
+          "settings": {
+            "item_heading": "Não Contém",
+            "text": "{{ product.metafields.custom.nao_contem | metafield_tag }}"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_fGtcJp",
+        "benefit_VC9nyU"
+      ],
+      "custom_css": [],
+      "name": "ANIMAÇÃO 3D PRODUTO",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Product Benefits</h2>",
+        "full-width-enabled": false,
+        "video_hosted": "{{ product.metafields.custom.animacao.value }}",
+        "section_height_mode": "fixed_height",
+        "desktop_section_height": 67,
+        "desktop_section_max_height": 680,
+        "desktop_width": 67,
+        "desktop_max_width": 680,
+        "button_label": "",
+        "button_link": "",
+        "quick_buy_product": "",
+        "button_select": "primary",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "color-body-heading": "rgba(0,0,0,0)",
+        "color-overlay": "#fff8f3",
+        "color-overlay-opacity": 100,
+        "color-body-text": "rgba(0,0,0,0)",
+        "margin-top": 0,
+        "margin-bottom": 0,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "page_qMXhLz": {
+      "type": "page",
+      "name": "t:sections.page.presets.name",
+      "settings": {
+        "page": "{{ product.metafields.custom.tabela_nutricional_html.value }}",
+        "compact-size-enabled": true,
+        "size_heading": 50,
+        "size_heading_mobile": 100,
+        "color-body-text": "{{ settings.colors.primary }}",
+        "color-bg-overlay": "",
+        "color-overlay-opacity": 100,
+        "margin-top": 60,
+        "margin-bottom": 60,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "custom_liquid_kNjApt": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<style>\n/* Target the first benefit block - \"Contem\" heading */\n.wt-benefits-product__icon-item:nth-child(1) .wt-benefits-product__icon-item-heading {\n  color: green;\n}\n\n/* Target the second benefit block - \"Não Contem\" heading */\n.wt-benefits-product__icon-item:nth-child(2) .wt-benefits-product__icon-item-heading {\n  color: red;\n}\n</style>"
+      }
+    },
+    "collapsible_menu_ir4Hmw": {
+      "type": "collapsible_menu",
+      "blocks": {
+        "collapsible_tab_Dkbb3K": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Artigos",
+            "content": "{{ product.metafields.custom.artigos | metafield_tag }}",
+            "page": "",
+            "icon": "check_mark",
+            "icon_advanced_settings": false,
+            "icon_height_desktop": 28,
+            "icon_height": 27,
+            "icon_margin_desktop": 0,
+            "icon_margin": 0,
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_tab_Dkbb3K"
+      ],
+      "name": "t:sections.collapsible_menu.presets.name",
+      "settings": {
+        "color-body-text": "rgba(0,0,0,0)",
+        "background_color": "#f0f0f0",
+        "compact-size-enabled": true,
+        "margin-top": 20,
+        "margin-bottom": 20,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "rich_text_cbgmX8": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_V3Fpqk": {
+          "type": "heading",
+          "settings": {
+            "advanced_heading": false,
+            "heading": "Continue de onde parou",
+            "heading_richtext": "<h2>Your headline here</h2>",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100,
+            "heading_richtext_color": "",
+            "heading_richtext_gradient": ""
+          }
+        },
+        "text_WbDXkj": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Os produtos que você já deu uma olhada.</p>",
+            "text_style": "body",
+            "disable_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_V3Fpqk",
+        "text_WbDXkj"
+      ],
+      "name": "Título - Vistos recentemente",
+      "settings": {
+        "section_width": "regular",
+        "desktop_text_horizontal_position": "center",
+        "full-width-enabled": false,
+        "color-body-text": "{{ settings.colors.secondary_hover }}",
+        "background_color": "",
+        "background_gradient": "",
+        "margin-top": 20,
+        "margin-bottom": 0,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20,
+        "compact_size": false
+      }
+    },
+    "separator_xAyPnV": {
+      "type": "separator",
+      "name": "Separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": false,
+        "color-background": "#e6e6e6",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 40,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "recently_viewed_products_6RJXYY": {
+      "type": "recently-viewed-products",
+      "name": "Produtos vistos recentemente",
+      "settings": {
+        "title": "",
+        "hide_empty_section": false,
+        "products_to_show": 4,
+        "enable_stack_products": false,
+        "number_of_column_desktop": 4,
+        "spacing_desktop": "16",
+        "make_products_full_width": true,
+        "number_of_column_mobile": 2.1,
+        "spacing_mobile": "16",
+        "color-body-text": "",
+        "background_color": "",
+        "margin-top": 0,
+        "margin-bottom": 20,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "rich_text_piQqqK": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_QFimwy": {
+          "type": "heading",
+          "settings": {
+            "advanced_heading": false,
+            "heading": "Combina com sua rotina",
+            "heading_richtext": "<h2>Your headline here</h2>",
+            "disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100,
+            "heading_richtext_color": "",
+            "heading_richtext_gradient": ""
+          }
+        },
+        "text_Gj8P8X": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Selecionado com base no que outros High Lifers também levam.</p>",
+            "text_style": "body",
+            "disable_on_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_QFimwy",
+        "text_Gj8P8X"
+      ],
+      "name": "Título - Recomendados",
+      "settings": {
+        "section_width": "regular",
+        "desktop_text_horizontal_position": "center",
+        "full-width-enabled": false,
+        "color-body-text": "{{ settings.colors.secondary_hover }}",
+        "background_color": "",
+        "background_gradient": "",
+        "margin-top": 20,
+        "margin-bottom": 0,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20,
+        "compact_size": false
+      }
+    },
+    "separator_4DLUMt": {
+      "type": "separator",
+      "name": "Separator",
+      "settings": {
+        "advanced_heading": false,
+        "heading": "",
+        "heading_richtext": "<h2>Separator</h2>",
+        "size_heading": 100,
+        "size_heading_mobile": 100,
+        "show-separator-line": true,
+        "full-width-line": false,
+        "color-background": "#e6e6e6",
+        "color-body-text": "rgba(0,0,0,0)",
+        "color-section-background": "#ffffff",
+        "margin-top": 0,
+        "margin-bottom": 40,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "product_recommendations_Ve4KpP": {
+      "type": "product-recommendations",
+      "name": "Produtos Recomendados",
+      "settings": {
+        "heading": "",
+        "disable_on_mobile": true,
+        "products_to_show": 4,
+        "number_of_column_desktop": 4,
+        "make_products_full_width": true,
+        "show_secondary_image_on_hover": true,
+        "number_of_column_mobile": 2.1,
+        "text_alignment": "left",
+        "image_ratio": "square",
+        "show_vendor": false,
+        "enable_vendor_link": false,
+        "show_product_rating": false,
+        "color-body-text": "{{ settings.colors.primary }}",
+        "background_color": "",
+        "margin-top": 0,
+        "margin-bottom": 60,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    },
+    "newsletter_pEcrBa": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_mLFMeW": {
+          "type": "heading",
+          "settings": {
+            "heading": "Fique por dentro das nossas\nnovidades e promoções",
+            "heading_disable_on_mobile": false,
+            "size_heading": 50,
+            "size_heading_mobile": 80
+          }
+        },
+        "paragraph_d8VNPK": {
+          "type": "paragraph",
+          "settings": {
+            "paragraph": "",
+            "text_disable_on_mobile": false
+          }
+        },
+        "email_form_gTPAyG": {
+          "type": "email_form",
+          "settings": {
+            "button_select": "primary",
+            "button_label": "",
+            "show_consent_checkbox": false,
+            "consent_checkbox_label": "<p>I want to sign up for the Newsletter (information about promotions, discounts, premieres, contests).</p>",
+            "consent_validation_message": "Please check this box to proceed."
+          }
+        }
+      },
+      "block_order": [
+        "heading_mLFMeW",
+        "paragraph_d8VNPK",
+        "email_form_gTPAyG"
+      ],
+      "disabled": true,
+      "settings": {
+        "color-body-text": "#151515",
+        "background_color": "#f0f0f0",
+        "margin-top": 60,
+        "margin-bottom": 60,
+        "show_mobile_spacing": false,
+        "margin-top-mobile": 20,
+        "margin-bottom-mobile": 20
+      }
+    }
+  },
+  "order": [
+    "breadcrumbs",
+    "main",
+    "image_banner_accHpj",
+    "features_banner_wiKkaQ",
+    "image_with_text_fw8xNC",
+    "separator_kj9WPa",
+    "image_with_text_YVYUbm",
+    "separator_gCB7fK",
+    "image_with_text_mVY3WH",
+    "benefits_product_RArPDt",
+    "page_qMXhLz",
+    "custom_liquid_kNjApt",
+    "collapsible_menu_ir4Hmw",
+    "rich_text_cbgmX8",
+    "separator_xAyPnV",
+    "recently_viewed_products_6RJXYY",
+    "rich_text_piQqqK",
+    "separator_4DLUMt",
+    "product_recommendations_Ve4KpP",
+    "newsletter_pEcrBa"
+  ]
+}
