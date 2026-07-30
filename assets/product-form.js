@@ -201,6 +201,14 @@ if (!customElements.get("product-form")) {
         }
 
         if (this.cartType === "drawer") {
+          if (typeof this.cart?.renderContents === "function") {
+            this.cart.renderContents(response);
+          }
+
+          if (typeof this.cart?.open === "function") {
+            this.cart.open();
+          }
+
           return;
         }
 
