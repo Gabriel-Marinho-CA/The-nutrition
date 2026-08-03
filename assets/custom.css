@@ -1,14 +1,12 @@
-/* =========================================================
-   AMP VOLUME DISCOUNT — AJUSTES NA PÁGINA DE PRODUTO
-   ========================================================= */
+/* AJUSTES APENAS NOS PRODUTOS COM AMP */
 
-/* Remove o seletor de quantidade original do tema */
+/* Esconde somente o seletor de quantidade original do tema */
 .wt-product__info:has(.amp-volume-discount-bundles)
 .counter-wrapper {
   display: none !important;
 }
 
-/* Faz o botão ocupar toda a largura disponível */
+/* Faz o botão ocupar toda a largura */
 .wt-product__info:has(.amp-volume-discount-bundles)
 .product-form__buttons {
   display: block !important;
@@ -20,33 +18,20 @@
   width: 100% !important;
 }
 
-/* Remove a quantidade interna redundante do AMP */
-.amp-bundles__volume-discount-bundles__quantity-divider,
-.amp-bundles__volume-discount-bundles__quantity-controls {
-  display: none !important;
-}
-
-/* Remove o total repetido */
+/* Remove apenas o total repetido do AMP */
+.wt-product__info:has(.amp-volume-discount-bundles)
 .amp-bundles__volume-discount-bundles__totals {
   display: none !important;
 }
 
-/* Aproxima a economia do restante do bloco */
+/* Ajusta o espaçamento da economia */
+.wt-product__info:has(.amp-volume-discount-bundles)
 .amp-bundles__volume-discount-bundles__summary {
   margin-top: 12px !important;
 }
 
-/* Deixa a linha de economia alinhada à esquerda */
+.wt-product__info:has(.amp-volume-discount-bundles)
 .amp-bundles__volume-discount-bundles__benefit {
   justify-content: flex-start !important;
   width: 100% !important;
-}
-
-/* Evita excesso de altura nas opções */
-.amp-bundles__volume-discount-bundles__tier-option {
-  min-height: auto !important;
-}
-
-.amp-bundles__volume-discount-bundles__tier-content {
-  padding: 16px !important;
 }
