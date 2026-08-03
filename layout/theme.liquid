@@ -25,6 +25,133 @@
   {%- endif -%}"
 >
   <head>
+    
+    {% if template.name == 'product' %}
+  <script>
+    (() => {
+      document.addEventListener(
+        "click",
+        async (event) => {
+          const button = event.target.closest(
+            "product-form .js-add-to-cart"
+          );
+
+          if (!button) return;
+
+          const productArea = button.closest(
+            ".wt-product__main, .wt-product__info, .product__info-container"
+          );
+
+          const ampWidget = productArea?.querySelector(
+            ".amp-volume-discount-bundles"
+          );
+
+          if (!ampWidget) return;
+
+          event.preventDefault();
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+
+          if (button.dataset.tnAdding === "true") return;
+
+          const form = button.closest(
+            "form[action*='/cart/add']"
+          );
+
+          const cartDrawer = document.querySelector(
+            "cart-drawer"
+          );
+
+          if (!form || !cartDrawer) return;
+
+          button.dataset.tnAdding = "true";
+          button.setAttribute("aria-disabled", "true");
+          button.classList.add("loading");
+
+          const loader = button.querySelector(
+            ".loading-overlay__spinner"
+          );
+
+          loader?.classList.remove("hidden");
+
+          try {
+            const formData = new FormData(form);
+
+            if (
+              typeof cartDrawer.getSectionsToRender ===
+              "function"
+            ) {
+              formData.append(
+                "sections",
+                cartDrawer
+                  .getSectionsToRender()
+                  .map((section) => section.id)
+              );
+            }
+
+            formData.append(
+              "sections_url",
+              window.location.pathname
+            );
+
+            const response = await fetch(
+              window.routes?.cart_add_url ||
+                "/cart/add.js",
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "X-Requested-With": "XMLHttpRequest"
+                },
+                body: formData
+              }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok || data.status) {
+              throw new Error(
+                data.description ||
+                  data.message ||
+                  "Não foi possível adicionar o produto."
+              );
+            }
+
+            if (
+              typeof cartDrawer.renderContents ===
+              "function"
+            ) {
+              cartDrawer.renderContents(data);
+            }
+
+            cartDrawer.classList.remove("is-empty");
+
+            window.setTimeout(() => {
+              cartDrawer.open?.();
+            }, 100);
+          } catch (error) {
+            console.error(
+              "Erro ao adicionar o bundle:",
+              error
+            );
+
+            alert(
+              error.message ||
+                "Não foi possível adicionar ao carrinho."
+            );
+          } finally {
+            delete button.dataset.tnAdding;
+            button.removeAttribute("aria-disabled");
+            button.classList.remove("loading");
+            loader?.classList.add("hidden");
+          }
+        },
+        true
+      );
+    })();
+  </script>
+{% endif %}
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
