@@ -106,7 +106,7 @@
 .wt-product__info:has(.amp-volume-discount-bundles)
 .amp-bundles__volume-discount-bundles__tier-option--selected {
   background: #faf5ec !important;
-  border: 2px solid #c6a263 !important;
+  border: 1px solid #c6a263 !important;
 }
 
 /* Conteúdo superior dos cartões */
@@ -229,7 +229,6 @@
   font-weight: 700 !important;
   opacity: 1 !important;
 }
-
 
 /* Espaço acima do cartão que possui o selo */
 .wt-product__info:has(.amp-volume-discount-bundles)
