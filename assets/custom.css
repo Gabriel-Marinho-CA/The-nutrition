@@ -35,3 +35,54 @@
   justify-content: flex-start !important;
   width: 100% !important;
 }
+
+/* Giftback integrado visualmente ao AMP */
+.wt-product__info:has(.amp-volume-discount-bundles)
+.tn-giftback-badge--amp {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  margin: 6px 0 16px;
+  padding: 0;
+  color: #6f6555;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.wt-product__info:has(.amp-volume-discount-bundles)
+.tn-giftback-badge--amp
+.tn-giftback-badge__icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  color: #9b712d;
+  background: transparent;
+}
+
+.wt-product__info:has(.amp-volume-discount-bundles)
+.tn-giftback-badge--amp
+.tn-giftback-badge__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.wt-product__info:has(.amp-volume-discount-bundles)
+.tn-giftback-badge--amp
+.tn-giftback-badge__text {
+  padding: 0;
+  color: #6f6555;
+  font-size: 13px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.wt-product__info:has(.amp-volume-discount-bundles)
+.tn-giftback-badge--amp
+.tn-giftback-badge__text strong {
+  color: #9b712d;
+  font-size: 13px;
+  font-weight: 700;
+}
