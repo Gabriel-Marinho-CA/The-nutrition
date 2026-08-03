@@ -88,270 +88,189 @@
 }
 
 /* =========================================================
-   AMP VOLUME DISCOUNT — VISUAL PREMIUM
-   Somente em produtos com AMP bundle
+   AMP — VISUAL IGUAL À REFERÊNCIA
 ========================================================= */
 
-/* Espaçamento geral */
-.wt-product__info:has(.amp-volume-discount-bundles) .amp-volume-discount-bundles {
-  margin: 18px 0 14px;
-}
-
-/* Headline */
+/* Opção normal: cinza muito claro */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__headline {
-  margin-bottom: 14px;
-  color: #2c2c2c;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.3;
-}
-
-/* Cards gerais */
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle {
-  border-radius: 22px !important;
-  padding: 22px 20px !important;
-  margin-bottom: 14px !important;
-  overflow: hidden !important;
-  box-shadow: none !important;
-  transition: all 0.2s ease;
-}
-
-/* CARD 1 — neutro e suave */
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle:first-child {
+.amp-bundles__volume-discount-bundles__tier-option {
+  position: relative !important;
+  overflow: visible !important;
   background: #fcfcfb !important;
-  border: 1px solid #e8e5df !important;
+  border: 1px solid #e6e3de !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
 }
 
-/* CARD 2 — destaque premium */
+/* Opção selecionada: fundo bege e borda dourada */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle:last-child {
-  background: #f5efe5 !important;
-  border: 2px solid #c79a47 !important;
+.amp-bundles__volume-discount-bundles__tier-option--selected {
+  background: #faf5ec !important;
+  border: 2px solid #c6a263 !important;
 }
 
-/* Se AMP aplicar classe de selecionado, mantém destaque */
+/* Conteúdo superior dos cartões */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle--selected,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle.is-selected {
-  background: #f5efe5 !important;
-  border: 2px solid #c79a47 !important;
+.amp-bundles__volume-discount-bundles__tier-content {
+  padding: 20px 22px !important;
 }
 
-/* Títulos */
+/* Texto Leve 1 / Leve 2 */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle-title,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__option-title {
-  color: #2f2f2f !important;
+.amp-bundles__volume-discount-bundles__tier-text {
+  color: #303030 !important;
   font-size: 16px !important;
   font-weight: 700 !important;
 }
 
-/* Badge do card 1 */
+/* Badge preço normal */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle:first-child .amp-volume-discount-bundles__badge,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle:first-child .amp-volume-discount-bundles__option-badge {
-  background: #eceae6 !important;
-  color: #66625c !important;
-  border: none !important;
-  font-weight: 600 !important;
-}
-
-/* Badge do card 2 */
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle:last-child .amp-volume-discount-bundles__badge,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle:last-child .amp-volume-discount-bundles__option-badge {
-  background: #c79a47 !important;
-  color: #ffffff !important;
-  border: none !important;
-  font-weight: 700 !important;
-}
-
-/* Ribbon "Mais escolhido" */
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__highlight-ribbon {
-  background: #b98a43 !important;
-  color: #fff !important;
-  border-radius: 10px !important;
+.amp-bundles__volume-discount-bundles__tier-badge[data-tier-index="0"] {
   padding: 4px 10px !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  box-shadow: none !important;
+  color: #676767 !important;
+  background: #eeeeec !important;
+  border: 0 !important;
+  border-radius: 999px !important;
 }
 
-/* Preço antigo */
+/* Badge 10% OFF */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__compare-price,
+.amp-bundles__volume-discount-bundles__tier-badge[data-tier-index="1"] {
+  padding: 4px 10px !important;
+  color: #ffffff !important;
+  background: #bc8e4a !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+}
+
+/* Preço anterior */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__old-price {
-  color: #8d877e !important;
-  font-size: 14px !important;
+.amp-bundles__volume-discount-bundles__tier-prices__original {
+  color: #77736d !important;
+  font-size: 13px !important;
   text-decoration-thickness: 1px !important;
 }
 
 /* Preço final */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__price,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__final-price {
-  color: #2b2b2b !important;
-  font-size: 21px !important;
+.amp-bundles__volume-discount-bundles__tier-prices__discounted {
+  color: #292929 !important;
+  font-size: 18px !important;
   font-weight: 700 !important;
 }
 
-/* Divider interno suave */
+/* Traço interno suave e sem ultrapassar o cartão */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles hr,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__divider,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__bundle-divider {
+.amp-bundles__volume-discount-bundles__quantity-divider {
+  box-sizing: border-box !important;
+  width: auto !important;
+  max-width: none !important;
+  height: 1px !important;
+  margin: 0 22px !important;
+  padding: 0 !important;
+  background: #ddd4c6 !important;
   border: 0 !important;
-  border-top: 1px solid #d8d0c3 !important;
   opacity: 1 !important;
-  margin: 16px 0 14px !important;
-  width: 100% !important;
 }
 
-/* Linha da área de quantidade */
+/* Área de quantidade */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-wrapper,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-selector-wrapper,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-selector {
-  border-top: 1px solid #d8d0c3 !important;
-  margin-top: 14px !important;
-  padding-top: 16px !important;
-  box-shadow: none !important;
-}
-
-/* Layout da quantidade */
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-wrapper {
+.amp-bundles__volume-discount-bundles__quantity-controls {
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: flex-end !important;
+  gap: 7px !important;
+  padding: 16px 22px 18px !important;
 }
 
+/* Texto Quantidade alinhado à esquerda */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-label {
-  color: #4b4a46 !important;
+.amp-bundles__volume-discount-bundles__quantity-label {
+  margin-right: auto !important;
+  color: #44413d !important;
   font-size: 14px !important;
   font-weight: 600 !important;
 }
 
-/* Botões de quantidade */
+/* Botões menos e mais em cápsulas claras */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-selector button,
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-button {
-  width: 38px !important;
-  height: 38px !important;
+.amp-bundles__volume-discount-bundles__quantity-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  color: #3d3a36 !important;
+  background: #ffffff !important;
+  border: 1px solid #eee9e1 !important;
   border-radius: 999px !important;
-  border: none !important;
-  background: #f4efe7 !important;
-  color: #333 !important;
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  box-shadow: none !important;
+  box-shadow: 0 3px 10px rgba(55, 43, 25, 0.04) !important;
+  opacity: 1 !important;
 }
 
+/* Menos desabilitado */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-selector-value,
+.amp-bundles__volume-discount-bundles__quantity-button:disabled {
+  color: #bab5ad !important;
+  opacity: 1 !important;
+}
+
+/* Número da quantidade */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__quantity-value {
-  min-width: 24px !important;
-  text-align: center !important;
-  color: #2d2d2d !important;
+.amp-bundles__volume-discount-bundles__quantity-value {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 30px !important;
+  height: 36px !important;
+  color: #303030 !important;
   font-size: 16px !important;
   font-weight: 700 !important;
+  opacity: 1 !important;
 }
 
-/* Economia */
+/* Selo Mais escolhido */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__benefit {
-  margin-top: 8px !important;
-  margin-bottom: 8px !important;
-  color: #b98a43 !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-}
-
-/* Total */
-.wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__total-label {
-  color: #2c2c2c !important;
-  font-size: 15px !important;
+[class*="volume-discount-bundles"][class*="ribbon"] {
+  left: 16px !important;
+  right: auto !important;
+  top: -13px !important;
+  padding: 5px 12px !important;
+  color: #ffffff !important;
+  background: #b98a43 !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
   font-weight: 700 !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
 }
 
+/* Espaço acima do cartão que possui o selo */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-volume-discount-bundles__total-price {
-  color: #111 !important;
-  font-size: 20px !important;
-  font-weight: 800 !important;
-}
-
-/* Giftback AMP */
-.wt-product__info:has(.amp-volume-discount-bundles)
-.tn-giftback-badge--amp {
+.amp-bundles__volume-discount-bundles__tier-option--selected {
   margin-top: 10px !important;
-  margin-bottom: 14px !important;
-  padding: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.wt-product__info:has(.amp-volume-discount-bundles)
-.tn-giftback-badge--amp .tn-giftback-badge__icon {
-  width: 22px !important;
-  height: 22px !important;
-  flex: 0 0 22px !important;
-  background: transparent !important;
-  color: #b98a43 !important;
-}
-
-.wt-product__info:has(.amp-volume-discount-bundles)
-.tn-giftback-badge--amp .tn-giftback-badge__text {
-  font-size: 14px !important;
-  line-height: 1.35 !important;
-  white-space: normal !important;
-}
-
-.wt-product__info:has(.amp-volume-discount-bundles)
-.tn-giftback-badge--amp .tn-giftback-badge__text strong {
-  color: #b98a43 !important;
-  font-size: 15px !important;
 }
 
 /* Mobile */
 @media screen and (max-width: 749px) {
   .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle {
-    padding: 18px 16px !important;
-    border-radius: 20px !important;
+  .amp-bundles__volume-discount-bundles__tier-content {
+    padding: 17px 16px !important;
   }
 
   .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__price,
-  .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__final-price {
-    font-size: 18px !important;
+  .amp-bundles__volume-discount-bundles__quantity-divider {
+    margin: 0 16px !important;
   }
 
   .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-selector button,
+  .amp-bundles__volume-discount-bundles__quantity-controls {
+    padding: 14px 16px 16px !important;
+  }
+
   .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-button {
+  .amp-bundles__volume-discount-bundles__quantity-button {
     width: 34px !important;
     height: 34px !important;
   }
