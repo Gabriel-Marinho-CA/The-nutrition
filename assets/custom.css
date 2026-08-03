@@ -87,11 +87,7 @@
   font-weight: 700;
 }
 
-/* =========================================================
-   AMP — VISUAL IGUAL À REFERÊNCIA
-========================================================= */
-
-/* Opção normal: cinza muito claro */
+/* Opções em estado neutro: cinza muito claro */
 .wt-product__info:has(.amp-volume-discount-bundles)
 .amp-bundles__volume-discount-bundles__tier-option {
   position: relative !important;
@@ -102,9 +98,25 @@
   box-shadow: none !important;
 }
 
-/* Opção selecionada: fundo bege e borda dourada */
+/* Opção 1 permanece neutra mesmo quando selecionada */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-bundles__volume-discount-bundles__tier-option--selected {
+.amp-bundles__volume-discount-bundles__tier-option:first-child,
+.wt-product__info:has(.amp-volume-discount-bundles)
+.amp-bundles__volume-discount-bundles__tier-option:first-child.amp-bundles__volume-discount-bundles__tier-option--selected {
+  background: #f8f8f7 !important;
+  border: 1px solid #e6e3de !important;
+}
+
+/* Opção 2 permanece neutra quando não selecionada */
+.wt-product__info:has(.amp-volume-discount-bundles)
+.amp-bundles__volume-discount-bundles__tier-option:nth-child(2) {
+  background: #fcfcfb !important;
+  border: 1px solid #e6e3de !important;
+}
+
+/* Destaque somente quando a opção 2 estiver selecionada */
+.wt-product__info:has(.amp-volume-discount-bundles)
+.amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected {
   background: #faf5ec !important;
   border: 1px solid #c6a263 !important;
 }
@@ -230,10 +242,16 @@
   opacity: 1 !important;
 }
 
-/* Espaço acima do cartão que possui o selo */
+/* Espaço acima apenas quando a opção 2 estiver selecionada */
 .wt-product__info:has(.amp-volume-discount-bundles)
-.amp-bundles__volume-discount-bundles__tier-option--selected {
+.amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected {
   margin-top: 10px !important;
+}
+
+/* Remove o espaço adicional quando a opção 1 estiver selecionada */
+.wt-product__info:has(.amp-volume-discount-bundles)
+.amp-bundles__volume-discount-bundles__tier-option:first-child.amp-bundles__volume-discount-bundles__tier-option--selected {
+  margin-top: 0 !important;
 }
 
 /* Mobile */
