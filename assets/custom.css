@@ -88,17 +88,18 @@
 }
 
 /* =========================================================
-   AMP VOLUME DISCOUNT — AJUSTE VISUAL CLEAN / PREMIUM
-   Apenas em produtos com AMP bundle
+   AMP VOLUME DISCOUNT — VISUAL PREMIUM
+   Somente em produtos com AMP bundle
 ========================================================= */
 
+/* Espaçamento geral */
 .wt-product__info:has(.amp-volume-discount-bundles) .amp-volume-discount-bundles {
   margin: 18px 0 14px;
 }
 
 /* Headline */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__headline {
+.amp-volume-discount-bundles__headline {
   margin-bottom: 14px;
   color: #2c2c2c;
   font-size: 16px;
@@ -108,255 +109,250 @@
 
 /* Cards gerais */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle {
-  border-radius: 22px;
-  padding: 22px 20px;
-  box-shadow: none;
+.amp-volume-discount-bundles__bundle {
+  border-radius: 22px !important;
+  padding: 22px 20px !important;
+  margin-bottom: 14px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
   transition: all 0.2s ease;
-  margin-bottom: 14px;
-  overflow: hidden;
 }
 
-/* LEVE 1 — visual neutro */
+/* CARD 1 — neutro e suave */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle:first-child {
-  background: #fcfcfb;
-  border: 1px solid #e8e5df;
+.amp-volume-discount-bundles__bundle:first-child {
+  background: #fcfcfb !important;
+  border: 1px solid #e8e5df !important;
 }
 
-/* LEVE 2 — destaque */
+/* CARD 2 — destaque premium */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle:last-child {
-  background: #f7f2ea;
-  border: 1.5px solid #c8a15a;
+.amp-volume-discount-bundles__bundle:last-child {
+  background: #f5efe5 !important;
+  border: 2px solid #c79a47 !important;
 }
 
-/* Caso exista classe de selecionado, reforça só no selecionado */
+/* Se AMP aplicar classe de selecionado, mantém destaque */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle.is-selected,
+.amp-volume-discount-bundles__bundle--selected,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle--selected {
-  background: #f7f2ea;
-  border: 1.5px solid #c8a15a;
+.amp-volume-discount-bundles__bundle.is-selected {
+  background: #f5efe5 !important;
+  border: 2px solid #c79a47 !important;
 }
 
-/* Título da opção */
+/* Títulos */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle-title,
+.amp-volume-discount-bundles__bundle-title,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__option-title {
-  color: #2f2f2f;
-  font-size: 16px;
-  font-weight: 700;
+.amp-volume-discount-bundles__option-title {
+  color: #2f2f2f !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
 }
 
-/* Badge "Preço normal" */
+/* Badge do card 1 */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle:first-child .amp-volume-discount-bundles__badge,
+.amp-volume-discount-bundles__bundle:first-child .amp-volume-discount-bundles__badge,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle:first-child .amp-volume-discount-bundles__option-badge {
-  background: #eceae6;
-  color: #66625c;
-  border: none;
+.amp-volume-discount-bundles__bundle:first-child .amp-volume-discount-bundles__option-badge {
+  background: #eceae6 !important;
+  color: #66625c !important;
+  border: none !important;
+  font-weight: 600 !important;
 }
 
-/* Badge de desconto / destaque do Leve 2 */
+/* Badge do card 2 */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle:last-child .amp-volume-discount-bundles__badge,
+.amp-volume-discount-bundles__bundle:last-child .amp-volume-discount-bundles__badge,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle:last-child .amp-volume-discount-bundles__option-badge {
-  background: #c79a47;
-  color: #ffffff;
-  border: none;
-  font-weight: 700;
+.amp-volume-discount-bundles__bundle:last-child .amp-volume-discount-bundles__option-badge {
+  background: #c79a47 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 700 !important;
 }
 
 /* Ribbon "Mais escolhido" */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__highlight-ribbon {
-  background: #b98a43;
-  color: #fff;
-  border-radius: 10px;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: none;
+.amp-volume-discount-bundles__highlight-ribbon {
+  background: #b98a43 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
 }
 
 /* Preço antigo */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__compare-price,
+.amp-volume-discount-bundles__compare-price,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__old-price {
-  color: #8d877e;
-  font-size: 14px;
-  text-decoration-thickness: 1px;
+.amp-volume-discount-bundles__old-price {
+  color: #8d877e !important;
+  font-size: 14px !important;
+  text-decoration-thickness: 1px !important;
 }
 
 /* Preço final */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__price,
+.amp-volume-discount-bundles__price,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__final-price {
-  color: #2b2b2b;
-  font-size: 21px;
-  font-weight: 700;
+.amp-volume-discount-bundles__final-price {
+  color: #2b2b2b !important;
+  font-size: 21px !important;
+  font-weight: 700 !important;
 }
 
-/* ---------- CORREÇÃO DO TRAÇO ---------- */
-/* deixa qualquer divisor interno mais suave */
+/* Divider interno suave */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles hr,
+.amp-volume-discount-bundles hr,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__divider,
+.amp-volume-discount-bundles__divider,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__bundle-divider {
+.amp-volume-discount-bundles__bundle-divider {
   border: 0 !important;
-  border-top: 1px solid #ddd6cb !important;
+  border-top: 1px solid #d8d0c3 !important;
   opacity: 1 !important;
   margin: 16px 0 14px !important;
   width: 100% !important;
 }
 
-/* Se esse bloco de quantidade estiver criando o traço, suaviza ele também */
+/* Linha da área de quantidade */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-wrapper,
+.amp-volume-discount-bundles__quantity-wrapper,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-selector-wrapper,
+.amp-volume-discount-bundles__quantity-selector-wrapper,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-selector {
-  border-top: 1px solid #ddd6cb !important;
+.amp-volume-discount-bundles__quantity-selector {
+  border-top: 1px solid #d8d0c3 !important;
   margin-top: 14px !important;
   padding-top: 16px !important;
   box-shadow: none !important;
 }
 
-/* Linha de quantidade */
+/* Layout da quantidade */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.amp-volume-discount-bundles__quantity-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
 }
 
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-label {
-  color: #4b4a46;
-  font-size: 14px;
-  font-weight: 600;
+.amp-volume-discount-bundles__quantity-label {
+  color: #4b4a46 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
 }
 
 /* Botões de quantidade */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-selector button,
+.amp-volume-discount-bundles__quantity-selector button,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-button {
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
-  border: none;
-  background: #f2efe9;
-  color: #333;
-  font-size: 18px;
-  font-weight: 600;
-  box-shadow: none;
+.amp-volume-discount-bundles__quantity-button {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: #f4efe7 !important;
+  color: #333 !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
 }
 
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-selector-value,
+.amp-volume-discount-bundles__quantity-selector-value,
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__quantity-value {
-  min-width: 24px;
-  text-align: center;
-  color: #2d2d2d;
-  font-size: 16px;
-  font-weight: 700;
+.amp-volume-discount-bundles__quantity-value {
+  min-width: 24px !important;
+  text-align: center !important;
+  color: #2d2d2d !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
 }
 
-/* Texto de economia */
+/* Economia */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__benefit {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  color: #b98a43;
-  font-size: 14px;
-  font-weight: 600;
+.amp-volume-discount-bundles__benefit {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+  color: #b98a43 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
 }
 
 /* Total */
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__total {
-  margin-top: 6px;
+.amp-volume-discount-bundles__total-label {
+  color: #2c2c2c !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
 }
 
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__total-label {
-  color: #2c2c2c;
-  font-size: 15px;
-  font-weight: 700;
+.amp-volume-discount-bundles__total-price {
+  color: #111 !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+/* Giftback AMP */
+.wt-product__info:has(.amp-volume-discount-bundles)
+.tn-giftback-badge--amp {
+  margin-top: 10px !important;
+  margin-bottom: 14px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-volume-discount-bundles__total-price {
-  color: #111;
-  font-size: 20px;
-  font-weight: 800;
-}
-
-/* Giftback abaixo da economia */
-.wt-product__info:has(.amp-volume-discount-bundles)
-  .tn-giftback-badge--amp {
-  margin-top: 10px;
-  margin-bottom: 14px;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+.tn-giftback-badge--amp .tn-giftback-badge__icon {
+  width: 22px !important;
+  height: 22px !important;
+  flex: 0 0 22px !important;
+  background: transparent !important;
+  color: #b98a43 !important;
 }
 
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .tn-giftback-badge--amp .tn-giftback-badge__icon {
-  width: 22px;
-  height: 22px;
-  flex: 0 0 22px;
-  background: transparent;
-  color: #b98a43;
+.tn-giftback-badge--amp .tn-giftback-badge__text {
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+  white-space: normal !important;
 }
 
 .wt-product__info:has(.amp-volume-discount-bundles)
-  .tn-giftback-badge--amp .tn-giftback-badge__text {
-  font-size: 14px;
-  line-height: 1.35;
-  white-space: normal;
-}
-
-.wt-product__info:has(.amp-volume-discount-bundles)
-  .tn-giftback-badge--amp .tn-giftback-badge__text strong {
-  color: #b98a43;
-  font-size: 15px;
+.tn-giftback-badge--amp .tn-giftback-badge__text strong {
+  color: #b98a43 !important;
+  font-size: 15px !important;
 }
 
 /* Mobile */
 @media screen and (max-width: 749px) {
   .wt-product__info:has(.amp-volume-discount-bundles)
-    .amp-volume-discount-bundles__bundle {
-    padding: 18px 16px;
-    border-radius: 20px;
+  .amp-volume-discount-bundles__bundle {
+    padding: 18px 16px !important;
+    border-radius: 20px !important;
   }
 
   .wt-product__info:has(.amp-volume-discount-bundles)
-    .amp-volume-discount-bundles__price,
+  .amp-volume-discount-bundles__price,
   .wt-product__info:has(.amp-volume-discount-bundles)
-    .amp-volume-discount-bundles__final-price {
-    font-size: 18px;
+  .amp-volume-discount-bundles__final-price {
+    font-size: 18px !important;
   }
 
   .wt-product__info:has(.amp-volume-discount-bundles)
-    .amp-volume-discount-bundles__quantity-selector button,
+  .amp-volume-discount-bundles__quantity-selector button,
   .wt-product__info:has(.amp-volume-discount-bundles)
-    .amp-volume-discount-bundles__quantity-button {
-    width: 34px;
-    height: 34px;
+  .amp-volume-discount-bundles__quantity-button {
+    width: 34px !important;
+    height: 34px !important;
   }
 }
