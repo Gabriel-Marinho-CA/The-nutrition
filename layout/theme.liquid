@@ -77,6 +77,49 @@
           try {
             const formData = new FormData(form);
 
+/*
+ * O AMP pode exibir a quantidade correta sem atualizar
+ * imediatamente o campo oculto do formulário.
+ * Por isso, usamos primeiro a quantidade exibida no AMP.
+ */
+const ampQuantityElement = productArea?.querySelector(
+  ".amp-bundles__volume-discount-bundles__quantity-value"
+);
+
+const ampQuantity = parseInt(
+  ampQuantityElement?.textContent?.trim(),
+  10
+);
+
+const formQuantityInput = form.querySelector(
+  'input[name="quantity"]'
+);
+
+const formQuantity = parseInt(
+  formQuantityInput?.value,
+  10
+);
+
+const finalQuantity =
+  Number.isFinite(ampQuantity) && ampQuantity > 0
+    ? ampQuantity
+    : Number.isFinite(formQuantity) && formQuantity > 0
+      ? formQuantity
+      : 1;
+
+/*
+ * Atualiza tanto o FormData enviado ao Shopify quanto
+ * o campo interno usado pelo tema.
+ */
+formData.set(
+  "quantity",
+  String(finalQuantity)
+);
+
+if (formQuantityInput) {
+  formQuantityInput.value = String(finalQuantity);
+}
+
             if (
               typeof cartDrawer.getSectionsToRender ===
               "function"
