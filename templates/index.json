@@ -392,7 +392,7 @@
         "heading_richtext": "<h2>Image banner</h2>",
         "full-width-enabled": false,
         "container_max_width": 0,
-        "slide_height": "fixed_height",
+        "slide_height": "adapt_to_first_image",
         "desktop_fixed_height": 460,
         "mobile_fixed_height": 200,
         "desktop_image": "shopify://shop_images/IMG_1245.png",
