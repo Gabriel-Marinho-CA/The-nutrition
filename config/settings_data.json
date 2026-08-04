@@ -129,7 +129,7 @@
           "gift_tier_mbTzwE": {
             "type": "gift_tier",
             "settings": {
-              "minimum_amount": 399,
+              "minimum_amount": 499,
               "gift_products": [
                 "par-de-meia-n-38-ao-42"
               ]
