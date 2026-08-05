@@ -538,93 +538,189 @@ if (formQuantityInput) {
       const CLASSIC_BUNDLE_BUTTON =
         '.amp-bundles__classic-bundles__cta';
 
+      const getCart = async () => {
+        const response = await fetch('/cart.js', {
+          headers: {
+            Accept: 'application/json'
+          },
+          cache: 'no-store'
+        });
+
+        if (!response.ok) {
+          throw new Error('Não foi possível consultar o carrinho.');
+        }
+
+        return response.json();
+      };
+
+      const waitForCartChange = async (
+        previousItemCount,
+        attempts = 15
+      ) => {
+        for (let attempt = 0; attempt < attempts; attempt += 1) {
+          await new Promise(resolve => {
+            window.setTimeout(resolve, 200);
+          });
+
+          const cart = await getCart();
+
+          if (cart.item_count !== previousItemCount) {
+            return cart;
+          }
+        }
+
+        return getCart();
+      };
+
+      const refreshCartDrawer = async cartDrawer => {
+        if (
+          !cartDrawer ||
+          typeof cartDrawer.getSectionsToRender !== 'function'
+        ) {
+          return;
+        }
+
+        const sections = cartDrawer
+          .getSectionsToRender()
+          .map(section => section.id);
+
+        if (!sections.length) {
+          return;
+        }
+
+        const url = new URL(
+          window.location.href
+        );
+
+        url.searchParams.set(
+          'sections',
+          sections.join(',')
+        );
+
+        const response = await fetch(url.toString(), {
+          headers: {
+            Accept: 'application/json'
+          },
+          cache: 'no-store'
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            'Não foi possível atualizar o minicarrinho.'
+          );
+        }
+
+        const renderedSections = await response.json();
+
+        if (
+          typeof cartDrawer.renderContents === 'function'
+        ) {
+          cartDrawer.renderContents({
+            sections: renderedSections
+          });
+        }
+
+        cartDrawer.classList.remove('is-empty');
+
+        window.setTimeout(() => {
+          if (typeof cartDrawer.open === 'function') {
+            cartDrawer.open();
+          }
+        }, 100);
+      };
+
       const attachClassicBundleHandler = () => {
         document
           .querySelectorAll(CLASSIC_BUNDLE_BUTTON)
           .forEach(button => {
             if (
-              button.dataset.tnCartProtection === 'true'
+              button.dataset.tnClassicBundleReady === 'true'
             ) {
               return;
             }
 
-            button.dataset.tnCartProtection = 'true';
+            button.dataset.tnClassicBundleReady = 'true';
 
-            /*
-             * O listener fica diretamente no botão.
-             * O AMP continua executando a adição do kit,
-             * mas o clique não sobe até o script da Yampi.
-             */
             button.addEventListener(
               'click',
-              event => {
+              async event => {
+                /*
+                 * O AMP continua processando o clique,
+                 * mas ele não sobe até a integração da Yampi.
+                 */
                 event.stopPropagation();
+                event.stopImmediatePropagation();
+
+                if (
+                  button.dataset.tnBundleAdding === 'true'
+                ) {
+                  return;
+                }
+
+                button.dataset.tnBundleAdding = 'true';
 
                 const cartDrawer =
                   document.querySelector('cart-drawer');
 
-                /*
-                 * Aguarda o AMP adicionar os produtos
-                 * e então atualiza/abre o minicart.
-                 */
-                window.setTimeout(async () => {
-                  try {
-                    const cartResponse = await fetch(
-                      '/cart.js',
-                      {
-                        headers: {
-                          Accept: 'application/json'
-                        }
-                      }
-                    );
+                try {
+                  const cartBefore = await getCart();
 
-                    if (!cartResponse.ok) {
-                      return;
-                    }
+                  /*
+                   * Aguarda o AMP concluir a inclusão dos
+                   * seis itens no carrinho.
+                   */
+                  await waitForCartChange(
+                    cartBefore.item_count
+                  );
 
-                    const cart = await cartResponse.json();
+                  /*
+                   * Busca novamente as seções do drawer,
+                   * renderiza o conteúdo e só então abre.
+                   */
+                  await refreshCartDrawer(cartDrawer);
+                } catch (error) {
+                  console.error(
+                    'Erro ao atualizar o carrinho do kit:',
+                    error
+                  );
 
-                    if (!cartDrawer) return;
-
-                    cartDrawer.classList.remove('is-empty');
-
-                    if (
-                      typeof cartDrawer.open === 'function'
-                    ) {
-                      cartDrawer.open();
-                    }
-
-                    document.dispatchEvent(
-                      new CustomEvent('cart:refresh', {
-                        bubbles: true,
-                        detail: {
-                          cart
-                        }
-                      })
-                    );
-                  } catch (error) {
-                    console.error(
-                      'Erro ao atualizar o carrinho do kit:',
-                      error
-                    );
-                  }
-                }, 700);
+                  /*
+                   * Não abre um drawer vazio caso a
+                   * atualização tenha falhado.
+                   */
+                  window.location.href =
+                    window.routes?.cart_url || '/cart';
+                } finally {
+                  delete button.dataset.tnBundleAdding;
+                }
               },
               false
             );
           });
       };
 
-      attachClassicBundleHandler();
-
-      const observer = new MutationObserver(() => {
+      const initializeClassicBundle = () => {
         attachClassicBundleHandler();
-      });
 
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
+        const observer = new MutationObserver(() => {
+          attachClassicBundleHandler();
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener(
+          'DOMContentLoaded',
+          initializeClassicBundle,
+          { once: true }
+        );
+      } else {
+        initializeClassicBundle();
+      }
     })();
   </script>
 {% endif %}
