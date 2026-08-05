@@ -3,6 +3,22 @@
 
   Usage:
   {% render 'cart-drawer' %}
+
+  Regras das ofertas:
+
+  1. Classic Bundle — Kit Sachês
+     O desconto só permanece ativo enquanto houver pelo menos uma unidade
+     de cada uma das seis variantes do kit.
+
+     Com dois conjuntos completos, existem dois kits válidos.
+     Ao remover uma unidade de um dos sabores, permanece apenas um kit válido.
+
+  2. Volume Discount
+     A propriedade _tn_amp_group contém o mínimo necessário.
+     Exemplo: volume_2 exige quantidade mínima de 2 unidades.
+
+  Os descontos são apenas apresentados no minicarrinho.
+  O valor efetivo é aplicado no checkout.
 {% endcomment %}
 
 {{ 'component-cart-drawer-base.css' | asset_url | stylesheet_tag }}
@@ -34,34 +50,157 @@
   assign btn_bg = settings['color-button-primary-background'] | default: '#000000'
   assign btn_text = settings['color-button-primary-text'] | default: '#ffffff'
 
-  assign tn_amp_total_discount = 0
-  assign tn_amp_checkout_total = cart.total_price
-  assign tn_has_amp_discount = false
+  comment
+    Variantes que formam um Kit Sachês completo.
+  endcomment
+
+  assign tn_kit_variant_1 = 44713374810146
+  assign tn_kit_variant_2 = 44713374941218
+  assign tn_kit_variant_3 = 44713375072290
+  assign tn_kit_variant_4 = 44713375268898
+  assign tn_kit_variant_5 = 44713375301666
+  assign tn_kit_variant_6 = 44713374744610
+
+  assign tn_kit_qty_1 = 0
+  assign tn_kit_qty_2 = 0
+  assign tn_kit_qty_3 = 0
+  assign tn_kit_qty_4 = 0
+  assign tn_kit_qty_5 = 0
+  assign tn_kit_qty_6 = 0
+
+  comment
+    Conta apenas as unidades que foram adicionadas pelo Classic Bundle.
+    Produtos iguais adicionados normalmente não entram na composição do kit.
+  endcomment
 
   for cart_item in cart.items
-    assign tn_amp_percent = cart_item.properties['_tn_amp_discount_percent'] | default: 0 | plus: 0
+    assign tn_item_campaign = cart_item.properties['_tn_amp_campaign']
+    assign tn_item_group = cart_item.properties['_tn_amp_group']
 
-    if tn_amp_percent > 0
-      assign tn_has_amp_discount = true
+    if tn_item_campaign == 'classic_bundle' and tn_item_group == 'kit_sachets'
+      case cart_item.variant.id
+        when tn_kit_variant_1
+          assign tn_kit_qty_1 = tn_kit_qty_1 | plus: cart_item.quantity
 
-      assign tn_amp_multiplier = 100 | minus: tn_amp_percent
-      assign tn_amp_unit_numerator = cart_item.final_price | times: tn_amp_multiplier
-      assign tn_amp_unit_numerator = tn_amp_unit_numerator | plus: 50
-      assign tn_amp_unit_price = tn_amp_unit_numerator | divided_by: 100
+        when tn_kit_variant_2
+          assign tn_kit_qty_2 = tn_kit_qty_2 | plus: cart_item.quantity
 
-      assign tn_amp_line_price = tn_amp_unit_price | times: cart_item.quantity
-      assign tn_amp_line_discount = cart_item.final_line_price | minus: tn_amp_line_price
+        when tn_kit_variant_3
+          assign tn_kit_qty_3 = tn_kit_qty_3 | plus: cart_item.quantity
 
-      if tn_amp_line_discount > 0
-        assign tn_amp_total_discount = tn_amp_total_discount | plus: tn_amp_line_discount
+        when tn_kit_variant_4
+          assign tn_kit_qty_4 = tn_kit_qty_4 | plus: cart_item.quantity
+
+        when tn_kit_variant_5
+          assign tn_kit_qty_5 = tn_kit_qty_5 | plus: cart_item.quantity
+
+        when tn_kit_variant_6
+          assign tn_kit_qty_6 = tn_kit_qty_6 | plus: cart_item.quantity
+      endcase
+    endif
+  endfor
+
+  comment
+    O número de kits completos é a menor quantidade encontrada
+    entre as seis variantes obrigatórias.
+  endcomment
+
+  assign tn_complete_kit_count = tn_kit_qty_1
+
+  if tn_kit_qty_2 < tn_complete_kit_count
+    assign tn_complete_kit_count = tn_kit_qty_2
+  endif
+
+  if tn_kit_qty_3 < tn_complete_kit_count
+    assign tn_complete_kit_count = tn_kit_qty_3
+  endif
+
+  if tn_kit_qty_4 < tn_complete_kit_count
+    assign tn_complete_kit_count = tn_kit_qty_4
+  endif
+
+  if tn_kit_qty_5 < tn_complete_kit_count
+    assign tn_complete_kit_count = tn_kit_qty_5
+  endif
+
+  if tn_kit_qty_6 < tn_complete_kit_count
+    assign tn_complete_kit_count = tn_kit_qty_6
+  endif
+
+  assign tn_offer_total_discount = 0
+  assign tn_checkout_total = cart.total_price
+  assign tn_has_valid_offer = false
+  assign tn_has_valid_kit = false
+  assign tn_has_valid_volume_offer = false
+
+  comment
+    Calcula o desconto total considerando somente ofertas
+    que continuam válidas no estado atual do carrinho.
+  endcomment
+
+  for cart_item in cart.items
+    assign tn_item_campaign = cart_item.properties['_tn_amp_campaign']
+    assign tn_item_group = cart_item.properties['_tn_amp_group']
+    assign tn_item_percent = cart_item.properties['_tn_amp_discount_percent'] | default: 0 | plus: 0
+    assign tn_item_eligible_quantity = 0
+
+    if tn_item_percent > 0
+      if tn_item_campaign == 'classic_bundle' and tn_item_group == 'kit_sachets'
+        if tn_complete_kit_count > 0
+          assign tn_item_eligible_quantity = cart_item.quantity
+
+          if tn_item_eligible_quantity > tn_complete_kit_count
+            assign tn_item_eligible_quantity = tn_complete_kit_count
+          endif
+        endif
+
+      elsif tn_item_campaign == 'volume_discount'
+        assign tn_volume_minimum = tn_item_group | remove: 'volume_' | plus: 0
+
+        if tn_volume_minimum > 0 and cart_item.quantity >= tn_volume_minimum
+          assign tn_item_eligible_quantity = cart_item.quantity
+        endif
+      endif
+    endif
+
+    if tn_item_eligible_quantity > 0
+      assign tn_has_valid_offer = true
+
+      if tn_item_campaign == 'classic_bundle'
+        assign tn_has_valid_kit = true
+      elsif tn_item_campaign == 'volume_discount'
+        assign tn_has_valid_volume_offer = true
+      endif
+
+      assign tn_item_multiplier = 100 | minus: tn_item_percent
+
+      assign tn_item_discounted_unit_numerator = cart_item.final_price | times: tn_item_multiplier
+      assign tn_item_discounted_unit_numerator = tn_item_discounted_unit_numerator | plus: 50
+      assign tn_item_discounted_unit_price = tn_item_discounted_unit_numerator | divided_by: 100
+
+      assign tn_item_discount_per_unit = cart_item.final_price | minus: tn_item_discounted_unit_price
+      assign tn_item_discount_total = tn_item_discount_per_unit | times: tn_item_eligible_quantity
+
+      if tn_item_discount_total > 0
+        assign tn_offer_total_discount = tn_offer_total_discount | plus: tn_item_discount_total
       endif
     endif
   endfor
 
-  assign tn_amp_checkout_total = cart.total_price | minus: tn_amp_total_discount
+  assign tn_checkout_total = cart.total_price | minus: tn_offer_total_discount
 
-  if tn_amp_checkout_total < 0
-    assign tn_amp_checkout_total = 0
+  if tn_checkout_total < 0
+    assign tn_checkout_total = 0
+  endif
+
+  assign tn_discount_summary_label = 'Desconto da oferta'
+
+  if tn_has_valid_kit and tn_has_valid_volume_offer
+    assign tn_discount_summary_label = 'Descontos'
+  elsif tn_has_valid_kit
+    assign tn_discount_summary_label = 'Desconto do kit'
+  elsif tn_has_valid_volume_offer
+    assign tn_discount_summary_label = 'Desconto da oferta'
   endif
 -%}
 
@@ -87,25 +226,25 @@
     visibility: hidden;
   }
 
-  .tn-amp-price {
+  .tn-offer-price {
     display: flex;
     align-items: baseline;
     gap: 7px;
     flex-wrap: wrap;
   }
 
-  .tn-amp-price__original {
-    color: rgba(var(--color-foreground), 0.58);
+  .tn-offer-price__original {
+    color: rgba(var(--color-foreground), 0.52);
     font-size: 12px;
     text-decoration: line-through;
   }
 
-  .tn-amp-price__discounted {
+  .tn-offer-price__discounted {
     color: rgb(var(--color-foreground));
     font-weight: 700;
   }
 
-  .tn-amp-discount-label {
+  .tn-offer-discount-label {
     display: inline-flex;
     align-items: center;
     width: fit-content;
@@ -120,13 +259,13 @@
     font-weight: 700;
   }
 
-  .tn-amp-cart-summary {
+  .tn-offer-cart-summary {
     display: grid;
     width: 100%;
     gap: 8px;
   }
 
-  .tn-amp-cart-summary__row {
+  .tn-offer-cart-summary__row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -136,14 +275,14 @@
     line-height: 1.35;
   }
 
-  .tn-amp-cart-summary__row--discount {
+  .tn-offer-cart-summary__row--discount {
     color: #8c6729;
     font-weight: 650;
   }
 
-  .tn-amp-cart-summary__total {
+  .tn-offer-cart-summary__total {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 18px;
     margin-top: 2px;
@@ -151,35 +290,30 @@
     border-top: 1px solid rgba(var(--color-foreground), 0.12);
   }
 
-  .tn-amp-cart-summary__total-label,
-  .tn-amp-cart-summary__total-value {
+  .tn-offer-cart-summary__total-label,
+  .tn-offer-cart-summary__total-value {
     margin: 0;
     font-size: 18px;
     line-height: 1.25;
     font-weight: 700;
   }
 
-  .tn-amp-cart-summary__total-content {
+  .tn-offer-cart-summary__total-value {
     text-align: right;
   }
-
-  .tn-amp-cart-summary__note {
-    margin: 3px 0 0;
-    color: rgba(var(--color-foreground), 0.58);
-    font-size: 11px;
-    line-height: 1.35;
-  }
 {% endstyle %}
+
+{% comment %}
+  data-cart-type="drawer" impede que o product-form redirecione para /cart
+  após adicionar ao carrinho — ele abre o drawer.
+{% endcomment %}
 
 <cart-drawer
   class="drawer{% if cart == empty %} is-empty{% endif %}"
   data-cart-type="drawer"
 >
   <div id="CartDrawer" class="cart-drawer">
-    <div
-      id="CartDrawer-Overlay"
-      class="cart-drawer__overlay"
-    ></div>
+    <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
 
     <div
       class="drawer__inner gradient"
@@ -214,9 +348,7 @@
                 {{ 'general.continue_shopping' | t }}
               </a>
 
-              {%- if shop.customer_accounts_enabled
-                and customer == null
-              -%}
+              {%- if shop.customer_accounts_enabled and customer == null -%}
                 <p class="cart__login-title h3">
                   {{ 'sections.cart.login.title' | t }}
                 </p>
@@ -269,10 +401,7 @@
           >
             {%- if cart != empty -%}
               <div class="drawer__cart-items-wrapper">
-                <table
-                  class="cart-items"
-                  role="table"
-                >
+                <table class="cart-items" role="table">
                   <thead role="rowgroup">
                     <tr role="row">
                       <th
@@ -337,20 +466,53 @@
                           assign is_gift = true
                         endif
 
-                        assign tn_item_amp_percent = item.properties['_tn_amp_discount_percent'] | default: 0 | plus: 0
-                        assign tn_item_has_amp_discount = false
-                        assign tn_item_amp_unit_price = item.final_price
-                        assign tn_item_amp_line_price = item.final_line_price
+                        assign tn_item_campaign = item.properties['_tn_amp_campaign']
+                        assign tn_item_group = item.properties['_tn_amp_group']
+                        assign tn_item_percent = item.properties['_tn_amp_discount_percent'] | default: 0 | plus: 0
 
-                        if tn_item_amp_percent > 0
-                          assign tn_item_has_amp_discount = true
-                          assign tn_item_amp_multiplier = 100 | minus: tn_item_amp_percent
+                        assign tn_item_offer_valid = false
+                        assign tn_item_eligible_quantity = 0
+                        assign tn_item_offer_label = 'Oferta'
 
-                          assign tn_item_amp_unit_numerator = item.final_price | times: tn_item_amp_multiplier
-                          assign tn_item_amp_unit_numerator = tn_item_amp_unit_numerator | plus: 50
-                          assign tn_item_amp_unit_price = tn_item_amp_unit_numerator | divided_by: 100
+                        if tn_item_percent > 0
+                          if tn_item_campaign == 'classic_bundle' and tn_item_group == 'kit_sachets'
+                            if tn_complete_kit_count > 0
+                              assign tn_item_eligible_quantity = item.quantity
 
-                          assign tn_item_amp_line_price = tn_item_amp_unit_price | times: item.quantity
+                              if tn_item_eligible_quantity > tn_complete_kit_count
+                                assign tn_item_eligible_quantity = tn_complete_kit_count
+                              endif
+
+                              if tn_item_eligible_quantity > 0
+                                assign tn_item_offer_valid = true
+                                assign tn_item_offer_label = 'Kit'
+                              endif
+                            endif
+
+                          elsif tn_item_campaign == 'volume_discount'
+                            assign tn_item_volume_minimum = tn_item_group | remove: 'volume_' | plus: 0
+
+                            if tn_item_volume_minimum > 0 and item.quantity >= tn_item_volume_minimum
+                              assign tn_item_eligible_quantity = item.quantity
+                              assign tn_item_offer_valid = true
+                              assign tn_item_offer_label = 'Oferta'
+                            endif
+                          endif
+                        endif
+
+                        assign tn_item_display_line_price = item.final_line_price
+
+                        if tn_item_offer_valid
+                          assign tn_item_multiplier = 100 | minus: tn_item_percent
+
+                          assign tn_item_discounted_unit_numerator = item.final_price | times: tn_item_multiplier
+                          assign tn_item_discounted_unit_numerator = tn_item_discounted_unit_numerator | plus: 50
+                          assign tn_item_discounted_unit_price = tn_item_discounted_unit_numerator | divided_by: 100
+
+                          assign tn_item_full_price_quantity = item.quantity | minus: tn_item_eligible_quantity
+                          assign tn_item_discounted_part = tn_item_discounted_unit_price | times: tn_item_eligible_quantity
+                          assign tn_item_full_price_part = item.final_price | times: tn_item_full_price_quantity
+                          assign tn_item_display_line_price = tn_item_discounted_part | plus: tn_item_full_price_part
                         endif
                       -%}
 
@@ -358,6 +520,9 @@
                         id="CartDrawer-Item-{{ item.index | plus: 1 }}"
                         class="cart-item{% if item.parent_relationship.parent != null %} cart-item__nested-line{% endif %}{% if is_gift %} cart-item--gift{% endif %}"
                         role="row"
+                        {% if item.parent_relationship.parent != null %}
+                          aria-label="{{ 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape }}"
+                        {% endif %}
                       >
                         <td
                           class="cart-item__media"
@@ -420,20 +585,21 @@
                                 {%- render 'loading-spinner' -%}
 
                                 <div class="cart-item__price-wrapper">
-                                  {%- if tn_item_has_amp_discount -%}
-                                    <div class="tn-amp-price">
-                                      <s class="tn-amp-price__original">
+                                  {%- if tn_item_offer_valid -%}
+                                    <div class="tn-offer-price">
+                                      <s class="tn-offer-price__original">
                                         {{ item.final_line_price | money }}
                                       </s>
 
-                                      <span class="tn-amp-price__discounted">
-                                        {{ tn_item_amp_line_price | money }}
+                                      <span class="tn-offer-price__discounted">
+                                        {{ tn_item_display_line_price | money }}
                                       </span>
                                     </div>
 
-                                    <span class="tn-amp-discount-label">
-                                      AMP · {{ tn_item_amp_percent }}% OFF
+                                    <span class="tn-offer-discount-label">
+                                      {{ tn_item_offer_label }} · {{ tn_item_percent }}% OFF
                                     </span>
+
                                   {%- elsif item.original_line_price != item.final_line_price -%}
                                     <div class="cart-item__discounted-prices">
                                       <span class="visually-hidden">
@@ -452,15 +618,14 @@
                                         {{ item.final_line_price | money }}
                                       </span>
                                     </div>
+
                                   {%- else -%}
                                     <span class="price price--end">
                                       {{ item.original_line_price | money }}
                                     </span>
                                   {%- endif -%}
 
-                                  {%- if item.variant.available
-                                    and item.unit_price_measurement
-                                  -%}
+                                  {%- if item.variant.available and item.unit_price_measurement -%}
                                     {% render 'unit-price',
                                       price: item.unit_price,
                                       measurement: item.unit_price_measurement
@@ -482,9 +647,7 @@
                                           class="quantity__button"
                                           name="minus"
                                           type="button"
-                                          {% if item.instructions
-                                            and item.instructions.can_update_quantity == false
-                                          %}
+                                          {% if item.instructions and item.instructions.can_update_quantity == false %}
                                             disabled
                                           {% endif %}
                                         >
@@ -517,9 +680,7 @@
                                           aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
                                           id="Drawer-quantity-{{ item.index | plus: 1 }}"
                                           data-index="{{ item.index | plus: 1 }}"
-                                          {% if item.instructions
-                                            and item.instructions.can_update_quantity == false
-                                          %}
+                                          {% if item.instructions and item.instructions.can_update_quantity == false %}
                                             disabled
                                           {% endif %}
                                         >
@@ -528,9 +689,7 @@
                                           class="quantity__button"
                                           name="plus"
                                           type="button"
-                                          {% if item.instructions
-                                            and item.instructions.can_update_quantity == false
-                                          %}
+                                          {% if item.instructions and item.instructions.can_update_quantity == false %}
                                             disabled
                                           {% endif %}
                                         >
@@ -565,6 +724,108 @@
                                       </button>
                                     </cart-remove-button>
                                   </div>
+
+                                  {%- if has_qty_rules or has_vol_pricing -%}
+                                    <button
+                                      type="button"
+                                      class="quantity-popover__info-button quantity-popover__info-button--icon-with-label button button--tertiary"
+                                      aria-expanded="false"
+                                    >
+                                      <span class="svg-wrapper">
+                                        {{- 'icon-info.svg' | inline_asset_content -}}
+                                      </span>
+
+                                      <span>
+                                        {%- if has_vol_pricing -%}
+                                          {{ 'products.product.volume_pricing.note' | t }}
+                                        {%- elsif has_qty_rules -%}
+                                          {{ 'products.product.quantity.note' | t }}
+                                        {%- endif -%}
+                                      </span>
+                                    </button>
+                                  {%- endif -%}
+
+                                  {%- if has_vol_pricing or has_qty_rules -%}
+                                    <div
+                                      class="cart-items__info global-settings-popup quantity-popover__info"
+                                      tabindex="-1"
+                                      hidden
+                                    >
+                                      {%- if has_qty_rules == false -%}
+                                        <span class="volume-pricing-label caption">
+                                          {{- 'products.product.volume_pricing.title' | t -}}
+                                        </span>
+                                      {%- endif -%}
+
+                                      <div class="quantity__rules caption">
+                                        {%- if item.variant.quantity_rule.increment > 1 -%}
+                                          <span class="divider">
+                                            {{
+                                              'products.product.quantity.multiples_of'
+                                              | t: quantity: item.variant.quantity_rule.increment
+                                            }}
+                                          </span>
+                                        {%- endif -%}
+
+                                        {%- if item.variant.quantity_rule.min > 1 -%}
+                                          <span class="divider">
+                                            {{
+                                              'products.product.quantity.min_of'
+                                              | t: quantity: item.variant.quantity_rule.min
+                                            }}
+                                          </span>
+                                        {%- endif -%}
+
+                                        {%- if item.variant.quantity_rule.max != null -%}
+                                          <span class="divider">
+                                            {{
+                                              'products.product.quantity.max_of'
+                                              | t: quantity: item.variant.quantity_rule.max
+                                            }}
+                                          </span>
+                                        {%- endif -%}
+                                      </div>
+
+                                      <button
+                                        class="button-close button button--tertiary"
+                                        type="button"
+                                        aria-label="{{ 'accessibility.close' | t }}"
+                                      >
+                                        <span class="svg-wrapper">
+                                          {{- 'icon-close.svg' | inline_asset_content -}}
+                                        </span>
+                                      </button>
+
+                                      {%- if item.variant.quantity_price_breaks.size > 0 -%}
+                                        <volume-pricing class="parent-display">
+                                          <ul class="list-unstyled">
+                                            <li>
+                                              <span>
+                                                {{ item.variant.quantity_rule.min }}+
+                                              </span>
+
+                                              <span>
+                                                {{ item.variant.price | money_with_currency }}/ea
+                                              </span>
+                                            </li>
+
+                                            {%- for price_break in item.variant.quantity_price_breaks -%}
+                                              <li>
+                                                <span>
+                                                  {{ price_break.minimum_quantity }}
+                                                  <span aria-hidden="true">+</span>
+                                                </span>
+
+                                                <span>
+                                                  {{ price_break.price | money_with_currency }}/ea
+                                                </span>
+                                              </li>
+                                            {%- endfor -%}
+                                          </ul>
+                                        </volume-pricing>
+                                      {%- endif -%}
+                                    </div>
+                                  {%- endif -%}
 
                                   <div
                                     id="CartDrawer-LineItemError-{{ item.index | plus: 1 }}"
@@ -603,9 +864,7 @@
                               {%- for property in item.properties -%}
                                 {%- assign property_first_char = property.first | slice: 0 -%}
 
-                                {%- if property.last != blank
-                                  and property_first_char != '_'
-                                -%}
+                                {%- if property.last != blank and property_first_char != '_' -%}
                                   <div class="product-option">
                                     <dt>{{ property.first }}:</dt>
 
@@ -669,10 +928,7 @@
             </p>
           </div>
 
-          <div
-            id="CartDrawer-CartErrors"
-            role="alert"
-          ></div>
+          <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
       </cart-drawer-items>
 
@@ -681,13 +937,10 @@
           {% render 'order_bump' %}
         {% endif %}
 
-        {% assign giftback_carrinho = tn_amp_checkout_total | times: 10 | divided_by: 100 %}
+        {% assign giftback_carrinho = tn_checkout_total | times: 10 | divided_by: 100 %}
 
         <div class="tn-cart-giftback">
-          <div
-            class="tn-cart-giftback__icon"
-            aria-hidden="true"
-          >
+          <div class="tn-cart-giftback__icon" aria-hidden="true">
             <svg
               width="18"
               height="18"
@@ -735,9 +988,7 @@
 
           <div class="tn-cart-giftback__text">
             Ganhe
-            <strong>
-              {{ giftback_carrinho | money }}
-            </strong>
+            <strong>{{ giftback_carrinho | money }}</strong>
             de giftback nessa compra
           </div>
         </div>
@@ -849,9 +1100,7 @@
                 {%- for discount in cart.cart_level_discount_applications -%}
                   <li class="discounts__discount discounts__discount--end">
                     {{- 'icon-discount.svg' | inline_asset_content -}}
-
                     {{ discount.title | escape }}
-
                     (-{{ discount.total_allocated_amount | money }})
                   </li>
                 {%- endfor -%}
@@ -859,14 +1108,9 @@
             {%- endif -%}
           </div>
 
-          {%- if tn_has_amp_discount
-            and tn_amp_total_discount > 0
-          -%}
-            <div
-              class="tn-amp-cart-summary"
-              role="status"
-            >
-              <div class="tn-amp-cart-summary__row">
+          {%- if tn_has_valid_offer and tn_offer_total_discount > 0 -%}
+            <div class="tn-offer-cart-summary" role="status">
+              <div class="tn-offer-cart-summary__row">
                 <span>Subtotal</span>
 
                 <span>
@@ -874,35 +1118,26 @@
                 </span>
               </div>
 
-              <div class="tn-amp-cart-summary__row tn-amp-cart-summary__row--discount">
-                <span>Descontos AMP</span>
+              <div class="tn-offer-cart-summary__row tn-offer-cart-summary__row--discount">
+                <span>{{ tn_discount_summary_label }}</span>
 
                 <span>
-                  -{{ tn_amp_total_discount | money }}
+                  -{{ tn_offer_total_discount | money }}
                 </span>
               </div>
 
-              <div class="tn-amp-cart-summary__total">
-                <span class="tn-amp-cart-summary__total-label">
+              <div class="tn-offer-cart-summary__total">
+                <span class="tn-offer-cart-summary__total-label">
                   Total
                 </span>
 
-                <div class="tn-amp-cart-summary__total-content">
-                  <p class="tn-amp-cart-summary__total-value">
-                    {{ tn_amp_checkout_total | money }}
-                  </p>
-
-                  <p class="tn-amp-cart-summary__note">
-                    Desconto aplicado no checkout da Yampi
-                  </p>
-                </div>
+                <p class="tn-offer-cart-summary__total-value">
+                  {{ tn_checkout_total | money }}
+                </p>
               </div>
             </div>
           {%- else -%}
-            <div
-              class="totals"
-              role="status"
-            >
+            <div class="totals" role="status">
               <h2 class="totals__total">
                 Total
               </h2>
