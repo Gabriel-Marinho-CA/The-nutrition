@@ -3,6 +3,7 @@
 
   const SELECTORS = {
     productButton: "product-form .js-add-to-cart",
+
     volumeWidget: ".amp-volume-discount-bundles",
     selectedVolumeTier:
       ".amp-bundles__volume-discount-bundles__tier-option--selected",
@@ -10,8 +11,16 @@
       ".amp-bundles__volume-discount-bundles__quantity-value",
     volumeTierText:
       ".amp-bundles__volume-discount-bundles__tier-text",
+
+    classicWidget:
+      ".amp-bundles__classic-bundles",
+    classicHeadline:
+      ".amp-bundles__classic-bundles__headline",
+    classicProductsCard:
+      ".amp-bundles__classic-bundles__products_card",
     classicButton:
       ".amp-bundles__classic-bundles__cta",
+
     cartDrawer: "cart-drawer"
   };
 
@@ -144,15 +153,6 @@
     return formQuantity || 1;
   };
 
-  /*
-   * Executa a sincronização de brindes do carrinho
-   * depois que o AMP termina de adicionar os produtos.
-   *
-   * Para funcionar, o arquivo cart-drawer.js precisa
-   * expor a função:
-   *
-   * window.syncCartGifts = syncCartGifts;
-   */
   const syncCartGiftsAfterAdd = async () => {
     if (
       typeof window.syncCartGifts !==
@@ -168,10 +168,6 @@
     );
   };
 
-  /*
-   * Atualiza o drawer usando a função nativa
-   * refresh() já existente no tema.
-   */
   const refreshAndOpenCartDrawer = async () => {
     const cartDrawer = getCartDrawer();
 
@@ -205,21 +201,262 @@
     cartDrawer.classList.add("active");
   };
 
-  /*
-   * Depois de uma adição:
-   *
-   * 1. sincroniza os brindes;
-   * 2. busca novamente todo o carrinho;
-   * 3. abre o drawer já atualizado.
-   */
   const finalizeCartUpdate = async () => {
     await syncCartGiftsAfterAdd();
     await refreshAndOpenCartDrawer();
   };
 
   /* =====================================================
+     INTERFACE COMPACTA DO KIT DE SACHÊS
+     ===================================================== */
+
+  const createBundleToggle = (
+    widget,
+    productsCard
+  ) => {
+    const existingToggle =
+      widget.querySelector(
+        ".tn-sachet-bundle-toggle"
+      );
+
+    if (existingToggle) {
+      return;
+    }
+
+    const toggle = document.createElement(
+      "button"
+    );
+
+    toggle.type = "button";
+    toggle.className =
+      "tn-sachet-bundle-toggle";
+
+    toggle.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+    const productsId =
+      productsCard.id ||
+      `tn-sachet-products-${Math.random()
+        .toString(36)
+        .slice(2, 10)}`;
+
+    productsCard.id = productsId;
+
+    toggle.setAttribute(
+      "aria-controls",
+      productsId
+    );
+
+    toggle.innerHTML = `
+      <span class="tn-sachet-bundle-toggle__label">
+        Ver sabores inclusos
+      </span>
+
+      <span
+        class="tn-sachet-bundle-toggle__icon"
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 9L12 15L18 9"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+    `;
+
+    productsCard.classList.add(
+      "tn-sachet-bundle-products"
+    );
+
+    productsCard.hidden = true;
+
+    productsCard.parentNode.insertBefore(
+      toggle,
+      productsCard
+    );
+
+    toggle.addEventListener(
+      "click",
+      () => {
+        const isExpanded =
+          toggle.getAttribute(
+            "aria-expanded"
+          ) === "true";
+
+        const nextExpanded =
+          !isExpanded;
+
+        toggle.setAttribute(
+          "aria-expanded",
+          String(nextExpanded)
+        );
+
+        productsCard.hidden =
+          !nextExpanded;
+
+        widget.classList.toggle(
+          "tn-sachet-bundle--expanded",
+          nextExpanded
+        );
+
+        const label =
+          toggle.querySelector(
+            ".tn-sachet-bundle-toggle__label"
+          );
+
+        if (label) {
+          label.textContent =
+            nextExpanded
+              ? "Ocultar sabores"
+              : "Ver sabores inclusos";
+        }
+      }
+    );
+  };
+
+  const createBundleSummary = widget => {
+    const existingSummary =
+      widget.querySelector(
+        ".tn-sachet-bundle-summary"
+      );
+
+    if (existingSummary) {
+      return;
+    }
+
+    const headline =
+      widget.querySelector(
+        SELECTORS.classicHeadline
+      );
+
+    const summary =
+      document.createElement("div");
+
+    summary.className =
+      "tn-sachet-bundle-summary";
+
+    summary.innerHTML = `
+      <div class="tn-sachet-bundle-summary__text">
+        <span class="tn-sachet-bundle-summary__title">
+          Kit com 6 sachês
+        </span>
+
+        <span class="tn-sachet-bundle-summary__description">
+          3 sabores de whey + 3 sabores de colágeno
+        </span>
+      </div>
+
+      <span class="tn-sachet-bundle-summary__badge">
+        Economize 5%
+      </span>
+    `;
+
+    if (headline) {
+      headline.insertAdjacentElement(
+        "afterend",
+        summary
+      );
+    } else {
+      widget.prepend(summary);
+    }
+  };
+
+  const initializeClassicBundleUI = () => {
+    const widgets =
+      document.querySelectorAll(
+        SELECTORS.classicWidget
+      );
+
+    widgets.forEach(widget => {
+      if (
+        widget.dataset
+          .tnSachetUiInitialized ===
+        "true"
+      ) {
+        return;
+      }
+
+      const productsCard =
+        widget.querySelector(
+          SELECTORS.classicProductsCard
+        );
+
+      if (!productsCard) {
+        return;
+      }
+
+      widget.dataset
+        .tnSachetUiInitialized =
+        "true";
+
+      widget.classList.add(
+        "tn-sachet-bundle"
+      );
+
+      createBundleSummary(widget);
+
+      createBundleToggle(
+        widget,
+        productsCard
+      );
+    });
+  };
+
+  let initializeTimer = null;
+
+  const scheduleClassicBundleUI = () => {
+    window.clearTimeout(
+      initializeTimer
+    );
+
+    initializeTimer =
+      window.setTimeout(() => {
+        initializeClassicBundleUI();
+      }, 150);
+  };
+
+  if (
+    document.readyState === "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      scheduleClassicBundleUI
+    );
+  } else {
+    scheduleClassicBundleUI();
+  }
+
+  window.addEventListener(
+    "load",
+    scheduleClassicBundleUI
+  );
+
+  const classicBundleObserver =
+    new MutationObserver(() => {
+      scheduleClassicBundleUI();
+    });
+
+  classicBundleObserver.observe(
+    document.documentElement,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+  /* =====================================================
      VOLUME DISCOUNT
-     Exemplo: Leve 1 ou Leve 2 Wheys
+     LEVE 1 OU LEVE 2
      ===================================================== */
 
   document.addEventListener(
@@ -266,7 +503,8 @@
         return;
       }
 
-      button.dataset.tnAmpAdding = "true";
+      button.dataset.tnAmpAdding =
+        "true";
 
       button.setAttribute(
         "aria-disabled",
@@ -275,9 +513,10 @@
 
       button.classList.add("loading");
 
-      const loader = button.querySelector(
-        ".loading-overlay__spinner"
-      );
+      const loader =
+        button.querySelector(
+          ".loading-overlay__spinner"
+        );
 
       loader?.classList.remove("hidden");
 
@@ -288,7 +527,8 @@
             form
           );
 
-        const formData = new FormData(form);
+        const formData =
+          new FormData(form);
 
         formData.set(
           "quantity",
@@ -334,9 +574,13 @@
           }
         );
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
-        if (!response.ok || data.status) {
+        if (
+          !response.ok ||
+          data.status
+        ) {
           throw new Error(
             data.description ||
               data.message ||
@@ -356,13 +600,17 @@
             "Não foi possível adicionar ao carrinho."
         );
       } finally {
-        delete button.dataset.tnAmpAdding;
+        delete button.dataset
+          .tnAmpAdding;
 
         button.removeAttribute(
           "aria-disabled"
         );
 
-        button.classList.remove("loading");
+        button.classList.remove(
+          "loading"
+        );
+
         loader?.classList.add("hidden");
       }
     },
@@ -371,7 +619,7 @@
 
   /* =====================================================
      CLASSIC BUNDLE
-     Kit com 6 sachês
+     KIT COM 6 SACHÊS
      ===================================================== */
 
   const createAmpBundleReference = () => {
@@ -421,9 +669,13 @@
         }
       );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
-      if (!response.ok || data.status) {
+      if (
+        !response.ok ||
+        data.status
+      ) {
         throw new Error(
           data.description ||
             data.message ||
@@ -443,17 +695,13 @@
 
       if (!button) return;
 
-      /*
-       * Cancela completamente o comportamento
-       * original do AMP e da Yampi.
-       */
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 
       if (
-        button.dataset.tnBundleAdding ===
-        "true"
+        button.dataset
+          .tnBundleAdding === "true"
       ) {
         return;
       }
