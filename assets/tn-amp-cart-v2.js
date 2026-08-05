@@ -3,46 +3,24 @@
 
   const SELECTORS = {
     productButton: "product-form .js-add-to-cart",
-    volumeWidget: ".amp-volume-discount-bundles",
+
+    volumeWidget:
+      ".amp-volume-discount-bundles",
+
     selectedVolumeTier:
       ".amp-bundles__volume-discount-bundles__tier-option--selected",
+
     volumeQuantity:
       ".amp-bundles__volume-discount-bundles__quantity-value",
+
     volumeTierText:
       ".amp-bundles__volume-discount-bundles__tier-text",
+
     classicButton:
       ".amp-bundles__classic-bundles__cta",
+
     cartDrawer: "cart-drawer"
   };
-
-  const SACHET_BUNDLE_ID = "1785888881916";
-
-  const SACHET_BUNDLE_ITEMS = [
-    {
-      id: 44713374810146,
-      quantity: 1
-    },
-    {
-      id: 44713374941218,
-      quantity: 1
-    },
-    {
-      id: 44713375072290,
-      quantity: 1
-    },
-    {
-      id: 44713375268898,
-      quantity: 1
-    },
-    {
-      id: 44713375301666,
-      quantity: 1
-    },
-    {
-      id: 44713374744610,
-      quantity: 1
-    }
-  ];
 
   const wait = milliseconds =>
     new Promise(resolve => {
@@ -65,6 +43,58 @@
     }
 
     return response.json();
+  };
+
+  const getCartSignature = cart => {
+    const itemSignature = (cart.items || [])
+      .map(item => {
+        const properties =
+          item.properties || {};
+
+        return [
+          item.key || "",
+          item.variant_id || item.id || "",
+          item.quantity || 0,
+          item.final_line_price || 0,
+          properties._amp_bundles || ""
+        ].join(":");
+      })
+      .sort()
+      .join("|");
+
+    return [
+      cart.item_count || 0,
+      cart.total_price || 0,
+      cart.total_discount || 0,
+      itemSignature
+    ].join("::");
+  };
+
+  const waitForCartChange = async (
+    previousSignature,
+    attempts = 28,
+    interval = 250
+  ) => {
+    for (
+      let attempt = 0;
+      attempt < attempts;
+      attempt += 1
+    ) {
+      await wait(interval);
+
+      const cart = await fetchCart();
+
+      if (
+        getCartSignature(cart) !==
+        previousSignature
+      ) {
+        return cart;
+      }
+    }
+
+    throw new Error(
+      "O AMP não concluiu a inclusão no carrinho."
+    );
   };
 
   const getCartDrawer = () => {
@@ -91,7 +121,9 @@
   const parsePositiveInteger = value => {
     const match = String(value || "").match(/\d+/);
 
-    if (!match) return null;
+    if (!match) {
+      return null;
+    }
 
     const number = parseInt(match[0], 10);
 
@@ -132,9 +164,10 @@
       return quantityFromTierText;
     }
 
-    const quantityInput = form.querySelector(
-      'input[name="quantity"]'
-    );
+    const quantityInput =
+      form.querySelector(
+        'input[name="quantity"]'
+      );
 
     const formQuantity =
       parsePositiveInteger(
@@ -144,82 +177,70 @@
     return formQuantity || 1;
   };
 
-  /*
-   * Executa a sincronização de brindes do carrinho
-   * depois que o AMP termina de adicionar os produtos.
-   *
-   * Para funcionar, o arquivo cart-drawer.js precisa
-   * expor a função:
-   *
-   * window.syncCartGifts = syncCartGifts;
-   */
-  const syncCartGiftsAfterAdd = async () => {
-    if (
-      typeof window.syncCartGifts !==
-      "function"
-    ) {
-      return false;
-    }
+  const syncCartGiftsAfterAdd =
+    async cart => {
+      if (
+        typeof window.syncCartGifts !==
+        "function"
+      ) {
+        return false;
+      }
 
-    const cart = await fetchCart();
+      const currentCart =
+        cart || (await fetchCart());
 
-    return window.syncCartGifts(
-      cart.items || []
-    );
-  };
-
-  /*
-   * Atualiza o drawer usando a função nativa
-   * refresh() já existente no tema.
-   */
-  const refreshAndOpenCartDrawer = async () => {
-    const cartDrawer = getCartDrawer();
-
-    if (!cartDrawer) {
-      throw new Error(
-        "O minicarrinho não foi encontrado."
+      return window.syncCartGifts(
+        currentCart.items || []
       );
-    }
+    };
 
-    if (
-      typeof cartDrawer.refresh === "function"
-    ) {
-      await cartDrawer.refresh({
-        open: true
-      });
+  const refreshAndOpenCartDrawer =
+    async () => {
+      const cartDrawer = getCartDrawer();
 
-      return;
-    }
+      if (!cartDrawer) {
+        throw new Error(
+          "O minicarrinho não foi encontrado."
+        );
+      }
 
-    cartDrawer.classList.remove("is-empty");
+      if (
+        typeof cartDrawer.refresh ===
+        "function"
+      ) {
+        await cartDrawer.refresh({
+          open: true
+        });
 
-    await wait(150);
+        return;
+      }
 
-    if (
-      typeof cartDrawer.open === "function"
-    ) {
-      cartDrawer.open();
-      return;
-    }
+      cartDrawer.classList.remove(
+        "is-empty"
+      );
 
-    cartDrawer.classList.add("active");
-  };
+      await wait(150);
 
-  /*
-   * Depois de uma adição:
-   *
-   * 1. sincroniza os brindes;
-   * 2. busca novamente todo o carrinho;
-   * 3. abre o drawer já atualizado.
-   */
-  const finalizeCartUpdate = async () => {
-    await syncCartGiftsAfterAdd();
-    await refreshAndOpenCartDrawer();
-  };
+      if (
+        typeof cartDrawer.open ===
+        "function"
+      ) {
+        cartDrawer.open();
+        return;
+      }
+
+      cartDrawer.classList.add("active");
+    };
+
+  const finalizeCartUpdate =
+    async cart => {
+      await syncCartGiftsAfterAdd(cart);
+      await refreshAndOpenCartDrawer();
+    };
 
   /* =====================================================
      VOLUME DISCOUNT
-     Exemplo: Leve 1 ou Leve 2 Wheys
+     LEVE 1 OU LEVE 2
      ===================================================== */
 
   document.addEventListener(
@@ -229,36 +250,43 @@
         SELECTORS.productButton
       );
 
-      if (!button) return;
+      if (!button) {
+        return;
+      }
 
-      const productArea = button.closest(
-        [
-          ".wt-product__main",
-          ".wt-product__info",
-          ".product__info-container"
-        ].join(",")
-      );
+      const productArea =
+        button.closest(
+          [
+            ".wt-product__main",
+            ".wt-product__info",
+            ".product__info-container"
+          ].join(",")
+        );
 
       const ampWidget =
         productArea?.querySelector(
           SELECTORS.volumeWidget
         );
 
-      if (!ampWidget) return;
+      if (!ampWidget) {
+        return;
+      }
 
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 
       if (
-        button.dataset.tnAmpAdding === "true"
+        button.dataset.tnAmpAdding ===
+        "true"
       ) {
         return;
       }
 
-      const form = button.closest(
-        'form[action*="/cart/add"]'
-      );
+      const form =
+        button.closest(
+          'form[action*="/cart/add"]'
+        );
 
       const cartDrawer = getCartDrawer();
 
@@ -266,7 +294,8 @@
         return;
       }
 
-      button.dataset.tnAmpAdding = "true";
+      button.dataset.tnAmpAdding =
+        "true";
 
       button.setAttribute(
         "aria-disabled",
@@ -275,9 +304,10 @@
 
       button.classList.add("loading");
 
-      const loader = button.querySelector(
-        ".loading-overlay__spinner"
-      );
+      const loader =
+        button.querySelector(
+          ".loading-overlay__spinner"
+        );
 
       loader?.classList.remove("hidden");
 
@@ -288,7 +318,8 @@
             form
           );
 
-        const formData = new FormData(form);
+        const formData =
+          new FormData(form);
 
         formData.set(
           "quantity",
@@ -334,9 +365,13 @@
           }
         );
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
-        if (!response.ok || data.status) {
+        if (
+          !response.ok ||
+          data.status
+        ) {
           throw new Error(
             data.description ||
               data.message ||
@@ -344,7 +379,12 @@
           );
         }
 
-        await finalizeCartUpdate();
+        const updatedCart =
+          await fetchCart();
+
+        await finalizeCartUpdate(
+          updatedCart
+        );
       } catch (error) {
         console.error(
           "Erro no AMP Volume Discount:",
@@ -356,13 +396,17 @@
             "Não foi possível adicionar ao carrinho."
         );
       } finally {
-        delete button.dataset.tnAmpAdding;
+        delete button.dataset
+          .tnAmpAdding;
 
         button.removeAttribute(
           "aria-disabled"
         );
 
-        button.classList.remove("loading");
+        button.classList.remove(
+          "loading"
+        );
+
         loader?.classList.add("hidden");
       }
     },
@@ -371,136 +415,129 @@
 
   /* =====================================================
      CLASSIC BUNDLE
-     Kit com 6 sachês
+     KIT COM 6 SACHÊS
      ===================================================== */
 
-  const createAmpBundleReference = () => {
-    const randomPart = Math.random()
-      .toString(36)
-      .slice(2, 12);
-
-    return [
-      SACHET_BUNDLE_ID,
-      "tn",
-      Date.now(),
-      randomPart
-    ].join("_");
-  };
-
-  const addClassicBundleToCart =
-    async () => {
-      const bundleReference =
-        createAmpBundleReference();
-
-      const payload = {
-        items: SACHET_BUNDLE_ITEMS.map(
-          item => ({
-            id: item.id,
-            quantity: item.quantity,
-            properties: {
-              _amp_bundles:
-                bundleReference
-            }
-          })
-        )
-      };
-
-      const response = await fetch(
-        window.routes?.cart_add_url ||
-          "/cart/add.js",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type":
-              "application/json",
-            "X-Requested-With":
-              "XMLHttpRequest"
-          },
-          body: JSON.stringify(payload)
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok || data.status) {
-        throw new Error(
-          data.description ||
-            data.message ||
-            "Não foi possível adicionar o kit."
-        );
-      }
-
-      return data;
-    };
-
-  document.addEventListener(
-    "click",
+  const handleClassicBundleClick =
     async event => {
-      const button = event.target.closest(
-        SELECTORS.classicButton
-      );
-
-      if (!button) return;
+      const button = event.currentTarget;
 
       /*
-       * Cancela completamente o comportamento
-       * original do AMP e da Yampi.
+       * Não cancela o comportamento do AMP.
+       * Apenas impede que o clique continue
+       * subindo até o listener global da Yampi.
        */
-      event.preventDefault();
       event.stopPropagation();
-      event.stopImmediatePropagation();
 
       if (
-        button.dataset.tnBundleAdding ===
+        button.dataset
+          .tnClassicWatching === "true"
+      ) {
+        return;
+      }
+
+      button.dataset
+        .tnClassicWatching = "true";
+
+      try {
+        /*
+         * Este listener está no próprio botão.
+         * O AMP também recebe o clique nesse
+         * elemento e executa sua inclusão normal.
+         */
+        const cartBefore =
+          await fetchCart();
+
+        const previousSignature =
+          getCartSignature(cartBefore);
+
+        const updatedCart =
+          await waitForCartChange(
+            previousSignature
+          );
+
+        await finalizeCartUpdate(
+          updatedCart
+        );
+      } catch (error) {
+        console.error(
+          "Erro após adicionar o Kit Sachês:",
+          error
+        );
+      } finally {
+        delete button.dataset
+          .tnClassicWatching;
+      }
+    };
+
+  const attachClassicBundleButton =
+    button => {
+      if (
+        button.dataset
+          .tnClassicListenerAttached ===
         "true"
       ) {
         return;
       }
 
-      button.dataset.tnBundleAdding =
+      button.dataset
+        .tnClassicListenerAttached =
         "true";
 
-      button.disabled = true;
-
-      button.setAttribute(
-        "aria-disabled",
-        "true"
+      /*
+       * Listener no próprio botão e em fase
+       * normal de bubbling:
+       *
+       * - o AMP continua funcionando;
+       * - o clique para antes de chegar
+       *   ao document/Yampi.
+       */
+      button.addEventListener(
+        "click",
+        handleClassicBundleClick,
+        false
       );
+    };
 
-      const originalContent =
-        button.innerHTML;
+  const scanClassicBundleButtons = () => {
+    document
+      .querySelectorAll(
+        SELECTORS.classicButton
+      )
+      .forEach(
+        attachClassicBundleButton
+      );
+  };
 
-      button.innerHTML =
-        "<div>ADICIONANDO KIT...</div>";
+  const initializeClassicBundle =
+    () => {
+      scanClassicBundleButtons();
 
-      try {
-        await addClassicBundleToCart();
-        await finalizeCartUpdate();
-      } catch (error) {
-        console.error(
-          "Erro ao adicionar o Kit Sachês:",
-          error
-        );
+      const observer =
+        new MutationObserver(() => {
+          scanClassicBundleButtons();
+        });
 
-        alert(
-          error.message ||
-            "Não foi possível adicionar o kit ao carrinho."
-        );
-      } finally {
-        delete button.dataset
-          .tnBundleAdding;
+      observer.observe(
+        document.documentElement,
+        {
+          childList: true,
+          subtree: true
+        }
+      );
+    };
 
-        button.disabled = false;
-
-        button.removeAttribute(
-          "aria-disabled"
-        );
-
-        button.innerHTML =
-          originalContent;
+  if (
+    document.readyState === "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initializeClassicBundle,
+      {
+        once: true
       }
-    },
-    true
-  );
+    );
+  } else {
+    initializeClassicBundle();
+  }
 })();
