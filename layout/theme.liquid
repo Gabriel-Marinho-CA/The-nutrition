@@ -531,6 +531,104 @@ if (formQuantityInput) {
     {% endif %}
     {%- if request.design_mode -%}<script>window.__wtCheck={sid:'{{ shop.id }}',em:{{ shop.email | json }}};</script><script src="{{ 'wt-meta.js' | asset_url }}" defer></script>{%- endif -%}
     <!-- Wonder Theme v2.4.1 -->
+
+    {% if template.name == 'product' %}
+  <script>
+    (() => {
+      const CLASSIC_BUNDLE_BUTTON =
+        '.amp-bundles__classic-bundles__cta';
+
+      const attachClassicBundleHandler = () => {
+        document
+          .querySelectorAll(CLASSIC_BUNDLE_BUTTON)
+          .forEach(button => {
+            if (
+              button.dataset.tnCartProtection === 'true'
+            ) {
+              return;
+            }
+
+            button.dataset.tnCartProtection = 'true';
+
+            /*
+             * O listener fica diretamente no botão.
+             * O AMP continua executando a adição do kit,
+             * mas o clique não sobe até o script da Yampi.
+             */
+            button.addEventListener(
+              'click',
+              event => {
+                event.stopPropagation();
+
+                const cartDrawer =
+                  document.querySelector('cart-drawer');
+
+                /*
+                 * Aguarda o AMP adicionar os produtos
+                 * e então atualiza/abre o minicart.
+                 */
+                window.setTimeout(async () => {
+                  try {
+                    const cartResponse = await fetch(
+                      '/cart.js',
+                      {
+                        headers: {
+                          Accept: 'application/json'
+                        }
+                      }
+                    );
+
+                    if (!cartResponse.ok) {
+                      return;
+                    }
+
+                    const cart = await cartResponse.json();
+
+                    if (!cartDrawer) return;
+
+                    cartDrawer.classList.remove('is-empty');
+
+                    if (
+                      typeof cartDrawer.open === 'function'
+                    ) {
+                      cartDrawer.open();
+                    }
+
+                    document.dispatchEvent(
+                      new CustomEvent('cart:refresh', {
+                        bubbles: true,
+                        detail: {
+                          cart
+                        }
+                      })
+                    );
+                  } catch (error) {
+                    console.error(
+                      'Erro ao atualizar o carrinho do kit:',
+                      error
+                    );
+                  }
+                }, 700);
+              },
+              false
+            );
+          });
+      };
+
+      attachClassicBundleHandler();
+
+      const observer = new MutationObserver(() => {
+        attachClassicBundleHandler();
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    })();
+  </script>
+{% endif %}
+
   <!-- Não remova. Checkout Yampi. -->
 {% capture yampi_snippet_content %}{% include 'YampiSnippet' %}{% endcapture %} {% unless yampi_snippet_content contains 'Liquid error' %} {% include 'YampiSnippet' %} {% endunless %}
 <!-- Não remova. Checkout Yampi. --> </body>
