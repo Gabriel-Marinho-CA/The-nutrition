@@ -2,7 +2,8 @@
   "use strict";
 
   const SELECTORS = {
-    productButton: "product-form .js-add-to-cart",
+    productButton:
+      "product-form .js-add-to-cart",
 
     volumeWidget:
       ".amp-volume-discount-bundles",
@@ -16,6 +17,9 @@
     volumeTierText:
       ".amp-bundles__volume-discount-bundles__tier-text",
 
+    volumeTierBadge:
+      ".amp-bundles__volume-discount-bundles__tier-badge",
+
     classicButton:
       ".amp-bundles__classic-bundles__cta",
 
@@ -24,15 +28,15 @@
   };
 
   /*
-   * Referência fixa da campanha.
+   * Kit Sachês — campanha Classic Bundle.
    *
-   * Como a propriedade é sempre igual,
-   * quando o cliente adiciona novamente
-   * o mesmo kit, a Shopify soma as
-   * quantidades das linhas existentes.
+   * A referência fixa faz com que novas adições
+   * do mesmo kit sejam agrupadas em quantidade.
    */
   const SACHET_BUNDLE_REFERENCE =
     "1785888881916_tn_sachets";
+
+  const SACHET_BUNDLE_DISCOUNT_PERCENT = 5;
 
   const SACHET_BUNDLE_ITEMS = [
     {
@@ -131,13 +135,42 @@
       : null;
   };
 
+  const parsePercentage = value => {
+    const match = String(
+      value || ""
+    ).match(/(\d+(?:[.,]\d+)?)\s*%/);
+
+    if (!match) {
+      return 0;
+    }
+
+    const number = Number(
+      match[1].replace(",", ".")
+    );
+
+    if (
+      !Number.isFinite(number) ||
+      number <= 0
+    ) {
+      return 0;
+    }
+
+    return number;
+  };
+
+  const getSelectedVolumeTier = ampWidget => {
+    return ampWidget.querySelector(
+      SELECTORS.selectedVolumeTier
+    );
+  };
+
   const getVolumeQuantity = (
     ampWidget,
     form
   ) => {
     const selectedTier =
-      ampWidget.querySelector(
-        SELECTORS.selectedVolumeTier
+      getSelectedVolumeTier(
+        ampWidget
       );
 
     const quantityShown =
@@ -174,6 +207,39 @@
 
     return formQuantity || 1;
   };
+
+  const getVolumeDiscountPercent =
+    ampWidget => {
+      const selectedTier =
+        getSelectedVolumeTier(
+          ampWidget
+        );
+
+      if (!selectedTier) {
+        return 0;
+      }
+
+      const badgeText =
+        selectedTier.querySelector(
+          SELECTORS.volumeTierBadge
+        )?.textContent;
+
+      const discountFromBadge =
+        parsePercentage(
+          badgeText
+        );
+
+      if (discountFromBadge > 0) {
+        return discountFromBadge;
+      }
+
+      const discountFromTier =
+        parsePercentage(
+          selectedTier.textContent
+        );
+
+      return discountFromTier;
+    };
 
   const syncCartGiftsAfterAdd =
     async () => {
@@ -240,7 +306,7 @@
 
   /* =====================================================
      VOLUME DISCOUNT
-     LEVE 1 OU LEVE 2
+     LEVE 1, LEVE 2 ETC.
      ===================================================== */
 
   document.addEventListener(
@@ -324,6 +390,11 @@
             form
           );
 
+        const discountPercent =
+          getVolumeDiscountPercent(
+            ampWidget
+          );
+
         const formData =
           new FormData(form);
 
@@ -331,6 +402,41 @@
           "quantity",
           String(quantity)
         );
+
+        /*
+         * Propriedades privadas usadas pelo drawer.
+         *
+         * Começam com "_", portanto não aparecem
+         * normalmente para o cliente.
+         */
+        if (discountPercent > 0) {
+          formData.set(
+            "properties[_tn_amp_campaign]",
+            "volume_discount"
+          );
+
+          formData.set(
+            "properties[_tn_amp_discount_percent]",
+            String(discountPercent)
+          );
+
+          formData.set(
+            "properties[_tn_amp_group]",
+            `volume_${quantity}`
+          );
+        } else {
+          formData.delete(
+            "properties[_tn_amp_campaign]"
+          );
+
+          formData.delete(
+            "properties[_tn_amp_discount_percent]"
+          );
+
+          formData.delete(
+            "properties[_tn_amp_group]"
+          );
+        }
 
         const quantityInput =
           form.querySelector(
@@ -435,7 +541,18 @@
 
             properties: {
               _amp_bundles:
-                SACHET_BUNDLE_REFERENCE
+                SACHET_BUNDLE_REFERENCE,
+
+              _tn_amp_campaign:
+                "classic_bundle",
+
+              _tn_amp_discount_percent:
+                String(
+                  SACHET_BUNDLE_DISCOUNT_PERCENT
+                ),
+
+              _tn_amp_group:
+                "kit_sachets"
             }
           })
         )
@@ -489,11 +606,6 @@
         return;
       }
 
-      /*
-       * Bloqueia tanto o AMP quanto a Yampi.
-       * A inclusão é feita diretamente pela
-       * API do carrinho, sem redirecionamento.
-       */
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
