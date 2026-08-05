@@ -26,6 +26,10 @@
 >
   <head>
     
+    {% if template.name == 'product' %}
+  <script src="{{ 'tn-amp-cart.js' | asset_url }}"></script>
+{% endif %}
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,12 +74,6 @@
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'base.js' | asset_url }}" defer="defer"></script>
-    {% if template.name == 'product' %}
-  <script
-    src="{{ 'tn-amp-cart.js' | asset_url }}"
-    defer="defer"
-  ></script>
-{% endif %}
 
     <script src="{{ 'color-swatch.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
