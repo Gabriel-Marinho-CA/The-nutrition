@@ -1,6 +1,8 @@
 (() => {
   "use strict";
 
+  console.log("TN AMP CART V2 CARREGADO");
+
   const SELECTORS = {
     productButton: "product-form .js-add-to-cart",
     volumeWidget: ".amp-volume-discount-bundles",
@@ -15,61 +17,39 @@
     cartDrawer: "cart-drawer"
   };
 
+  const SACHET_BUNDLE_ID = "1785888881916";
+
+  const SACHET_BUNDLE_ITEMS = [
+    {
+      id: 44713374810146,
+      quantity: 1
+    },
+    {
+      id: 44713374941218,
+      quantity: 1
+    },
+    {
+      id: 44713375072290,
+      quantity: 1
+    },
+    {
+      id: 44713375268898,
+      quantity: 1
+    },
+    {
+      id: 44713375301666,
+      quantity: 1
+    },
+    {
+      id: 44713374744610,
+      quantity: 1
+    }
+  ];
+
   const wait = milliseconds =>
     new Promise(resolve => {
       window.setTimeout(resolve, milliseconds);
     });
-
-  const fetchCart = async () => {
-    const response = await fetch("/cart.js", {
-      method: "GET",
-      headers: {
-        Accept: "application/json"
-      },
-      cache: "no-store"
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        "Não foi possível consultar o carrinho."
-      );
-    }
-
-    return response.json();
-  };
-
-  const getCartSignature = cart => {
-    return [
-      cart.item_count,
-      cart.total_price,
-      ...(cart.items || []).map(
-        item => `${item.key}:${item.quantity}`
-      )
-    ].join("|");
-  };
-
-  const waitForCartChange = async previousSignature => {
-    for (
-      let attempt = 0;
-      attempt < 24;
-      attempt += 1
-    ) {
-      await wait(250);
-
-      const cart = await fetchCart();
-
-      if (
-        getCartSignature(cart) !==
-        previousSignature
-      ) {
-        return cart;
-      }
-    }
-
-    throw new Error(
-      "O AMP não concluiu a inclusão no carrinho."
-    );
-  };
 
   const getCartDrawer = () => {
     return document.querySelector(
@@ -90,76 +70,6 @@
       .getSectionsToRender()
       .map(section => section.id)
       .filter(Boolean);
-  };
-
-  const refreshAndOpenCartDrawer = async () => {
-    const cartDrawer = getCartDrawer();
-
-    if (!cartDrawer) {
-      throw new Error(
-        "O minicarrinho não foi encontrado."
-      );
-    }
-
-    const sectionIds =
-      getDrawerSections(cartDrawer);
-
-    if (!sectionIds.length) {
-      throw new Error(
-        "As seções do minicarrinho não foram encontradas."
-      );
-    }
-
-    const separator =
-      window.location.search ? "&" : "?";
-
-    const sectionsUrl =
-      `${window.location.pathname}` +
-      `${window.location.search}` +
-      `${separator}sections=${encodeURIComponent(
-        sectionIds.join(",")
-      )}` +
-      `&tn_cart_refresh=${Date.now()}`;
-
-    const response = await fetch(sectionsUrl, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      cache: "no-store"
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        "Não foi possível atualizar o minicarrinho."
-      );
-    }
-
-    const sections = await response.json();
-
-    if (
-      typeof cartDrawer.renderContents ===
-      "function"
-    ) {
-      cartDrawer.renderContents({
-        sections
-      });
-    } else {
-      throw new Error(
-        "O tema não permitiu atualizar o minicarrinho."
-      );
-    }
-
-    cartDrawer.classList.remove("is-empty");
-
-    await wait(150);
-
-    if (
-      typeof cartDrawer.open === "function"
-    ) {
-      cartDrawer.open();
-    }
   };
 
   const parsePositiveInteger = value => {
@@ -218,12 +128,45 @@
     return formQuantity || 1;
   };
 
+  const openCartDrawer = async (
+    cartDrawer,
+    data
+  ) => {
+    if (!cartDrawer) {
+      throw new Error(
+        "O minicarrinho não foi encontrado."
+      );
+    }
+
+    if (
+      data?.sections &&
+      typeof cartDrawer.renderContents ===
+        "function"
+    ) {
+      cartDrawer.renderContents(data);
+    }
+
+    cartDrawer.classList.remove("is-empty");
+
+    await wait(150);
+
+    if (
+      typeof cartDrawer.open === "function"
+    ) {
+      cartDrawer.open();
+      return;
+    }
+
+    cartDrawer.classList.add("active");
+  };
+
   /* =====================================================
      VOLUME DISCOUNT
      Exemplo: Leve 1 ou Leve 2 Wheys
      ===================================================== */
 
-  const handleVolumeDiscountClick =
+  document.addEventListener(
+    "click",
     async event => {
       const button = event.target.closest(
         SELECTORS.productButton
@@ -262,7 +205,9 @@
 
       const cartDrawer = getCartDrawer();
 
-      if (!form || !cartDrawer) return;
+      if (!form || !cartDrawer) {
+        return;
+      }
 
       button.dataset.tnAmpAdding = "true";
       button.setAttribute(
@@ -340,25 +285,10 @@
           );
         }
 
-        if (
-          typeof cartDrawer.renderContents ===
-          "function"
-        ) {
-          cartDrawer.renderContents(data);
-        }
-
-        cartDrawer.classList.remove(
-          "is-empty"
+        await openCartDrawer(
+          cartDrawer,
+          data
         );
-
-        await wait(100);
-
-        if (
-          typeof cartDrawer.open ===
-          "function"
-        ) {
-          cartDrawer.open();
-        }
       } catch (error) {
         console.error(
           "Erro no AMP Volume Discount:",
@@ -379,321 +309,160 @@
         button.classList.remove("loading");
         loader?.classList.add("hidden");
       }
+    },
+    true
+  );
+
+  /* =====================================================
+     CLASSIC BUNDLE
+     Kit com 6 sachês
+     ===================================================== */
+
+  const createAmpBundleReference = () => {
+    const randomPart = Math.random()
+      .toString(36)
+      .slice(2, 12);
+
+    return [
+      SACHET_BUNDLE_ID,
+      "tn",
+      Date.now(),
+      randomPart
+    ].join("_");
+  };
+
+  const addClassicBundleToCart =
+    async () => {
+      const cartDrawer =
+        getCartDrawer();
+
+      if (!cartDrawer) {
+        throw new Error(
+          "O minicarrinho não foi encontrado."
+        );
+      }
+
+      const bundleReference =
+        createAmpBundleReference();
+
+      const sectionIds =
+        getDrawerSections(cartDrawer);
+
+      const payload = {
+        items: SACHET_BUNDLE_ITEMS.map(
+          item => ({
+            id: item.id,
+            quantity: item.quantity,
+            properties: {
+              _amp_bundles:
+                bundleReference
+            }
+          })
+        ),
+        sections: sectionIds,
+        sections_url:
+          window.location.pathname
+      };
+
+      const response = await fetch(
+        window.routes?.cart_add_url ||
+          "/cart/add.js",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type":
+              "application/json",
+            "X-Requested-With":
+              "XMLHttpRequest"
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || data.status) {
+        throw new Error(
+          data.description ||
+            data.message ||
+            "Não foi possível adicionar o kit."
+        );
+      }
+
+      await openCartDrawer(
+        cartDrawer,
+        data
+      );
+
+      return data;
     };
 
   document.addEventListener(
     "click",
-    handleVolumeDiscountClick,
-    true
-  );
+    async event => {
+      const button = event.target.closest(
+        SELECTORS.classicButton
+      );
 
+      if (!button) return;
 
-  /* =====================================================
-   CLASSIC BUNDLE — KIT COM 6 SACHÊS
-   ===================================================== */
+      console.log(
+        "CLIQUE NO CLASSIC BUNDLE INTERCEPTADO"
+      );
 
-const CLASSIC_BUNDLE_SELECTOR =
-  ".amp-bundles__classic-bundles__cta";
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
 
-const SACHET_BUNDLE_ID = "1785888881916";
-
-const SACHET_BUNDLE_ITEMS = [
-  {
-    id: 44713374810146,
-    quantity: 1
-  },
-  {
-    id: 44713374941218,
-    quantity: 1
-  },
-  {
-    id: 44713375072290,
-    quantity: 1
-  },
-  {
-    id: 44713375268898,
-    quantity: 1
-  },
-  {
-    id: 44713375301666,
-    quantity: 1
-  },
-  {
-    id: 44713374744610,
-    quantity: 1
-  }
-];
-
-const createAmpBundleReference = () => {
-  const randomPart = Math.random()
-    .toString(36)
-    .slice(2, 12);
-
-  return [
-    SACHET_BUNDLE_ID,
-    "tn",
-    Date.now(),
-    randomPart
-  ].join("_");
-};
-
-const addClassicBundleToCart = async button => {
-  const cartDrawer = document.querySelector(
-    "cart-drawer"
-  );
-
-  if (!cartDrawer) {
-    throw new Error(
-      "O minicarrinho não foi encontrado."
-    );
-  }
-
-  const bundleReference =
-    createAmpBundleReference();
-
-  const sections =
-    typeof cartDrawer.getSectionsToRender ===
-    "function"
-      ? cartDrawer
-          .getSectionsToRender()
-          .map(section => section.id)
-          .filter(Boolean)
-      : [];
-
-  const payload = {
-    items: SACHET_BUNDLE_ITEMS.map(item => ({
-      id: item.id,
-      quantity: item.quantity,
-      properties: {
-        _amp_bundles: bundleReference
+      if (
+        button.dataset.tnBundleAdding ===
+        "true"
+      ) {
+        return;
       }
-    })),
-    sections,
-    sections_url: window.location.pathname
-  };
 
-  const response = await fetch(
-    window.routes?.cart_add_url ||
-      "/cart/add.js",
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      body: JSON.stringify(payload)
-    }
-  );
+      button.dataset.tnBundleAdding =
+        "true";
 
-  const data = await response.json();
-
-  if (!response.ok || data.status) {
-    throw new Error(
-      data.description ||
-        data.message ||
-        "Não foi possível adicionar o kit."
-    );
-  }
-
-  if (
-    data.sections &&
-    typeof cartDrawer.renderContents ===
-      "function"
-  ) {
-    cartDrawer.renderContents(data);
-  } else {
-    document.dispatchEvent(
-      new CustomEvent("cart:refresh", {
-        bubbles: true
-      })
-    );
-  }
-
-  cartDrawer.classList.remove("is-empty");
-
-  await new Promise(resolve => {
-    window.setTimeout(resolve, 150);
-  });
-
-  if (
-    typeof cartDrawer.open === "function"
-  ) {
-    cartDrawer.open();
-  }
-
-  return data;
-};
-
-document.addEventListener(
-  "click",
-  async event => {
-    const button = event.target.closest(
-      CLASSIC_BUNDLE_SELECTOR
-    );
-
-    if (!button) return;
-
-    /*
-     * Cancela totalmente o comportamento original:
-     * - não deixa o AMP executar o redirecionamento;
-     * - não deixa a Yampi capturar o clique;
-     * - adiciona os itens via AJAX.
-     */
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-
-    if (
-      button.dataset.tnBundleAdding === "true"
-    ) {
-      return;
-    }
-
-    button.dataset.tnBundleAdding = "true";
-    button.disabled = true;
-    button.setAttribute(
-      "aria-disabled",
-      "true"
-    );
-
-    const originalContent =
-      button.innerHTML;
-
-    button.innerHTML =
-      "<div>ADICIONANDO KIT...</div>";
-
-    try {
-      await addClassicBundleToCart(button);
-    } catch (error) {
-      console.error(
-        "Erro ao adicionar o Kit Sachês:",
-        error
+      button.disabled = true;
+      button.setAttribute(
+        "aria-disabled",
+        "true"
       );
 
-      alert(
-        error.message ||
-          "Não foi possível adicionar o kit ao carrinho."
-      );
-    } finally {
-      delete button.dataset.tnBundleAdding;
-
-      button.disabled = false;
-      button.removeAttribute(
-        "aria-disabled"
-      );
+      const originalContent =
+        button.innerHTML;
 
       button.innerHTML =
-        originalContent;
-    }
-  },
-  true
-);
+        "<div>ADICIONANDO KIT...</div>";
 
+      try {
+        await addClassicBundleToCart();
+      } catch (error) {
+        console.error(
+          "Erro ao adicionar o Kit Sachês:",
+          error
+        );
 
-      button.addEventListener(
-        "click",
-        async event => {
-          /*
-           * Não usamos preventDefault nem
-           * stopImmediatePropagation.
-           *
-           * O AMP continua adicionando os
-           * produtos do kit.
-           *
-           * stopPropagation impede que o
-           * clique suba até a Yampi.
-           */
-          event.stopPropagation();
+        alert(
+          error.message ||
+            "Não foi possível adicionar o kit ao carrinho."
+        );
+      } finally {
+        delete button.dataset
+          .tnBundleAdding;
 
-          if (
-            button.dataset
-              .tnAmpClassicLoading ===
-            "true"
-          ) {
-            return;
-          }
+        button.disabled = false;
 
-          button.dataset
-            .tnAmpClassicLoading = "true";
+        button.removeAttribute(
+          "aria-disabled"
+        );
 
-          try {
-            let previousSignature =
-              button.dataset
-                .tnCartSignatureBefore;
-
-            if (!previousSignature) {
-              const cartBefore =
-                await fetchCart();
-
-              previousSignature =
-                getCartSignature(
-                  cartBefore
-                );
-            }
-
-            await waitForCartChange(
-              previousSignature
-            );
-
-            await refreshAndOpenCartDrawer();
-          } catch (error) {
-            console.error(
-              "Erro no AMP Classic Bundle:",
-              error
-            );
-
-            alert(
-              error.message ||
-                "Não foi possível adicionar o kit ao carrinho."
-            );
-          } finally {
-            delete button.dataset
-              .tnAmpClassicLoading;
-
-            delete button.dataset
-              .tnCartSignatureBefore;
-          }
-        },
-        false
-      );
-    };
-
-  const scanClassicBundleButtons = () => {
-    document
-      .querySelectorAll(
-        SELECTORS.classicButton
-      )
-      .forEach(
-        attachClassicBundleButton
-      );
-  };
-
-  const initialize = () => {
-    scanClassicBundleButtons();
-
-    const observer = new MutationObserver(
-      scanClassicBundleButtons
-    );
-
-    observer.observe(
-      document.documentElement,
-      {
-        childList: true,
-        subtree: true
+        button.innerHTML =
+          originalContent;
       }
-    );
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      initialize,
-      {
-        once: true
-      }
-    );
-  } else {
-    initialize();
-  }
+    },
+    true
+  );
 })();
