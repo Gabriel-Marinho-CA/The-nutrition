@@ -245,6 +245,8 @@ async function bxgySync(cartItems) {
   return changed;
 }
 
+window.syncCartGifts = syncCartGifts;
+
 // ── Brindes por valor do carrinho ────────────────────────────────────────────
 // Os níveis vêm dos blocos da seção `cart-drawer` (ver sections/cart-drawer.liquid),
 // que publica window.giftTiers = [{ min: <centavos>, variants: [id, ...] }].
