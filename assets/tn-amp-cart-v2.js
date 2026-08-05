@@ -1,8 +1,6 @@
 (() => {
   "use strict";
 
-  console.log("TN AMP CART V2 CARREGADO");
-
   const SELECTORS = {
     productButton: "product-form .js-add-to-cart",
     volumeWidget: ".amp-volume-discount-bundles",
@@ -50,6 +48,24 @@
     new Promise(resolve => {
       window.setTimeout(resolve, milliseconds);
     });
+
+  const fetchCart = async () => {
+    const response = await fetch("/cart.js", {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      },
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "Não foi possível consultar o carrinho."
+      );
+    }
+
+    return response.json();
+  };
 
   const getCartDrawer = () => {
     return document.querySelector(
@@ -128,10 +144,37 @@
     return formQuantity || 1;
   };
 
-  const openCartDrawer = async (
-    cartDrawer,
-    data
-  ) => {
+  /*
+   * Executa a sincronização de brindes do carrinho
+   * depois que o AMP termina de adicionar os produtos.
+   *
+   * Para funcionar, o arquivo cart-drawer.js precisa
+   * expor a função:
+   *
+   * window.syncCartGifts = syncCartGifts;
+   */
+  const syncCartGiftsAfterAdd = async () => {
+    if (
+      typeof window.syncCartGifts !==
+      "function"
+    ) {
+      return false;
+    }
+
+    const cart = await fetchCart();
+
+    return window.syncCartGifts(
+      cart.items || []
+    );
+  };
+
+  /*
+   * Atualiza o drawer usando a função nativa
+   * refresh() já existente no tema.
+   */
+  const refreshAndOpenCartDrawer = async () => {
+    const cartDrawer = getCartDrawer();
+
     if (!cartDrawer) {
       throw new Error(
         "O minicarrinho não foi encontrado."
@@ -139,11 +182,13 @@
     }
 
     if (
-      data?.sections &&
-      typeof cartDrawer.renderContents ===
-        "function"
+      typeof cartDrawer.refresh === "function"
     ) {
-      cartDrawer.renderContents(data);
+      await cartDrawer.refresh({
+        open: true
+      });
+
+      return;
     }
 
     cartDrawer.classList.remove("is-empty");
@@ -158,6 +203,18 @@
     }
 
     cartDrawer.classList.add("active");
+  };
+
+  /*
+   * Depois de uma adição:
+   *
+   * 1. sincroniza os brindes;
+   * 2. busca novamente todo o carrinho;
+   * 3. abre o drawer já atualizado.
+   */
+  const finalizeCartUpdate = async () => {
+    await syncCartGiftsAfterAdd();
+    await refreshAndOpenCartDrawer();
   };
 
   /* =====================================================
@@ -210,10 +267,12 @@
       }
 
       button.dataset.tnAmpAdding = "true";
+
       button.setAttribute(
         "aria-disabled",
         "true"
       );
+
       button.classList.add("loading");
 
       const loader = button.querySelector(
@@ -285,10 +344,7 @@
           );
         }
 
-        await openCartDrawer(
-          cartDrawer,
-          data
-        );
+        await finalizeCartUpdate();
       } catch (error) {
         console.error(
           "Erro no AMP Volume Discount:",
@@ -333,20 +389,8 @@
 
   const addClassicBundleToCart =
     async () => {
-      const cartDrawer =
-        getCartDrawer();
-
-      if (!cartDrawer) {
-        throw new Error(
-          "O minicarrinho não foi encontrado."
-        );
-      }
-
       const bundleReference =
         createAmpBundleReference();
-
-      const sectionIds =
-        getDrawerSections(cartDrawer);
 
       const payload = {
         items: SACHET_BUNDLE_ITEMS.map(
@@ -358,10 +402,7 @@
                 bundleReference
             }
           })
-        ),
-        sections: sectionIds,
-        sections_url:
-          window.location.pathname
+        )
       };
 
       const response = await fetch(
@@ -390,11 +431,6 @@
         );
       }
 
-      await openCartDrawer(
-        cartDrawer,
-        data
-      );
-
       return data;
     };
 
@@ -407,10 +443,10 @@
 
       if (!button) return;
 
-      console.log(
-        "CLIQUE NO CLASSIC BUNDLE INTERCEPTADO"
-      );
-
+      /*
+       * Cancela completamente o comportamento
+       * original do AMP e da Yampi.
+       */
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
@@ -426,6 +462,7 @@
         "true";
 
       button.disabled = true;
+
       button.setAttribute(
         "aria-disabled",
         "true"
@@ -439,6 +476,7 @@
 
       try {
         await addClassicBundleToCart();
+        await finalizeCartUpdate();
       } catch (error) {
         console.error(
           "Erro ao adicionar o Kit Sachês:",
