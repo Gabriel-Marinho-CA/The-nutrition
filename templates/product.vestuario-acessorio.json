@@ -23,55 +23,6 @@
         "margin-bottom-mobile": 20
       }
     },
-    "image_banner_Uw4k6M": {
-      "type": "image-banner",
-      "blocks": {
-        "text_XBQicB": {
-          "type": "text",
-          "settings": {
-            "text": "",
-            "text_style": "body",
-            "disable_on_mobile": false
-          }
-        }
-      },
-      "block_order": [
-        "text_XBQicB"
-      ],
-      "disabled": true,
-      "name": "Banner Brinde",
-      "settings": {
-        "advanced_heading": false,
-        "heading": "",
-        "heading_richtext": "<h2>Image banner</h2>",
-        "full-width-enabled": false,
-        "container_max_width": 0,
-        "slide_height": "fixed_height",
-        "desktop_fixed_height": 200,
-        "mobile_fixed_height": 200,
-        "desktop_image": "shopify://shop_images/Desktop_Coqueteleira_Lancamento_TN.jpg",
-        "desktop_text_vertical_position": "center",
-        "desktop_text_horizontal_position": "center",
-        "mobile_image": "shopify://shop_images/Mobile_Coqueteleira_Lancamento_TN.png",
-        "mobile_text_vertical_position": "center",
-        "mobile_text_horizontal_position": "center",
-        "out_hero_mobile": false,
-        "out-background-color": "",
-        "out-text-color": "",
-        "color-heading": "",
-        "section-color-overlay": "",
-        "section-color-overlay-opacity": 100,
-        "color-body-text": "",
-        "text-container-color": "",
-        "color-overlay-opacity": 100,
-        "margin-top": 20,
-        "margin-bottom": 20,
-        "show_mobile_spacing": false,
-        "margin-top-mobile": 20,
-        "margin-bottom-mobile": 20,
-        "lcp_optimize": false
-      }
-    },
     "main": {
       "type": "main-product",
       "blocks": {
@@ -352,35 +303,22 @@
         "margin-bottom-mobile": 20
       }
     },
-    "image_banner_accHpj": {
+    "image_banner_7iyjMq": {
       "type": "image-banner",
-      "blocks": {
-        "text_YErwnD": {
-          "type": "text",
-          "settings": {
-            "text": "",
-            "text_style": "body",
-            "disable_on_mobile": false
-          }
-        }
-      },
-      "block_order": [
-        "text_YErwnD"
-      ],
       "name": "Banner Brinde",
       "settings": {
         "advanced_heading": false,
         "heading": "",
         "heading_richtext": "<h2>Image banner</h2>",
-        "full-width-enabled": false,
+        "full-width-enabled": true,
         "container_max_width": 0,
         "slide_height": "fixed_height",
         "desktop_fixed_height": 200,
-        "mobile_fixed_height": 200,
-        "desktop_image": "shopify://shop_images/Desktop_Chaveiro_Whey_09f18e43-cb59-4999-b404-1ad1fa12d218.jpg",
+        "mobile_fixed_height": 300,
+        "desktop_image": "shopify://shop_images/Desktop_Brindes_ca89f57e-917f-4768-83df-0959c6ef0b07.jpg",
         "desktop_text_vertical_position": "center",
         "desktop_text_horizontal_position": "center",
-        "mobile_image": "shopify://shop_images/Mobile_Chaveiro_Whey_8a28de45-c91f-4d46-9614-8139aaf1631e.jpg",
+        "mobile_image": "shopify://shop_images/Desktop_Brindes-1_f7695339-e721-4399-b538-e8f632fd32e0.png",
         "mobile_text_vertical_position": "center",
         "mobile_text_horizontal_position": "center",
         "out_hero_mobile": false,
@@ -392,8 +330,8 @@
         "color-body-text": "",
         "text-container-color": "",
         "color-overlay-opacity": 100,
-        "margin-top": 20,
-        "margin-bottom": 20,
+        "margin-top": 0,
+        "margin-bottom": 0,
         "show_mobile_spacing": false,
         "margin-top-mobile": 20,
         "margin-bottom-mobile": 20,
@@ -990,9 +928,8 @@
   },
   "order": [
     "breadcrumbs",
-    "image_banner_Uw4k6M",
     "main",
-    "image_banner_accHpj",
+    "image_banner_7iyjMq",
     "features_banner_wiKkaQ",
     "image_with_text_fw8xNC",
     "separator_kj9WPa",
