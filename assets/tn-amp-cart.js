@@ -388,6 +388,209 @@
   );
 
 
+  /* =====================================================
+   CLASSIC BUNDLE — KIT COM 6 SACHÊS
+   ===================================================== */
+
+const CLASSIC_BUNDLE_SELECTOR =
+  ".amp-bundles__classic-bundles__cta";
+
+const SACHET_BUNDLE_ID = "1785888881916";
+
+const SACHET_BUNDLE_ITEMS = [
+  {
+    id: 44713374810146,
+    quantity: 1
+  },
+  {
+    id: 44713374941218,
+    quantity: 1
+  },
+  {
+    id: 44713375072290,
+    quantity: 1
+  },
+  {
+    id: 44713375268898,
+    quantity: 1
+  },
+  {
+    id: 44713375301666,
+    quantity: 1
+  },
+  {
+    id: 44713374744610,
+    quantity: 1
+  }
+];
+
+const createAmpBundleReference = () => {
+  const randomPart = Math.random()
+    .toString(36)
+    .slice(2, 12);
+
+  return [
+    SACHET_BUNDLE_ID,
+    "tn",
+    Date.now(),
+    randomPart
+  ].join("_");
+};
+
+const addClassicBundleToCart = async button => {
+  const cartDrawer = document.querySelector(
+    "cart-drawer"
+  );
+
+  if (!cartDrawer) {
+    throw new Error(
+      "O minicarrinho não foi encontrado."
+    );
+  }
+
+  const bundleReference =
+    createAmpBundleReference();
+
+  const sections =
+    typeof cartDrawer.getSectionsToRender ===
+    "function"
+      ? cartDrawer
+          .getSectionsToRender()
+          .map(section => section.id)
+          .filter(Boolean)
+      : [];
+
+  const payload = {
+    items: SACHET_BUNDLE_ITEMS.map(item => ({
+      id: item.id,
+      quantity: item.quantity,
+      properties: {
+        _amp_bundles: bundleReference
+      }
+    })),
+    sections,
+    sections_url: window.location.pathname
+  };
+
+  const response = await fetch(
+    window.routes?.cart_add_url ||
+      "/cart/add.js",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify(payload)
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok || data.status) {
+    throw new Error(
+      data.description ||
+        data.message ||
+        "Não foi possível adicionar o kit."
+    );
+  }
+
+  if (
+    data.sections &&
+    typeof cartDrawer.renderContents ===
+      "function"
+  ) {
+    cartDrawer.renderContents(data);
+  } else {
+    document.dispatchEvent(
+      new CustomEvent("cart:refresh", {
+        bubbles: true
+      })
+    );
+  }
+
+  cartDrawer.classList.remove("is-empty");
+
+  await new Promise(resolve => {
+    window.setTimeout(resolve, 150);
+  });
+
+  if (
+    typeof cartDrawer.open === "function"
+  ) {
+    cartDrawer.open();
+  }
+
+  return data;
+};
+
+document.addEventListener(
+  "click",
+  async event => {
+    const button = event.target.closest(
+      CLASSIC_BUNDLE_SELECTOR
+    );
+
+    if (!button) return;
+
+    /*
+     * Cancela totalmente o comportamento original:
+     * - não deixa o AMP executar o redirecionamento;
+     * - não deixa a Yampi capturar o clique;
+     * - adiciona os itens via AJAX.
+     */
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    if (
+      button.dataset.tnBundleAdding === "true"
+    ) {
+      return;
+    }
+
+    button.dataset.tnBundleAdding = "true";
+    button.disabled = true;
+    button.setAttribute(
+      "aria-disabled",
+      "true"
+    );
+
+    const originalContent =
+      button.innerHTML;
+
+    button.innerHTML =
+      "<div>ADICIONANDO KIT...</div>";
+
+    try {
+      await addClassicBundleToCart(button);
+    } catch (error) {
+      console.error(
+        "Erro ao adicionar o Kit Sachês:",
+        error
+      );
+
+      alert(
+        error.message ||
+          "Não foi possível adicionar o kit ao carrinho."
+      );
+    } finally {
+      delete button.dataset.tnBundleAdding;
+
+      button.disabled = false;
+      button.removeAttribute(
+        "aria-disabled"
+      );
+
+      button.innerHTML =
+        originalContent;
+    }
+  },
+  true
+);
+
+
       button.addEventListener(
         "click",
         async event => {
