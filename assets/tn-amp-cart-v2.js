@@ -3,19 +3,36 @@
 
   const SELECTORS = {
     productButton: "product-form .js-add-to-cart",
-    volumeWidget: ".amp-volume-discount-bundles",
+
+    volumeWidget:
+      ".amp-volume-discount-bundles",
+
     selectedVolumeTier:
       ".amp-bundles__volume-discount-bundles__tier-option--selected",
+
     volumeQuantity:
       ".amp-bundles__volume-discount-bundles__quantity-value",
+
     volumeTierText:
       ".amp-bundles__volume-discount-bundles__tier-text",
+
     classicButton:
       ".amp-bundles__classic-bundles__cta",
-    cartDrawer: "cart-drawer"
+
+    cartDrawer:
+      "cart-drawer"
   };
 
-  const SACHET_BUNDLE_ID = "1785888881916";
+  /*
+   * Referência fixa da campanha.
+   *
+   * Como a propriedade é sempre igual,
+   * quando o cliente adiciona novamente
+   * o mesmo kit, a Shopify soma as
+   * quantidades das linhas existentes.
+   */
+  const SACHET_BUNDLE_REFERENCE =
+    "1785888881916_tn_sachets";
 
   const SACHET_BUNDLE_ITEMS = [
     {
@@ -46,17 +63,23 @@
 
   const wait = milliseconds =>
     new Promise(resolve => {
-      window.setTimeout(resolve, milliseconds);
+      window.setTimeout(
+        resolve,
+        milliseconds
+      );
     });
 
   const fetchCart = async () => {
-    const response = await fetch("/cart.js", {
-      method: "GET",
-      headers: {
-        Accept: "application/json"
-      },
-      cache: "no-store"
-    });
+    const response = await fetch(
+      "/cart.js",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        },
+        cache: "no-store"
+      }
+    );
 
     if (!response.ok) {
       throw new Error(
@@ -89,11 +112,18 @@
   };
 
   const parsePositiveInteger = value => {
-    const match = String(value || "").match(/\d+/);
+    const match = String(
+      value || ""
+    ).match(/\d+/);
 
-    if (!match) return null;
+    if (!match) {
+      return null;
+    }
 
-    const number = parseInt(match[0], 10);
+    const number = parseInt(
+      match[0],
+      10
+    );
 
     return Number.isFinite(number) &&
       number > 0
@@ -132,9 +162,10 @@
       return quantityFromTierText;
     }
 
-    const quantityInput = form.querySelector(
-      'input[name="quantity"]'
-    );
+    const quantityInput =
+      form.querySelector(
+        'input[name="quantity"]'
+      );
 
     const formQuantity =
       parsePositiveInteger(
@@ -144,142 +175,147 @@
     return formQuantity || 1;
   };
 
-  /*
-   * Executa a sincronização de brindes do carrinho
-   * depois que o AMP termina de adicionar os produtos.
-   *
-   * Para funcionar, o arquivo cart-drawer.js precisa
-   * expor a função:
-   *
-   * window.syncCartGifts = syncCartGifts;
-   */
-  const syncCartGiftsAfterAdd = async () => {
-    if (
-      typeof window.syncCartGifts !==
-      "function"
-    ) {
-      return false;
-    }
+  const syncCartGiftsAfterAdd =
+    async () => {
+      if (
+        typeof window.syncCartGifts !==
+        "function"
+      ) {
+        return false;
+      }
 
-    const cart = await fetchCart();
+      const cart = await fetchCart();
 
-    return window.syncCartGifts(
-      cart.items || []
-    );
-  };
-
-  /*
-   * Atualiza o drawer usando a função nativa
-   * refresh() já existente no tema.
-   */
-  const refreshAndOpenCartDrawer = async () => {
-    const cartDrawer = getCartDrawer();
-
-    if (!cartDrawer) {
-      throw new Error(
-        "O minicarrinho não foi encontrado."
+      return window.syncCartGifts(
+        cart.items || []
       );
-    }
+    };
 
-    if (
-      typeof cartDrawer.refresh === "function"
-    ) {
-      await cartDrawer.refresh({
-        open: true
-      });
+  const refreshAndOpenCartDrawer =
+    async () => {
+      const cartDrawer =
+        getCartDrawer();
 
-      return;
-    }
+      if (!cartDrawer) {
+        throw new Error(
+          "O minicarrinho não foi encontrado."
+        );
+      }
 
-    cartDrawer.classList.remove("is-empty");
+      if (
+        typeof cartDrawer.refresh ===
+        "function"
+      ) {
+        await cartDrawer.refresh({
+          open: true
+        });
 
-    await wait(150);
+        return;
+      }
 
-    if (
-      typeof cartDrawer.open === "function"
-    ) {
-      cartDrawer.open();
-      return;
-    }
+      cartDrawer.classList.remove(
+        "is-empty"
+      );
 
-    cartDrawer.classList.add("active");
-  };
+      await wait(150);
 
-  /*
-   * Depois de uma adição:
-   *
-   * 1. sincroniza os brindes;
-   * 2. busca novamente todo o carrinho;
-   * 3. abre o drawer já atualizado.
-   */
-  const finalizeCartUpdate = async () => {
-    await syncCartGiftsAfterAdd();
-    await refreshAndOpenCartDrawer();
-  };
+      if (
+        typeof cartDrawer.open ===
+        "function"
+      ) {
+        cartDrawer.open();
+        return;
+      }
+
+      cartDrawer.classList.add(
+        "active"
+      );
+    };
+
+  const finalizeCartUpdate =
+    async () => {
+      await syncCartGiftsAfterAdd();
+      await refreshAndOpenCartDrawer();
+    };
 
   /* =====================================================
      VOLUME DISCOUNT
-     Exemplo: Leve 1 ou Leve 2 Wheys
+     LEVE 1 OU LEVE 2
      ===================================================== */
 
   document.addEventListener(
     "click",
     async event => {
-      const button = event.target.closest(
-        SELECTORS.productButton
-      );
+      const button =
+        event.target.closest(
+          SELECTORS.productButton
+        );
 
-      if (!button) return;
+      if (!button) {
+        return;
+      }
 
-      const productArea = button.closest(
-        [
-          ".wt-product__main",
-          ".wt-product__info",
-          ".product__info-container"
-        ].join(",")
-      );
+      const productArea =
+        button.closest(
+          [
+            ".wt-product__main",
+            ".wt-product__info",
+            ".product__info-container"
+          ].join(",")
+        );
 
       const ampWidget =
         productArea?.querySelector(
           SELECTORS.volumeWidget
         );
 
-      if (!ampWidget) return;
+      if (!ampWidget) {
+        return;
+      }
 
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 
       if (
-        button.dataset.tnAmpAdding === "true"
+        button.dataset.tnAmpAdding ===
+        "true"
       ) {
         return;
       }
 
-      const form = button.closest(
-        'form[action*="/cart/add"]'
-      );
+      const form =
+        button.closest(
+          'form[action*="/cart/add"]'
+        );
 
-      const cartDrawer = getCartDrawer();
+      const cartDrawer =
+        getCartDrawer();
 
       if (!form || !cartDrawer) {
         return;
       }
 
-      button.dataset.tnAmpAdding = "true";
+      button.dataset.tnAmpAdding =
+        "true";
 
       button.setAttribute(
         "aria-disabled",
         "true"
       );
 
-      button.classList.add("loading");
-
-      const loader = button.querySelector(
-        ".loading-overlay__spinner"
+      button.classList.add(
+        "loading"
       );
 
-      loader?.classList.remove("hidden");
+      const loader =
+        button.querySelector(
+          ".loading-overlay__spinner"
+        );
+
+      loader?.classList.remove(
+        "hidden"
+      );
 
       try {
         const quantity =
@@ -288,7 +324,8 @@
             form
           );
 
-        const formData = new FormData(form);
+        const formData =
+          new FormData(form);
 
         formData.set(
           "quantity",
@@ -306,7 +343,9 @@
         }
 
         const sectionIds =
-          getDrawerSections(cartDrawer);
+          getDrawerSections(
+            cartDrawer
+          );
 
         if (sectionIds.length) {
           formData.set(
@@ -326,7 +365,9 @@
           {
             method: "POST",
             headers: {
-              Accept: "application/json",
+              Accept:
+                "application/json",
+
               "X-Requested-With":
                 "XMLHttpRequest"
             },
@@ -334,9 +375,13 @@
           }
         );
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
-        if (!response.ok || data.status) {
+        if (
+          !response.ok ||
+          data.status
+        ) {
           throw new Error(
             data.description ||
               data.message ||
@@ -356,14 +401,20 @@
             "Não foi possível adicionar ao carrinho."
         );
       } finally {
-        delete button.dataset.tnAmpAdding;
+        delete button.dataset
+          .tnAmpAdding;
 
         button.removeAttribute(
           "aria-disabled"
         );
 
-        button.classList.remove("loading");
-        loader?.classList.add("hidden");
+        button.classList.remove(
+          "loading"
+        );
+
+        loader?.classList.add(
+          "hidden"
+        );
       }
     },
     true
@@ -371,35 +422,20 @@
 
   /* =====================================================
      CLASSIC BUNDLE
-     Kit com 6 sachês
+     KIT COM 6 SACHÊS
      ===================================================== */
-
-  const createAmpBundleReference = () => {
-    const randomPart = Math.random()
-      .toString(36)
-      .slice(2, 12);
-
-    return [
-      SACHET_BUNDLE_ID,
-      "tn",
-      Date.now(),
-      randomPart
-    ].join("_");
-  };
 
   const addClassicBundleToCart =
     async () => {
-      const bundleReference =
-        createAmpBundleReference();
-
       const payload = {
         items: SACHET_BUNDLE_ITEMS.map(
           item => ({
             id: item.id,
             quantity: item.quantity,
+
             properties: {
               _amp_bundles:
-                bundleReference
+                SACHET_BUNDLE_REFERENCE
             }
           })
         )
@@ -411,9 +447,12 @@
         {
           method: "POST",
           headers: {
-            Accept: "application/json",
+            Accept:
+              "application/json",
+
             "Content-Type":
               "application/json",
+
             "X-Requested-With":
               "XMLHttpRequest"
           },
@@ -421,9 +460,13 @@
         }
       );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
-      if (!response.ok || data.status) {
+      if (
+        !response.ok ||
+        data.status
+      ) {
         throw new Error(
           data.description ||
             data.message ||
@@ -437,23 +480,27 @@
   document.addEventListener(
     "click",
     async event => {
-      const button = event.target.closest(
-        SELECTORS.classicButton
-      );
+      const button =
+        event.target.closest(
+          SELECTORS.classicButton
+        );
 
-      if (!button) return;
+      if (!button) {
+        return;
+      }
 
       /*
-       * Cancela completamente o comportamento
-       * original do AMP e da Yampi.
+       * Bloqueia tanto o AMP quanto a Yampi.
+       * A inclusão é feita diretamente pela
+       * API do carrinho, sem redirecionamento.
        */
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
 
       if (
-        button.dataset.tnBundleAdding ===
-        "true"
+        button.dataset
+          .tnBundleAdding === "true"
       ) {
         return;
       }
