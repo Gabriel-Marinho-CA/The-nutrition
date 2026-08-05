@@ -278,3 +278,37 @@
   }
 }
 
+/* ======================================================
+   AMP — HERDAR AS FONTES CONFIGURADAS NO TEMA
+   ====================================================== */
+
+/* Textos gerais */
+#amp-classic-bundles-embed-section,
+#amp-classic-bundles-embed-section *,
+.amp-volume-discount-bundles,
+.amp-volume-discount-bundles *,
+.amp-bundles__classic-bundles,
+.amp-bundles__classic-bundles *,
+.amp-bundles__volume-discount-bundles,
+.amp-bundles__volume-discount-bundles * {
+  font-family: var(--font-body-family, inherit) !important;
+}
+
+/* Títulos e textos de maior destaque */
+.amp-bundles__classic-bundles__headline,
+.amp-bundles__classic-bundles__total-label,
+.amp-bundles__volume-discount-bundles__tier-text,
+.tn-sachet-bundle-summary__title {
+  font-family:
+    var(
+      --font-heading-family,
+      var(--font-body-family, inherit)
+    ) !important;
+}
+
+/* Botões */
+.amp-bundles__classic-bundles__cta,
+.amp-bundles__volume-discount-bundles button,
+.tn-sachet-bundle-toggle {
+  font-family: var(--font-body-family, inherit) !important;
+}
