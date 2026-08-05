@@ -392,42 +392,90 @@
      Exemplo: Kit com 6 sachês
      ===================================================== */
 
-  const attachClassicBundleButton =
-    button => {
-      if (
-        button.dataset.tnAmpClassicReady ===
-        "true"
-      ) {
+  let classicBundleProcessing = false;
+
+  document.addEventListener(
+    "pointerdown",
+    async event => {
+      const button = event.target.closest(
+        SELECTORS.classicButton
+      );
+
+      if (!button) return;
+
+      try {
+        const cart = await fetchCart();
+
+        button.dataset.tnCartSignatureBefore =
+          getCartSignature(cart);
+      } catch (error) {
+        console.error(
+          "Erro ao registrar o carrinho antes do kit:",
+          error
+        );
+      }
+    },
+    true
+  );
+
+  document.addEventListener(
+    "click",
+    async event => {
+      const button = event.target.closest(
+        SELECTORS.classicButton
+      );
+
+      if (!button) return;
+
+      /*
+       * Não bloqueia o comportamento do AMP.
+       * Apenas impede que o clique continue
+       * subindo depois que o AMP o receber.
+       */
+      event.stopPropagation();
+
+      if (classicBundleProcessing) {
         return;
       }
 
-      button.dataset.tnAmpClassicReady =
-        "true";
+      classicBundleProcessing = true;
 
-      /*
-       * Registra o estado do carrinho antes
-       * do clique ser processado pelo AMP.
-       */
-      button.addEventListener(
-        "pointerdown",
-        async () => {
-          try {
-            const cart = await fetchCart();
+      try {
+        let previousSignature =
+          button.dataset.tnCartSignatureBefore;
 
-            button.dataset
-              .tnCartSignatureBefore =
-              getCartSignature(cart);
-          } catch (error) {
-            console.error(
-              "Erro ao registrar o carrinho:",
-              error
-            );
-          }
-        },
-        {
-          passive: true
+        if (!previousSignature) {
+          const cartBefore = await fetchCart();
+
+          previousSignature =
+            getCartSignature(cartBefore);
         }
-      );
+
+        await waitForCartChange(
+          previousSignature
+        );
+
+        await refreshAndOpenCartDrawer();
+      } catch (error) {
+        console.error(
+          "Erro no AMP Classic Bundle:",
+          error
+        );
+
+        alert(
+          error.message ||
+            "Não foi possível adicionar o kit ao carrinho."
+        );
+      } finally {
+        classicBundleProcessing = false;
+
+        delete button.dataset
+          .tnCartSignatureBefore;
+      }
+    },
+    true
+  );
+})();
 
       button.addEventListener(
         "click",
