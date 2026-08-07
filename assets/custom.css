@@ -281,7 +281,7 @@ html.tn-amp-mode-single
   Não depende de onde o Volume Discount está no DOM.
 */
 html.tn-amp-mode-kit
-product-form.wt-product__add-to-cart {
+product-form:has(.js-add-to-cart) {
   display: none !important;
 }
 
