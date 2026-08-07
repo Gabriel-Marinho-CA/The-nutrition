@@ -44,6 +44,12 @@
     mixSatisfiedProgress:
       ".amp-bundles__mix-and-match-bundles__section-progress--satisfied",
 
+    mixProductWrapper:
+      ".amp-bundles__mix-and-match-bundles__product-wrapper",
+
+    mixProductTitle:
+      ".amp-bundles__product-tile__title, .amp-bundles__mix-and-match-bundles__product-tile__title",
+
     mixToggleButton:
       ".amp-bundles__mix-and-match-bundles__toggle-btn",
 
@@ -116,9 +122,11 @@
       "/cart.js",
       {
         method: "GET",
+
         headers: {
           Accept: "application/json"
         },
+
         cache: "no-store"
       }
     );
@@ -165,10 +173,8 @@
       return null;
     }
 
-    const number = parseInt(
-      match[0],
-      10
-    );
+    const number =
+      parseInt(match[0], 10);
 
     return Number.isFinite(number) &&
       number > 0
@@ -180,7 +186,9 @@
   const parsePercentage = value => {
     const match = String(
       value || ""
-    ).match(/(\d+(?:[.,]\d+)?)\s*%/);
+    ).match(
+      /(\d+(?:[.,]\d+)?)\s*%/
+    );
 
     if (!match) {
       return 0;
@@ -219,20 +227,21 @@
   };
 
 
-  const getVisibleElement = selector => {
-    const elements =
-      Array.from(
-        document.querySelectorAll(
-          selector
-        )
-      );
+  const getVisibleElement =
+    selector => {
+      const elements =
+        Array.from(
+          document.querySelectorAll(
+            selector
+          )
+        );
 
-    return (
-      elements.find(isVisible) ||
-      elements[0] ||
-      null
-    );
-  };
+      return (
+        elements.find(isVisible) ||
+        elements[0] ||
+        null
+      );
+    };
 
 
   const getSelectedVolumeTier =
@@ -333,7 +342,9 @@
           badgeText
         );
 
-      if (discountFromBadge > 0) {
+      if (
+        discountFromBadge > 0
+      ) {
         return discountFromBadge;
       }
 
@@ -412,6 +423,227 @@
 
 
   /* =====================================================
+     MIX & MATCH — PRODUTOS SELECIONADOS
+  ===================================================== */
+
+  /*
+    Guardamos qual produto foi escolhido em cada etapa.
+
+    0 = primeiro sabor
+    1 = segundo sabor
+  */
+
+  const mixSelections =
+    new Map();
+
+
+  /*
+    Cache dos produtos consultados na Shopify.
+  */
+
+  const productCache =
+    new Map();
+
+
+  /*
+    Converte o título do Shopify para o handle.
+
+    Exemplo:
+
+    Whey Isolado e Hidrolisado Cacao (405g) - The Nutrition
+
+    vira:
+
+    whey-isolado-e-hidrolisado-cacao-405g-the-nutrition
+  */
+
+  const titleToHandle =
+    title => {
+      return String(title || "")
+        .normalize("NFD")
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        )
+        .toLowerCase()
+        .replace(/&/g, " e ")
+        .replace(
+          /[^a-z0-9]+/g,
+          "-"
+        )
+        .replace(/^-+|-+$/g, "");
+    };
+
+
+  /*
+    Consulta o produto diretamente na Shopify
+    e retorna a variante.
+
+    Não precisamos deixar IDs hardcoded.
+  */
+
+  const getVariantFromProduct =
+    async selection => {
+      if (!selection?.handle) {
+        throw new Error(
+          "Produto selecionado não identificado."
+        );
+      }
+
+      if (
+        productCache.has(
+          selection.handle
+        )
+      ) {
+        return productCache.get(
+          selection.handle
+        );
+      }
+
+      const response =
+        await fetch(
+          `/products/${selection.handle}.js`,
+          {
+            method: "GET",
+
+            headers: {
+              Accept:
+                "application/json"
+            },
+
+            cache: "no-store"
+          }
+        );
+
+      if (!response.ok) {
+        throw new Error(
+          `Não foi possível carregar "${selection.title}".`
+        );
+      }
+
+      const product =
+        await response.json();
+
+      const variant =
+        product?.variants?.[0];
+
+      if (!variant?.id) {
+        throw new Error(
+          `Variante não encontrada para "${selection.title}".`
+        );
+      }
+
+      const result = {
+        id: Number(variant.id),
+        title:
+          selection.title,
+        handle:
+          selection.handle
+      };
+
+      productCache.set(
+        selection.handle,
+        result
+      );
+
+      return result;
+    };
+
+
+  const getMixSectionIndex =
+    element => {
+      const section =
+        element?.closest(
+          SELECTORS.mixSection
+        );
+
+      const widget =
+        element?.closest(
+          SELECTORS.mixWidget
+        );
+
+      if (
+        !section ||
+        !widget
+      ) {
+        return -1;
+      }
+
+      const sections =
+        Array.from(
+          widget.querySelectorAll(
+            SELECTORS.mixSection
+          )
+        );
+
+      return sections.indexOf(
+        section
+      );
+    };
+
+
+  const captureMixSelection =
+    button => {
+      const sectionIndex =
+        getMixSectionIndex(
+          button
+        );
+
+      if (sectionIndex < 0) {
+        return;
+      }
+
+      const wrapper =
+        button.closest(
+          SELECTORS.mixProductWrapper
+        );
+
+      if (!wrapper) {
+        return;
+      }
+
+      const titleElement =
+        wrapper.querySelector(
+          SELECTORS.mixProductTitle
+        );
+
+      const title =
+        titleElement?.textContent
+          ?.trim();
+
+      if (!title) {
+        return;
+      }
+
+      mixSelections.set(
+        sectionIndex,
+        {
+          title,
+          handle:
+            titleToHandle(title)
+        }
+      );
+    };
+
+
+  const clearMixSelection =
+    button => {
+      const sectionIndex =
+        getMixSectionIndex(
+          button
+        );
+
+      if (sectionIndex < 0) {
+        return;
+      }
+
+      mixSelections.delete(
+        sectionIndex
+      );
+    };
+
+
+  /* =====================================================
      MIX & MATCH — INTERFACE
   ===================================================== */
 
@@ -424,7 +656,8 @@
       element.textContent.trim() !==
         text
     ) {
-      element.textContent = text;
+      element.textContent =
+        text;
     }
   };
 
@@ -603,7 +836,9 @@
      ESTADO GLOBAL
   ===================================================== */
 
-  let currentKitMode = null;
+  let currentKitMode =
+    null;
+
 
   const setGlobalMode =
     isKitMode => {
@@ -621,6 +856,16 @@
 
       currentKitMode =
         isKitMode;
+
+
+      /*
+        Ao voltar para 1 unidade,
+        limpamos o estado do Mix.
+      */
+
+      if (!isKitMode) {
+        mixSelections.clear();
+      }
     };
 
 
@@ -635,7 +880,9 @@
           volumeWidget
         );
 
-      if (selectedTierIndex < 0) {
+      if (
+        selectedTierIndex < 0
+      ) {
         return;
       }
 
@@ -672,7 +919,9 @@
           )
         );
 
-      if (sections.length < 2) {
+      if (
+        sections.length < 2
+      ) {
         return;
       }
 
@@ -697,8 +946,11 @@
         !firstSatisfied &&
         !mixState.firstOpened
       ) {
-        mixState.firstOpened = true;
-        mixState.secondAutoOpened = false;
+        mixState.firstOpened =
+          true;
+
+        mixState.secondAutoOpened =
+          false;
 
         window.setTimeout(
           () => {
@@ -754,7 +1006,8 @@
         secondSatisfied &&
         !mixState.autoCollapsed
       ) {
-        mixState.autoCollapsed = true;
+        mixState.autoCollapsed =
+          true;
 
         window.setTimeout(
           () => {
@@ -767,10 +1020,312 @@
 
 
   /* =====================================================
+     MIX & MATCH — CAPTURA DAS ESCOLHAS
+  ===================================================== */
+
+  document.addEventListener(
+    "click",
+    event => {
+      const chooseButton =
+        event.target.closest(
+          SELECTORS.mixToggleButton
+        );
+
+      if (chooseButton) {
+        captureMixSelection(
+          chooseButton
+        );
+
+        return;
+      }
+
+
+      const removeButton =
+        event.target.closest(
+          SELECTORS.mixRemoveButton
+        );
+
+      if (removeButton) {
+        clearMixSelection(
+          removeButton
+        );
+      }
+    },
+    true
+  );
+
+
+  /* =====================================================
+     MIX & MATCH — ADICIONAR 2 AO CARRINHO
+  ===================================================== */
+
+  document.addEventListener(
+    "click",
+    async event => {
+      const button =
+        event.target.closest(
+          SELECTORS.mixCta
+        );
+
+      if (!button) {
+        return;
+      }
+
+
+      /*
+        BLOQUEIA completamente o clique nativo.
+
+        Assim:
+        - AMP não redireciona
+        - Yampi não redireciona
+        - nós controlamos a inclusão na Shopify
+      */
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+
+      if (
+        button.disabled ||
+        button.getAttribute(
+          "aria-disabled"
+        ) === "true"
+      ) {
+        return;
+      }
+
+
+      if (
+        button.dataset
+          .tnMixAdding ===
+        "true"
+      ) {
+        return;
+      }
+
+
+      const firstSelection =
+        mixSelections.get(0);
+
+      const secondSelection =
+        mixSelections.get(1);
+
+
+      if (
+        !firstSelection ||
+        !secondSelection
+      ) {
+        console.error(
+          "Seleções do Mix & Match não encontradas.",
+          {
+            firstSelection,
+            secondSelection
+          }
+        );
+
+        alert(
+          "Escolha os dois sabores antes de adicionar ao carrinho."
+        );
+
+        return;
+      }
+
+
+      button.dataset
+        .tnMixAdding =
+        "true";
+
+      button.disabled =
+        true;
+
+      button.setAttribute(
+        "aria-disabled",
+        "true"
+      );
+
+
+      const originalContent =
+        button.innerHTML;
+
+      button.innerHTML =
+        "<div>ADICIONANDO...</div>";
+
+
+      try {
+
+        /*
+          Busca os IDs reais diretamente
+          dos produtos da Shopify.
+        */
+
+        const [
+          firstVariant,
+          secondVariant
+        ] =
+          await Promise.all([
+            getVariantFromProduct(
+              firstSelection
+            ),
+
+            getVariantFromProduct(
+              secondSelection
+            )
+          ]);
+
+
+        /*
+          Caso a pessoa escolha o mesmo sabor
+          duas vezes, enviamos quantity: 2.
+        */
+
+        const quantities =
+          new Map();
+
+
+        [
+          firstVariant.id,
+          secondVariant.id
+        ].forEach(id => {
+          quantities.set(
+            id,
+            (
+              quantities.get(id) ||
+              0
+            ) + 1
+          );
+        });
+
+
+        /*
+          Mantém o MESMO padrão de propriedades
+          usado pelo Volume Discount.
+
+          O Mix & Match é apenas a interface
+          usada para escolher quais 2 Wheys
+          compõem a oferta.
+        */
+
+        const items =
+          Array.from(
+            quantities.entries()
+          ).map(
+            ([id, quantity]) => ({
+              id,
+              quantity,
+
+              properties: {
+                _tn_amp_campaign:
+                  "volume_discount",
+
+                _tn_amp_discount_percent:
+                  "10",
+
+                _tn_amp_group:
+                  "volume_2"
+              }
+            })
+          );
+
+
+        /*
+          Mesma lógica dos demais:
+          adiciona diretamente no carrinho Shopify.
+        */
+
+        const response =
+          await fetch(
+            window.routes
+              ?.cart_add_url ||
+              "/cart/add.js",
+            {
+              method: "POST",
+
+              headers: {
+                Accept:
+                  "application/json",
+
+                "Content-Type":
+                  "application/json",
+
+                "X-Requested-With":
+                  "XMLHttpRequest"
+              },
+
+              body:
+                JSON.stringify({
+                  items
+                })
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          !response.ok ||
+          data.status
+        ) {
+          throw new Error(
+            data.description ||
+              data.message ||
+              "Não foi possível adicionar o kit."
+          );
+        }
+
+
+        /*
+          MESMA FINALIZAÇÃO DOS OUTROS CARDS:
+
+          - atualiza brindes
+          - atualiza drawer
+          - abre drawer
+        */
+
+        await finalizeCartUpdate();
+
+
+      } catch (error) {
+
+        console.error(
+          "Erro ao adicionar Mix & Match:",
+          error
+        );
+
+        alert(
+          error.message ||
+            "Não foi possível adicionar os produtos ao carrinho."
+        );
+
+
+      } finally {
+
+        delete button.dataset
+          .tnMixAdding;
+
+        button.disabled =
+          false;
+
+        button.removeAttribute(
+          "aria-disabled"
+        );
+
+        button.innerHTML =
+          originalContent;
+      }
+    },
+    true
+  );
+
+
+  /* =====================================================
      SINCRONIZAÇÃO DOS WIDGETS
   ===================================================== */
 
-  let syncTimer = null;
+  let syncTimer =
+    null;
 
 
   const syncUI = () => {
@@ -793,15 +1348,12 @@
       decorateVolumeDiscount
     );
 
+
     mixWidgets.forEach(
       decorateMixAndMatch
     );
 
 
-    /*
-     * Dá prioridade ao Volume Discount visível.
-     * Isso resolve desktop/mobile duplicados no DOM.
-     */
     const visibleVolume =
       volumeWidgets.find(
         isVisible
@@ -814,9 +1366,6 @@
     }
 
 
-    /*
-     * Controla o Mix & Match visível.
-     */
     const visibleMix =
       mixWidgets.find(
         isVisible
@@ -843,12 +1392,10 @@
   };
 
 
-  /*
-   * Clique direto em qualquer tier.
-   *
-   * Não dependemos do MutationObserver para descobrir
-   * qual versão desktop/mobile foi clicada.
-   */
+  /* =====================================================
+     VOLUME DISCOUNT — TROCA DE OPÇÃO
+  ===================================================== */
+
   document.addEventListener(
     "click",
     event => {
@@ -882,18 +1429,28 @@
           tier
         );
 
-      if (clickedIndex < 0) {
+      if (
+        clickedIndex < 0
+      ) {
         return;
       }
 
-      /*
-       * Atualiza imediatamente.
-       */
+
       setGlobalMode(
         clickedIndex === 1
       );
 
-      if (clickedIndex === 1) {
+
+      if (
+        clickedIndex === 1
+      ) {
+        /*
+          Novo Kit:
+          começa novamente a escolha.
+        */
+
+        mixSelections.clear();
+
         mixState.firstOpened =
           false;
 
@@ -904,6 +1461,7 @@
           false;
       }
 
+
       window.setTimeout(
         scheduleSync,
         80
@@ -912,6 +1470,10 @@
     true
   );
 
+
+  /* =====================================================
+     OBSERVER
+  ===================================================== */
 
   const pageObserver =
     new MutationObserver(
@@ -923,7 +1485,9 @@
     document.documentElement,
     {
       subtree: true,
+
       childList: true,
+
       attributes: true,
 
       attributeFilter: [
@@ -968,9 +1532,12 @@
         return;
       }
 
+
       /*
-       * Kit com 2 usa o CTA do Mix & Match.
-       */
+        Kit com 2 utiliza exclusivamente
+        o Mix & Match.
+      */
+
       if (currentKitMode) {
         event.preventDefault();
         event.stopPropagation();
@@ -990,9 +1557,6 @@
       }
 
 
-      /*
-       * Usa o Volume Discount visível.
-       */
       const ampWidget =
         getVisibleElement(
           SELECTORS.volumeWidget
@@ -1009,7 +1573,8 @@
 
 
       if (
-        button.dataset.tnAmpAdding ===
+        button.dataset
+          .tnAmpAdding ===
         "true"
       ) {
         return;
@@ -1024,7 +1589,8 @@
       }
 
 
-      button.dataset.tnAmpAdding =
+      button.dataset
+        .tnAmpAdding =
         "true";
 
       button.setAttribute(
@@ -1048,6 +1614,7 @@
 
 
       try {
+
         const quantity =
           getVolumeQuantity(
             ampWidget,
@@ -1062,13 +1629,17 @@
         const formData =
           new FormData(form);
 
+
         formData.set(
           "quantity",
           String(quantity)
         );
 
 
-        if (discountPercent > 0) {
+        if (
+          discountPercent > 0
+        ) {
+
           formData.set(
             "properties[_tn_amp_campaign]",
             "volume_discount"
@@ -1085,7 +1656,9 @@
             "properties[_tn_amp_group]",
             `volume_${quantity}`
           );
+
         } else {
+
           formData.delete(
             "properties[_tn_amp_campaign]"
           );
@@ -1116,7 +1689,9 @@
             cartDrawer
           );
 
-        if (sectionIds.length) {
+        if (
+          sectionIds.length
+        ) {
           formData.set(
             "sections",
             sectionIds.join(",")
@@ -1132,7 +1707,8 @@
 
         const response =
           await fetch(
-            window.routes?.cart_add_url ||
+            window.routes
+              ?.cart_add_url ||
               "/cart/add.js",
             {
               method: "POST",
@@ -1145,7 +1721,8 @@
                   "XMLHttpRequest"
               },
 
-              body: formData
+              body:
+                formData
             }
           );
 
@@ -1167,7 +1744,10 @@
 
 
         await finalizeCartUpdate();
+
+
       } catch (error) {
+
         console.error(
           "Erro no AMP Volume Discount:",
           error
@@ -1177,7 +1757,10 @@
           error.message ||
             "Não foi possível adicionar ao carrinho."
         );
+
+
       } finally {
+
         delete button.dataset
           .tnAmpAdding;
 
@@ -1209,7 +1792,8 @@
         items:
           SACHET_BUNDLE_ITEMS.map(
             item => ({
-              id: item.id,
+              id:
+                item.id,
 
               quantity:
                 item.quantity,
@@ -1234,29 +1818,31 @@
       };
 
 
-      const response = await fetch(
-        window.routes?.cart_add_url ||
-          "/cart/add.js",
-        {
-          method: "POST",
+      const response =
+        await fetch(
+          window.routes
+            ?.cart_add_url ||
+            "/cart/add.js",
+          {
+            method: "POST",
 
-          headers: {
-            Accept:
-              "application/json",
+            headers: {
+              Accept:
+                "application/json",
 
-            "Content-Type":
-              "application/json",
+              "Content-Type":
+                "application/json",
 
-            "X-Requested-With":
-              "XMLHttpRequest"
-          },
+              "X-Requested-With":
+                "XMLHttpRequest"
+            },
 
-          body:
-            JSON.stringify(
-              payload
-            )
-        }
-      );
+            body:
+              JSON.stringify(
+                payload
+              )
+          }
+        );
 
 
       const data =
@@ -1306,10 +1892,12 @@
       }
 
 
-      button.dataset.tnBundleAdding =
+      button.dataset
+        .tnBundleAdding =
         "true";
 
-      button.disabled = true;
+      button.disabled =
+        true;
 
       button.setAttribute(
         "aria-disabled",
@@ -1325,10 +1913,14 @@
 
 
       try {
+
         await addClassicBundleToCart();
 
         await finalizeCartUpdate();
+
+
       } catch (error) {
+
         console.error(
           "Erro ao adicionar o Kit Sachês:",
           error
@@ -1338,11 +1930,15 @@
           error.message ||
             "Não foi possível adicionar o kit ao carrinho."
         );
+
+
       } finally {
+
         delete button.dataset
           .tnBundleAdding;
 
-        button.disabled = false;
+        button.disabled =
+          false;
 
         button.removeAttribute(
           "aria-disabled"
@@ -1354,4 +1950,5 @@
     },
     true
   );
+
 })();
