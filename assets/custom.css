@@ -264,35 +264,43 @@
    AMP MIX & MATCH — FLUXO INTEGRADO COM VOLUME DISCOUNT
 ========================================================= */
 
+/*
+  O estado agora fica no <html>.
+  Assim funciona mesmo quando o Wonder reorganiza
+  os blocos no mobile.
+*/
+
 /* Compra de 1 unidade: Mix & Match oculto */
-.tn-amp-commerce-flow.tn-amp-mode-single
+html.tn-amp-mode-single
 #amp-mix-and-match-bundles-embed-section {
   display: none !important;
 }
 
 /*
-  No Kit com 2 o formulário normal não é usado.
-  Remover o product-form inteiro elimina o espaço vazio.
+  No Kit com 2 o formulário normal não é utilizado.
 */
-.tn-amp-commerce-flow.tn-amp-mode-kit
+html.tn-amp-mode-kit
+.wt-product__info:has(.amp-volume-discount-bundles)
 product-form.wt-product__add-to-cart {
   display: none !important;
 }
 
 /*
-  Este é o container real que contém product-form + Mix & Match.
-  Quando estamos no Kit com 2, ele passa a conter somente o AMP.
+  Container que contém o Mix & Match.
+  Não depende da posição dele dentro do layout.
 */
-.tn-amp-commerce-flow.tn-amp-mode-kit
-.wt-product__add-to-cart_form.main-product__buy-buttons--container {
+html.tn-amp-mode-kit
+.wt-product__add-to-cart_form.main-product__buy-buttons--container:has(
+  #amp-mix-and-match-bundles-embed-section
+) {
   display: block !important;
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* Mix & Match logo abaixo da oferta */
-.tn-amp-commerce-flow.tn-amp-mode-kit
+/* Kit com 2: Mix & Match visível */
+html.tn-amp-mode-kit
 #amp-mix-and-match-bundles-embed-section {
   display: block !important;
   width: 100% !important;
@@ -302,16 +310,17 @@ product-form.wt-product__add-to-cart {
 }
 
 /* Compra de 1 unidade mantém CTA normal */
-.tn-amp-commerce-flow.tn-amp-mode-single
+html.tn-amp-mode-single
+.wt-product__info:has(.amp-volume-discount-bundles)
 .product-form__buttons {
   display: block !important;
   width: 100% !important;
 }
 
 /* Quantidade do kit é definida pelos dois sabores */
-.tn-amp-commerce-flow.tn-amp-mode-kit
+html.tn-amp-mode-kit
 .amp-bundles__volume-discount-bundles__quantity-divider,
-.tn-amp-commerce-flow.tn-amp-mode-kit
+html.tn-amp-mode-kit
 .amp-bundles__volume-discount-bundles__quantity-controls {
   display: none !important;
 }
@@ -774,7 +783,7 @@ product-form.wt-product__add-to-cart {
   O preço, economia e total já são exibidos no
   "Kit com 2" do Volume Discount.
 */
-.tn-amp-commerce-flow
+html.tn-amp-mode-kit
 .amp-bundles__mix-and-match-bundles__summary {
   display: none !important;
 }
@@ -834,7 +843,7 @@ product-form.wt-product__add-to-cart {
 
 @media screen and (max-width: 749px) {
 
-  .tn-amp-commerce-flow.tn-amp-mode-kit
+  html.tn-amp-mode-kit
   #amp-mix-and-match-bundles-embed-section {
     margin-top: 8px !important;
   }
