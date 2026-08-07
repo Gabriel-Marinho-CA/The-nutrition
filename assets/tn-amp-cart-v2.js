@@ -5,18 +5,8 @@
     productButton:
       "product-form .js-add-to-cart",
 
-    productArea:
-      [
-        ".wt-product__info",
-        ".product__info-container",
-        ".wt-product__main"
-      ].join(","),
-
     volumeWidget:
       ".amp-volume-discount-bundles",
-
-    volumeInner:
-      ".amp-bundles__volume-discount-bundles",
 
     volumeTier:
       ".amp-bundles__volume-discount-bundles__tier-option",
@@ -51,14 +41,8 @@
     mixSectionName:
       ".amp-bundles__mix-and-match-bundles__section-name",
 
-    mixSectionProgress:
-      ".amp-bundles__mix-and-match-bundles__section-progress",
-
     mixSatisfiedProgress:
       ".amp-bundles__mix-and-match-bundles__section-progress--satisfied",
-
-    mixProductTitle:
-      ".amp-bundles__mix-and-match-bundles__product-tile__title",
 
     mixToggleButton:
       ".amp-bundles__mix-and-match-bundles__toggle-btn",
@@ -75,6 +59,7 @@
     cartDrawer:
       "cart-drawer"
   };
+
 
   /* =====================================================
      KIT SACHÊS
@@ -112,6 +97,11 @@
     }
   ];
 
+
+  /* =====================================================
+     UTILITÁRIOS
+  ===================================================== */
+
   const wait = milliseconds =>
     new Promise(resolve => {
       window.setTimeout(
@@ -119,6 +109,7 @@
         milliseconds
       );
     });
+
 
   const fetchCart = async () => {
     const response = await fetch(
@@ -141,11 +132,13 @@
     return response.json();
   };
 
+
   const getCartDrawer = () => {
     return document.querySelector(
       SELECTORS.cartDrawer
     );
   };
+
 
   const getDrawerSections = cartDrawer => {
     if (
@@ -161,6 +154,7 @@
       .map(section => section.id)
       .filter(Boolean);
   };
+
 
   const parsePositiveInteger = value => {
     const match = String(
@@ -181,6 +175,7 @@
       ? number
       : null;
   };
+
 
   const parsePercentage = value => {
     const match = String(
@@ -205,11 +200,48 @@
     return number;
   };
 
-  const getSelectedVolumeTier = ampWidget => {
-    return ampWidget?.querySelector(
-      SELECTORS.selectedVolumeTier
+
+  const isVisible = element => {
+    if (!element) {
+      return false;
+    }
+
+    const style =
+      window.getComputedStyle(
+        element
+      );
+
+    return (
+      style.display !== "none" &&
+      style.visibility !== "hidden" &&
+      element.getClientRects().length > 0
     );
   };
+
+
+  const getVisibleElement = selector => {
+    const elements =
+      Array.from(
+        document.querySelectorAll(
+          selector
+        )
+      );
+
+    return (
+      elements.find(isVisible) ||
+      elements[0] ||
+      null
+    );
+  };
+
+
+  const getSelectedVolumeTier =
+    ampWidget => {
+      return ampWidget?.querySelector(
+        SELECTORS.selectedVolumeTier
+      );
+    };
+
 
   const getSelectedVolumeTierIndex =
     ampWidget => {
@@ -217,11 +249,12 @@
         return -1;
       }
 
-      const tiers = Array.from(
-        ampWidget.querySelectorAll(
-          SELECTORS.volumeTier
-        )
-      );
+      const tiers =
+        Array.from(
+          ampWidget.querySelectorAll(
+            SELECTORS.volumeTier
+          )
+        );
 
       const selectedTier =
         getSelectedVolumeTier(
@@ -232,6 +265,7 @@
         selectedTier
       );
     };
+
 
   const getVolumeQuantity = (
     ampWidget,
@@ -265,7 +299,7 @@
     }
 
     const quantityInput =
-      form.querySelector(
+      form?.querySelector(
         'input[name="quantity"]'
       );
 
@@ -276,6 +310,7 @@
 
     return formQuantity || 1;
   };
+
 
   const getVolumeDiscountPercent =
     ampWidget => {
@@ -307,6 +342,7 @@
       );
     };
 
+
   const syncCartGiftsAfterAdd =
     async () => {
       if (
@@ -316,12 +352,14 @@
         return false;
       }
 
-      const cart = await fetchCart();
+      const cart =
+        await fetchCart();
 
       return window.syncCartGifts(
         cart.items || []
       );
     };
+
 
   const refreshAndOpenCartDrawer =
     async () => {
@@ -356,6 +394,7 @@
         "function"
       ) {
         cartDrawer.open();
+
         return;
       }
 
@@ -363,6 +402,7 @@
         "active"
       );
     };
+
 
   const finalizeCartUpdate =
     async () => {
@@ -372,72 +412,8 @@
 
 
   /* =====================================================
-     FLUXO INTEGRADO
-     VOLUME DISCOUNT + MIX & MATCH
+     MIX & MATCH — INTERFACE
   ===================================================== */
-
-  let integratedFlow = null;
-  let flowSyncTimer = null;
-
-  const scheduleFlowSync = () => {
-    window.clearTimeout(
-      flowSyncTimer
-    );
-
-    flowSyncTimer =
-      window.setTimeout(
-        syncIntegratedFlow,
-        30
-      );
-  };
-
-  const getIntegratedFlowElements =
-    () => {
-      const volumeWidget =
-        document.querySelector(
-          SELECTORS.volumeWidget
-        );
-
-      const mixRoot =
-        document.querySelector(
-          SELECTORS.mixRoot
-        );
-
-      const mixWidget =
-        mixRoot?.querySelector(
-          SELECTORS.mixWidget
-        );
-
-      if (
-        !volumeWidget ||
-        !mixRoot ||
-        !mixWidget
-      ) {
-        return null;
-      }
-
-      const productArea =
-        volumeWidget.closest(
-          ".wt-product__info"
-        ) ||
-        volumeWidget.closest(
-          ".product__info-container"
-        ) ||
-        volumeWidget.closest(
-          ".wt-product__main"
-        );
-
-      if (!productArea) {
-        return null;
-      }
-
-      return {
-        productArea,
-        volumeWidget,
-        mixRoot,
-        mixWidget
-      };
-    };
 
   const setTextIfDifferent = (
     element,
@@ -452,8 +428,13 @@
     }
   };
 
+
   const decorateVolumeDiscount =
     volumeWidget => {
+      if (!volumeWidget) {
+        return;
+      }
+
       const tiers =
         Array.from(
           volumeWidget.querySelectorAll(
@@ -462,81 +443,35 @@
         );
 
       if (tiers[0]) {
-        const text =
+        setTextIfDifferent(
           tiers[0].querySelector(
             SELECTORS.volumeTierText
-          );
-
-        setTextIfDifferent(
-          text,
+          ),
           "1 unidade"
         );
       }
 
       if (tiers[1]) {
-        const text =
+        setTextIfDifferent(
           tiers[1].querySelector(
             SELECTORS.volumeTierText
-          );
-
-        setTextIfDifferent(
-          text,
+          ),
           "Kit com 2"
         );
       }
     };
 
-    title => {
-      const normalized =
-        String(
-          title || ""
-        ).toLowerCase();
-
-      if (
-        normalized.includes(
-          "cacao"
-        ) ||
-        normalized.includes(
-          "cacau"
-        )
-      ) {
-        return "Cacau";
-      }
-
-      if (
-        normalized.includes(
-          "strawberry"
-        ) ||
-        normalized.includes(
-          "morango"
-        )
-      ) {
-        return "Morango";
-      }
-
-      if (
-        normalized.includes(
-          "vanilla"
-        ) ||
-        normalized.includes(
-          "vanila"
-        )
-      ) {
-        return "Vanilla";
-      }
-
-      return title;
-    };
 
   const decorateMixAndMatch =
     mixWidget => {
-      const headline =
-        mixWidget.querySelector(
-          SELECTORS.mixHeadline
-        );
+      if (!mixWidget) {
+        return;
+      }
 
       setTextIfDifferent(
-        headline,
+        mixWidget.querySelector(
+          SELECTORS.mixHeadline
+        ),
         "Escolha os sabores"
       );
 
@@ -613,6 +548,7 @@
       }
     };
 
+
   const isSectionSatisfied =
     section => {
       return Boolean(
@@ -622,65 +558,110 @@
       );
     };
 
-  const openSection = section => {
-    const header =
-      section?.querySelector(
-        SELECTORS.mixSectionHeader
+
+  const openSection =
+    section => {
+      const header =
+        section?.querySelector(
+          SELECTORS.mixSectionHeader
+        );
+
+      if (
+        !header ||
+        header.getAttribute(
+          "aria-expanded"
+        ) === "true"
+      ) {
+        return;
+      }
+
+      header.click();
+    };
+
+
+  const closeSection =
+    section => {
+      const header =
+        section?.querySelector(
+          SELECTORS.mixSectionHeader
+        );
+
+      if (
+        !header ||
+        header.getAttribute(
+          "aria-expanded"
+        ) !== "true"
+      ) {
+        return;
+      }
+
+      header.click();
+    };
+
+
+  /* =====================================================
+     ESTADO GLOBAL
+  ===================================================== */
+
+  let currentKitMode = null;
+
+  const setGlobalMode =
+    isKitMode => {
+      document.documentElement
+        .classList.toggle(
+          "tn-amp-mode-kit",
+          isKitMode
+        );
+
+      document.documentElement
+        .classList.toggle(
+          "tn-amp-mode-single",
+          !isKitMode
+        );
+
+      currentKitMode =
+        isKitMode;
+    };
+
+
+  const syncGlobalModeFromWidget =
+    volumeWidget => {
+      if (!volumeWidget) {
+        return;
+      }
+
+      const selectedTierIndex =
+        getSelectedVolumeTierIndex(
+          volumeWidget
+        );
+
+      if (selectedTierIndex < 0) {
+        return;
+      }
+
+      setGlobalMode(
+        selectedTierIndex === 1
       );
+    };
 
-    if (
-      !header ||
-      header.getAttribute(
-        "aria-expanded"
-      ) === "true"
-    ) {
-      return;
-    }
 
-    header.click();
+  /* =====================================================
+     AUTO-ABERTURA DO MIX & MATCH
+  ===================================================== */
+
+  const mixState = {
+    firstOpened: false,
+    secondAutoOpened: false,
+    autoCollapsed: false
   };
 
-  const closeSection = section => {
-    const header =
-      section?.querySelector(
-        SELECTORS.mixSectionHeader
-      );
-
-    if (
-      !header ||
-      header.getAttribute(
-        "aria-expanded"
-      ) !== "true"
-    ) {
-      return;
-    }
-
-    header.click();
-  };
 
   const handleMixAndMatchSteps =
-    (
-      productArea,
-      mixWidget,
-      isKitMode
-    ) => {
-      if (!isKitMode) {
-        /*
-         * Ao voltar para 1 unidade,
-         * zeramos apenas os controles de
-         * automação visual.
-         *
-         * As escolhas do AMP continuam intactas.
-         */
-        delete productArea.dataset
-          .tnMixFirstOpened;
-
-        delete productArea.dataset
-          .tnMixSecondAutoOpened;
-
-        delete productArea.dataset
-          .tnMixAutoCollapsed;
-
+    mixWidget => {
+      if (
+        !currentKitMode ||
+        !mixWidget
+      ) {
         return;
       }
 
@@ -711,25 +692,13 @@
           second
         );
 
-      /*
-       * ===================================================
-       * PRIMEIRO ACESSO AO KIT
-       * ===================================================
-       *
-       * Abre o primeiro sabor uma única vez.
-       */
+
       if (
         !firstSatisfied &&
-        !productArea.dataset
-          .tnMixFirstOpened
+        !mixState.firstOpened
       ) {
-        productArea.dataset
-          .tnMixFirstOpened =
-          "true";
-
-        productArea.dataset
-          .tnMixSecondAutoOpened =
-          "false";
+        mixState.firstOpened = true;
+        mixState.secondAutoOpened = false;
 
         window.setTimeout(
           () => {
@@ -741,45 +710,25 @@
         return;
       }
 
-      /*
-       * Se o primeiro sabor voltar a ficar vazio,
-       * permitimos que a abertura automática do
-       * segundo aconteça novamente numa próxima
-       * seleção.
-       */
-      if (!firstSatisfied) {
-        productArea.dataset
-          .tnMixSecondAutoOpened =
-          "false";
 
-        productArea.dataset
-          .tnMixAutoCollapsed =
-          "false";
+      if (!firstSatisfied) {
+        mixState.secondAutoOpened =
+          false;
+
+        mixState.autoCollapsed =
+          false;
 
         return;
       }
 
-      /*
-       * ===================================================
-       * PRIMEIRO SABOR ACABOU DE SER ESCOLHIDO
-       * ===================================================
-       *
-       * Abre o segundo sabor UMA ÚNICA VEZ.
-       *
-       * Depois disso não interferimos mais nos accordions.
-       * Assim o cliente pode voltar manualmente para
-       * "1º sabor" sem o script reabrir o segundo.
-       */
+
       if (
         firstSatisfied &&
         !secondSatisfied &&
-        productArea.dataset
-          .tnMixSecondAutoOpened !==
-          "true"
+        !mixState.secondAutoOpened
       ) {
-        productArea.dataset
-          .tnMixSecondAutoOpened =
-          "true";
+        mixState.secondAutoOpened =
+          true;
 
         window.setTimeout(
           () => {
@@ -791,14 +740,7 @@
         return;
       }
 
-      /*
-       * Se o segundo ainda não foi escolhido e já
-       * fizemos a abertura automática uma vez,
-       * NÃO fazemos mais nada.
-       *
-       * Daqui em diante a navegação é totalmente
-       * controlada pelo usuário.
-       */
+
       if (
         firstSatisfied &&
         !secondSatisfied
@@ -806,24 +748,13 @@
         return;
       }
 
-      /*
-       * ===================================================
-       * OS DOIS SABORES ESTÃO ESCOLHIDOS
-       * ===================================================
-       *
-       * Fecha a seção aberta uma única vez para
-       * deixar o resumo compacto.
-       */
+
       if (
         firstSatisfied &&
         secondSatisfied &&
-        productArea.dataset
-          .tnMixAutoCollapsed !==
-          "true"
+        !mixState.autoCollapsed
       ) {
-        productArea.dataset
-          .tnMixAutoCollapsed =
-          "true";
+        mixState.autoCollapsed = true;
 
         window.setTimeout(
           () => {
@@ -834,127 +765,175 @@
       }
     };
 
-productArea.classList.add(
-  "tn-amp-commerce-flow"
-);
 
-decorateVolumeDiscount(
-  volumeWidget
-);
+  /* =====================================================
+     SINCRONIZAÇÃO DOS WIDGETS
+  ===================================================== */
 
-decorateMixAndMatch(
-  mixWidget
-);
+  let syncTimer = null;
 
-const selectedTierIndex =
-  getSelectedVolumeTierIndex(
-    volumeWidget
-  );
 
-const isKitMode =
-  selectedTierIndex === 1;
+  const syncUI = () => {
+    const volumeWidgets =
+      Array.from(
+        document.querySelectorAll(
+          SELECTORS.volumeWidget
+        )
+      );
 
-/*
- * Estado local do produto.
- * Mantemos porque outras partes do script usam essas classes.
- */
-productArea.classList.toggle(
-  "tn-amp-mode-kit",
-  isKitMode
-);
+    const mixWidgets =
+      Array.from(
+        document.querySelectorAll(
+          SELECTORS.mixWidget
+        )
+      );
 
-productArea.classList.toggle(
-  "tn-amp-mode-single",
-  !isKitMode
-);
 
-/*
- * Estado global da página.
- *
- * Necessário porque no mobile o Shopify/Wonder pode renderizar
- * os App Blocks em containers diferentes.
- */
-document.documentElement.classList.toggle(
-  "tn-amp-mode-kit",
-  isKitMode
-);
+    volumeWidgets.forEach(
+      decorateVolumeDiscount
+    );
 
-document.documentElement.classList.toggle(
-  "tn-amp-mode-single",
-  !isKitMode
-);
+    mixWidgets.forEach(
+      decorateMixAndMatch
+    );
 
-  const initializeIntegratedFlow =
-    () => {
-      const context =
-        getIntegratedFlowElements();
 
-      if (!context) {
-        return;
-      }
+    /*
+     * Dá prioridade ao Volume Discount visível.
+     * Isso resolve desktop/mobile duplicados no DOM.
+     */
+    const visibleVolume =
+      volumeWidgets.find(
+        isVisible
+      );
 
-      if (
-        integratedFlow &&
-        integratedFlow.volumeWidget ===
-          context.volumeWidget &&
-        integratedFlow.mixWidget ===
-          context.mixWidget
-      ) {
-        return;
-      }
+    if (visibleVolume) {
+      syncGlobalModeFromWidget(
+        visibleVolume
+      );
+    }
 
-      integratedFlow = context;
 
-      const observer =
-        new MutationObserver(
-          scheduleFlowSync
+    /*
+     * Controla o Mix & Match visível.
+     */
+    const visibleMix =
+      mixWidgets.find(
+        isVisible
+      );
+
+    if (visibleMix) {
+      handleMixAndMatchSteps(
+        visibleMix
+      );
+    }
+  };
+
+
+  const scheduleSync = () => {
+    window.clearTimeout(
+      syncTimer
+    );
+
+    syncTimer =
+      window.setTimeout(
+        syncUI,
+        40
+      );
+  };
+
+
+  /*
+   * Clique direto em qualquer tier.
+   *
+   * Não dependemos do MutationObserver para descobrir
+   * qual versão desktop/mobile foi clicada.
+   */
+  document.addEventListener(
+    "click",
+    event => {
+      const tier =
+        event.target.closest(
+          SELECTORS.volumeTier
         );
 
-      observer.observe(
-        context.volumeWidget,
-        {
-          subtree: true,
-          childList: true,
-          characterData: true,
-          attributes: true,
-          attributeFilter: [
-            "class",
-            "aria-expanded",
-            "disabled"
-          ]
-        }
+      if (!tier) {
+        return;
+      }
+
+      const widget =
+        tier.closest(
+          SELECTORS.volumeWidget
+        );
+
+      if (!widget) {
+        return;
+      }
+
+      const tiers =
+        Array.from(
+          widget.querySelectorAll(
+            SELECTORS.volumeTier
+          )
+        );
+
+      const clickedIndex =
+        tiers.indexOf(
+          tier
+        );
+
+      if (clickedIndex < 0) {
+        return;
+      }
+
+      /*
+       * Atualiza imediatamente.
+       */
+      setGlobalMode(
+        clickedIndex === 1
       );
 
-      observer.observe(
-        context.mixWidget,
-        {
-          subtree: true,
-          childList: true,
-          characterData: true,
-          attributes: true,
-          attributeFilter: [
-            "class",
-            "aria-expanded",
-            "disabled"
-          ]
-        }
-      );
+      if (clickedIndex === 1) {
+        mixState.firstOpened =
+          false;
 
-      scheduleFlowSync();
-    };
+        mixState.secondAutoOpened =
+          false;
+
+        mixState.autoCollapsed =
+          false;
+      }
+
+      window.setTimeout(
+        scheduleSync,
+        80
+      );
+    },
+    true
+  );
+
 
   const pageObserver =
     new MutationObserver(
-      initializeIntegratedFlow
+      scheduleSync
     );
+
 
   pageObserver.observe(
     document.documentElement,
     {
       subtree: true,
-      childList: true
+      childList: true,
+      attributes: true,
+
+      attributeFilter: [
+        "class",
+        "aria-expanded",
+        "disabled"
+      ]
     }
   );
+
 
   if (
     document.readyState ===
@@ -962,19 +941,19 @@ document.documentElement.classList.toggle(
   ) {
     document.addEventListener(
       "DOMContentLoaded",
-      initializeIntegratedFlow,
+      scheduleSync,
       {
         once: true
       }
     );
   } else {
-    initializeIntegratedFlow();
+    scheduleSync();
   }
 
 
   /* =====================================================
      VOLUME DISCOUNT
-     COMPRA NORMAL DE 1 UNIDADE
+     COMPRA DE 1 UNIDADE
   ===================================================== */
 
   document.addEventListener(
@@ -989,29 +968,10 @@ document.documentElement.classList.toggle(
         return;
       }
 
-      const productArea =
-        button.closest(
-          SELECTORS.productArea
-        );
-
-      const ampWidget =
-        productArea?.querySelector(
-          SELECTORS.volumeWidget
-        );
-
-      if (!ampWidget) {
-        return;
-      }
-
       /*
-       * No Kit com 2 o CTA do Mix & Match
-       * controla a compra.
+       * Kit com 2 usa o CTA do Mix & Match.
        */
-      if (
-        productArea.classList.contains(
-          "tn-amp-mode-kit"
-        )
-      ) {
+      if (currentKitMode) {
         event.preventDefault();
         event.stopPropagation();
         event.stopImmediatePropagation();
@@ -1019,9 +979,34 @@ document.documentElement.classList.toggle(
         return;
       }
 
+
+      const form =
+        button.closest(
+          'form[action*="/cart/add"]'
+        );
+
+      if (!form) {
+        return;
+      }
+
+
+      /*
+       * Usa o Volume Discount visível.
+       */
+      const ampWidget =
+        getVisibleElement(
+          SELECTORS.volumeWidget
+        );
+
+      if (!ampWidget) {
+        return;
+      }
+
+
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
+
 
       if (
         button.dataset.tnAmpAdding ===
@@ -1030,17 +1015,14 @@ document.documentElement.classList.toggle(
         return;
       }
 
-      const form =
-        button.closest(
-          'form[action*="/cart/add"]'
-        );
 
       const cartDrawer =
         getCartDrawer();
 
-      if (!form || !cartDrawer) {
+      if (!cartDrawer) {
         return;
       }
+
 
       button.dataset.tnAmpAdding =
         "true";
@@ -1054,6 +1036,7 @@ document.documentElement.classList.toggle(
         "loading"
       );
 
+
       const loader =
         button.querySelector(
           ".loading-overlay__spinner"
@@ -1062,6 +1045,7 @@ document.documentElement.classList.toggle(
       loader?.classList.remove(
         "hidden"
       );
+
 
       try {
         const quantity =
@@ -1082,6 +1066,7 @@ document.documentElement.classList.toggle(
           "quantity",
           String(quantity)
         );
+
 
         if (discountPercent > 0) {
           formData.set(
@@ -1114,6 +1099,7 @@ document.documentElement.classList.toggle(
           );
         }
 
+
         const quantityInput =
           form.querySelector(
             'input[name="quantity"]'
@@ -1123,6 +1109,7 @@ document.documentElement.classList.toggle(
           quantityInput.value =
             String(quantity);
         }
+
 
         const sectionIds =
           getDrawerSections(
@@ -1136,29 +1123,36 @@ document.documentElement.classList.toggle(
           );
         }
 
+
         formData.set(
           "sections_url",
           window.location.pathname
         );
 
-        const response = await fetch(
-          window.routes?.cart_add_url ||
-            "/cart/add.js",
-          {
-            method: "POST",
-            headers: {
-              Accept:
-                "application/json",
 
-              "X-Requested-With":
-                "XMLHttpRequest"
-            },
-            body: formData
-          }
-        );
+        const response =
+          await fetch(
+            window.routes?.cart_add_url ||
+              "/cart/add.js",
+            {
+              method: "POST",
+
+              headers: {
+                Accept:
+                  "application/json",
+
+                "X-Requested-With":
+                  "XMLHttpRequest"
+              },
+
+              body: formData
+            }
+          );
+
 
         const data =
           await response.json();
+
 
         if (
           !response.ok ||
@@ -1170,6 +1164,7 @@ document.documentElement.classList.toggle(
               "Não foi possível adicionar o produto."
           );
         }
+
 
         await finalizeCartUpdate();
       } catch (error) {
@@ -1238,11 +1233,13 @@ document.documentElement.classList.toggle(
           )
       };
 
+
       const response = await fetch(
         window.routes?.cart_add_url ||
           "/cart/add.js",
         {
           method: "POST",
+
           headers: {
             Accept:
               "application/json",
@@ -1253,14 +1250,18 @@ document.documentElement.classList.toggle(
             "X-Requested-With":
               "XMLHttpRequest"
           },
-          body: JSON.stringify(
-            payload
-          )
+
+          body:
+            JSON.stringify(
+              payload
+            )
         }
       );
 
+
       const data =
         await response.json();
+
 
       if (
         !response.ok ||
@@ -1273,8 +1274,10 @@ document.documentElement.classList.toggle(
         );
       }
 
+
       return data;
     };
+
 
   document.addEventListener(
     "click",
@@ -1288,9 +1291,11 @@ document.documentElement.classList.toggle(
         return;
       }
 
+
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
+
 
       if (
         button.dataset
@@ -1299,6 +1304,7 @@ document.documentElement.classList.toggle(
       ) {
         return;
       }
+
 
       button.dataset.tnBundleAdding =
         "true";
@@ -1310,11 +1316,13 @@ document.documentElement.classList.toggle(
         "true"
       );
 
+
       const originalContent =
         button.innerHTML;
 
       button.innerHTML =
         "<div>ADICIONANDO KIT...</div>";
+
 
       try {
         await addClassicBundleToCart();
