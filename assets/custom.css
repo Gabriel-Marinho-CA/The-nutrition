@@ -266,166 +266,165 @@
 
 /* =========================================================
    AMP BUNDLES — MIX & MATCH
-   Estrutura segura
+   Ajustes seguros de identidade visual
 ========================================================= */
 
 .amp-bundles__mix-and-match-bundles {
-  width: 100%;
-  margin: 0;
-  font-family: var(--font-body-family, inherit);
+  --amp-mix-and-match-bundles-headline-font-size: 17px !important;
+  --amp-mix-and-match-bundles-headline-font-weight: 450 !important;
+
+  --amp-mix-and-match-bundles-card-border-width: 1px !important;
+  --amp-mix-and-match-bundles-card-border-radius: 12px !important;
+
+  --amp-mix-and-match-bundles-benefit-text-size: 12px !important;
+  --amp-mix-and-match-bundles-benefit-text-weight: 700 !important;
+
+  --amp-mix-and-match-bundles-total-label-size: 17px !important;
+  --amp-mix-and-match-bundles-total-label-weight: 700 !important;
+
+  --amp-mix-and-match-bundles-total-original-size: 11px !important;
+  --amp-mix-and-match-bundles-total-original-weight: 450 !important;
+
+  --amp-mix-and-match-bundles-total-discounted-size: 19px !important;
+  --amp-mix-and-match-bundles-total-discounted-weight: 700 !important;
+
+  --amp-mix-and-match-bundles-cta-border-width: 0px !important;
+  --amp-mix-and-match-bundles-cta-border-radius: 8px !important;
+  --amp-mix-and-match-bundles-cta-font-size: 13px !important;
+  --amp-mix-and-match-bundles-cta-font-weight: 450 !important;
+
+  --amp-mix-and-match-bundles-headline-color: #000000 !important;
+  --amp-mix-and-match-bundles-card-border-color: #ebebeb !important;
+  --amp-mix-and-match-bundles-card-bg: #ffffff !important;
+
+  --amp-mix-and-match-bundles-benefit-text-color: #bc8e4a !important;
+  --amp-mix-and-match-bundles-benefit-icon-color: #bc8e4a !important;
+
+  --amp-mix-and-match-bundles-total-label-color: #000000 !important;
+  --amp-mix-and-match-bundles-total-original-color: #707070 !important;
+  --amp-mix-and-match-bundles-total-discounted-color: #000000 !important;
+
+  --amp-mix-and-match-bundles-cta-border-color: #000000 !important;
+  --amp-mix-and-match-bundles-cta-color: #ffffff !important;
+  --amp-mix-and-match-bundles-cta-bg: #000000 !important;
+
+  --amp-mix-and-match-bundles-card-text-color: #303030 !important;
+
+  width: 100% !important;
+
+  font-family: var(--font-body-family, inherit) !important;
 }
+
+
+/* Título */
 
 .amp-bundles__mix-and-match-bundles__headline {
-  margin: 0 0 12px;
-  font-size: 17px;
-  font-weight: 450;
-  line-height: 1.3;
-  color: #000;
+  margin-bottom: 12px !important;
+
+  font-family: var(--font-body-family, inherit) !important;
 }
+
+
+/* Espaço entre as duas etapas */
 
 .amp-bundles__mix-and-match-bundles__sections {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 10px !important;
 }
+
+
+/* Cards das etapas */
 
 .amp-bundles__mix-and-match-bundles__section {
-  overflow: hidden;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #ebebeb;
-  border-radius: 12px;
+  border-radius: 12px !important;
+  box-shadow: none !important;
 }
+
+
+/* Header das etapas */
 
 .amp-bundles__mix-and-match-bundles__section-header {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 52px;
-  padding: 13px 16px;
-  margin: 0;
-  border: 0;
-  background: #fff;
-  color: #303030;
-  font-family: var(--font-body-family, inherit);
-  cursor: pointer;
+  min-height: 52px !important;
+  padding: 13px 16px !important;
+
+  font-family: var(--font-body-family, inherit) !important;
 }
+
+
+/* Etapa aberta */
 
 .amp-bundles__mix-and-match-bundles__section-header[aria-expanded="true"] {
-  background: #faf5ec;
+  background-color: #faf5ec !important;
 }
 
-.amp-bundles__mix-and-match-bundles__section-header__left,
-.amp-bundles__mix-and-match-bundles__section-header__right {
-  display: flex;
-  align-items: center;
-}
 
-.amp-bundles__mix-and-match-bundles__section-header__left {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.amp-bundles__mix-and-match-bundles__section-header__right {
-  flex: 0 0 auto;
-  gap: 9px;
-  margin-left: 14px;
-}
+/* Nome da etapa */
 
 .amp-bundles__mix-and-match-bundles__section-name {
-  color: #303030;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.3;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
 }
+
+
+/* Contador */
 
 .amp-bundles__mix-and-match-bundles__section-progress {
-  color: #616161;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+
+  color: #616161 !important;
 }
 
-.amp-bundles__mix-and-match-bundles__section-header__chevron {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-}
+
+/* Total */
 
 .amp-bundles__mix-and-match-bundles__summary {
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid #ebebeb;
+  margin-top: 14px !important;
+  padding-top: 14px !important;
 }
+
 
 .amp-bundles__mix-and-match-bundles__total {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 16px !important;
 }
 
-.amp-bundles__mix-and-match-bundles__total-label {
-  font-size: 17px;
-  font-weight: 700;
-  color: #000;
-}
 
-.amp-bundles__mix-and-match-bundles__total-amount {
-  display: flex;
-  align-items: baseline;
-  gap: 7px;
-}
-
-.amp-bundles__mix-and-match-bundles__total-original {
-  color: #707070;
-  font-size: 11px;
-  text-decoration: line-through;
-}
-
-.amp-bundles__mix-and-match-bundles__total-discounted {
-  color: #000;
-  font-size: 19px;
-  font-weight: 700;
-}
+/* CTA */
 
 .amp-bundles__mix-and-match-bundles__cta {
-  width: 100%;
-  min-height: 44px;
-  margin-top: 14px;
-  padding: 10px 16px;
-  border: 0;
-  border-radius: 8px;
-  background: #000;
-  color: #fff;
-  font-family: var(--font-body-family, inherit);
-  font-size: 13px;
-  font-weight: 450;
-  text-transform: uppercase;
+  min-height: 44px !important;
+
+  margin-top: 14px !important;
+
+  font-family: var(--font-body-family, inherit) !important;
+
+  text-transform: uppercase !important;
 }
+
 
 .amp-bundles__mix-and-match-bundles__cta:disabled {
-  background: #d8d8d8;
-  color: #fff;
-  opacity: 1;
-  cursor: not-allowed;
+  background-color: #d8d8d8 !important;
+
+  opacity: 1 !important;
 }
 
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media screen and (max-width: 749px) {
+
   .amp-bundles__mix-and-match-bundles__headline {
-    font-size: 16px;
+    font-size: 16px !important;
   }
 
   .amp-bundles__mix-and-match-bundles__section-header {
-    min-height: 50px;
-    padding: 12px 13px;
+    min-height: 50px !important;
+    padding: 12px 13px !important;
   }
 
   .amp-bundles__mix-and-match-bundles__section-name {
-    font-size: 12px;
+    font-size: 12px !important;
   }
 }
