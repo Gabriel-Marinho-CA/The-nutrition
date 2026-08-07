@@ -202,56 +202,41 @@
   margin-top: 0 !important;
 }
 
+
 /* =========================================================
    MOBILE — VOLUME DISCOUNT
 ========================================================= */
 
 @media screen and (max-width: 749px) {
 
-  /* Card */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__tier-option {
     border-radius: 14px !important;
   }
 
-  /*
-    Estrutura:
-    radio | informação | preço
-  */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__tier-content {
     display: grid !important;
     grid-template-columns: 24px minmax(0, 1fr) auto !important;
     align-items: center !important;
-
     column-gap: 10px !important;
     row-gap: 4px !important;
-
     padding: 18px 16px !important;
   }
 
-  /* Radio */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__tier-radio {
     grid-column: 1 !important;
-
     margin: 0 !important;
   }
 
-  /*
-    Título + badge ficam empilhados.
-    Evita "Kit com 2" e "Economize 10%" brigando por espaço.
-  */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__tier-info {
     grid-column: 2 !important;
-
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
-
     gap: 6px !important;
-
     min-width: 0 !important;
   }
 
@@ -261,38 +246,25 @@
     line-height: 1.2 !important;
   }
 
-  /* Badges menores e sem quebra */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__tier-badge {
     width: fit-content !important;
     max-width: 100% !important;
-
     padding: 4px 9px !important;
-
     font-size: 10px !important;
     line-height: 1.1 !important;
-
     white-space: nowrap !important;
   }
 
-  /*
-    Preços isolados na direita.
-    Evita sobreposição com badge/título.
-  */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__tier-prices {
     grid-column: 3 !important;
-
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
-
     gap: 3px !important;
-
     min-width: 100px !important;
-
     text-align: right !important;
-
     white-space: nowrap !important;
   }
 
@@ -307,37 +279,28 @@
     line-height: 1.1 !important;
   }
 
-  /* Separador */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-divider {
     margin: 0 16px !important;
   }
 
-  /*
-    Quantidade fica em uma segunda linha limpa:
-    Quantidade                  - 2 +
-  */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-controls {
     display: flex !important;
     align-items: center !important;
-
     gap: 10px !important;
-
     padding: 16px !important;
   }
 
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-label {
     margin-right: auto !important;
-
     font-size: 13px !important;
   }
 
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-button {
     flex: 0 0 36px !important;
-
     width: 36px !important;
     height: 36px !important;
   }
@@ -345,10 +308,8 @@
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-value {
     flex: 0 0 26px !important;
-
     min-width: 26px !important;
     height: 36px !important;
-
     font-size: 15px !important;
   }
 }
@@ -391,30 +352,19 @@
    AMP MIX & MATCH — FLUXO INTEGRADO COM VOLUME DISCOUNT
 ========================================================= */
 
-/*
-  O estado fica no <html>.
-  Assim funciona mesmo quando o Wonder reorganiza
-  os blocos no mobile.
-*/
-
 /* Compra de 1 unidade: Mix & Match oculto */
 html.tn-amp-mode-single
 #amp-mix-and-match-bundles-embed-section {
   display: none !important;
 }
 
-/*
-  No Kit com 2 o formulário normal não é utilizado.
-  Não depende de onde o Volume Discount está no DOM.
-*/
+/* Kit com 2: CTA normal do produto não é utilizado */
 html.tn-amp-mode-kit
 product-form:has(.js-add-to-cart) {
   display: none !important;
 }
 
-/*
-  Container que contém o Mix & Match.
-*/
+/* Container que contém o Mix & Match */
 html.tn-amp-mode-kit
 .wt-product__add-to-cart_form.main-product__buy-buttons--container:has(
   #amp-mix-and-match-bundles-embed-section
@@ -483,7 +433,6 @@ html.tn-amp-mode-kit
 /* Título */
 .amp-bundles__mix-and-match-bundles__headline {
   width: 100% !important;
-
   margin: 0 0 12px !important;
 
   color: #303030 !important;
@@ -510,18 +459,12 @@ html.tn-amp-mode-kit
 
 .amp-bundles__mix-and-match-bundles__section {
   box-sizing: border-box !important;
-
   width: 100% !important;
-
   margin: 0 !important;
-
   overflow: hidden !important;
-
   background: #fcfcfb !important;
-
   border: 1px solid #e6e3de !important;
   border-radius: 12px !important;
-
   box-shadow: none !important;
 }
 
@@ -574,21 +517,17 @@ html.tn-amp-mode-kit
 
 .amp-bundles__mix-and-match-bundles__section-name {
   color: #303030 !important;
-
   font-size: 12px !important;
   font-weight: 700 !important;
   line-height: 1.3 !important;
-
   letter-spacing: 0 !important;
   text-transform: none !important;
 }
 
 .amp-bundles__mix-and-match-bundles__section-progress {
   color: #77736d !important;
-
   font-size: 11px !important;
   font-weight: 600 !important;
-
   white-space: nowrap !important;
 }
 
@@ -600,7 +539,6 @@ html.tn-amp-mode-kit
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-
   width: 17px !important;
   height: 17px !important;
 }
@@ -609,18 +547,12 @@ html.tn-amp-mode-kit
 /* Conteúdo aberto */
 .amp-bundles__mix-and-match-bundles__section-content {
   box-sizing: border-box !important;
-
   width: 100% !important;
-
   padding: 12px !important;
-
   background: #ffffff !important;
 }
 
-/*
-  Informações redundantes.
-  O próprio header já mostra 0/1 e 1/1 ✓.
-*/
+/* Informações redundantes */
 .amp-bundles__mix-and-match-bundles__section-description,
 .amp-bundles__mix-and-match-bundles__progress-container {
   display: none !important;
@@ -640,7 +572,6 @@ html.tn-amp-mode-kit
   gap: 9px !important;
 
   width: 100% !important;
-
   margin: 0 !important;
 }
 
@@ -685,9 +616,7 @@ html.tn-amp-mode-kit
   padding: 0 !important;
 
   background: transparent !important;
-
   border: 0 !important;
-
   box-shadow: none !important;
 }
 
@@ -790,15 +719,12 @@ html.tn-amp-mode-kit
 
 .amp-bundles__mix-and-match-bundles__product-tile__prices__original {
   color: #77736d !important;
-
   font-size: 9px !important;
-
   text-decoration: line-through !important;
 }
 
 .amp-bundles__mix-and-match-bundles__product-tile__prices__discounted {
   color: #292929 !important;
-
   font-size: 12px !important;
   font-weight: 700 !important;
 }
@@ -807,9 +733,7 @@ html.tn-amp-mode-kit
 /* Controles */
 .amp-bundles__mix-and-match-bundles__controls {
   width: 100% !important;
-
   margin-top: auto !important;
-
   padding-top: 8px !important;
 }
 
@@ -842,6 +766,13 @@ html.tn-amp-mode-kit
   cursor: pointer !important;
 }
 
+/* Garante que somente o texto real do botão seja exibido */
+.amp-bundles__mix-and-match-bundles__toggle-btn::before,
+.amp-bundles__mix-and-match-bundles__toggle-btn::after {
+  content: none !important;
+  display: none !important;
+}
+
 .amp-bundles__mix-and-match-bundles__toggle-btn:hover {
   border-color: #c6a263 !important;
 }
@@ -849,9 +780,7 @@ html.tn-amp-mode-kit
 .amp-bundles__mix-and-match-bundles__toggle-btn:disabled {
   color: #bab5ad !important;
   background: #f5f4f2 !important;
-
   border-color: #e6e3de !important;
-
   opacity: 1 !important;
 }
 
@@ -900,15 +829,19 @@ html.tn-amp-mode-kit
   cursor: pointer !important;
 }
 
+/* Garante que somente o texto real do botão seja exibido */
+.amp-bundles__mix-and-match-bundles__remove-button::before,
+.amp-bundles__mix-and-match-bundles__remove-button::after {
+  content: none !important;
+  display: none !important;
+}
+
 
 /* =========================================================
    RESUMO
 ========================================================= */
 
-/*
-  O preço, economia e total já são exibidos no
-  "Kit com 2" do Volume Discount.
-*/
+/* O preço, economia e total já são exibidos no Kit com 2 */
 html.tn-amp-mode-kit
 .amp-bundles__mix-and-match-bundles__summary {
   display: none !important;
@@ -930,7 +863,6 @@ html.tn-amp-mode-kit
   min-height: 46px !important;
 
   margin: 12px 0 18px !important;
-
   padding: 11px 16px !important;
 
   color: #ffffff !important;
@@ -1050,10 +982,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /*
-    O AMP usa DUAS classes no tile compacto.
-    Precisamos sobrescrever exatamente essa combinação.
-  */
+  /* Tile compacto do AMP */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile.amp-bundles__product-tile--compact.amp-bundles__mix-and-match-bundles__product-tile {
     display: contents !important;
@@ -1202,7 +1131,7 @@ html.tn-amp-mode-kit
 
 
   /* =====================================================
-     BOTÃO À DIREITA, ABAIXO DAS INFORMAÇÕES
+     BOTÃO À DIREITA
   ===================================================== */
 
   #amp-mix-and-match-bundles-embed-section
@@ -1233,10 +1162,24 @@ html.tn-amp-mode-kit
     margin: 0 !important;
     padding: 8px 12px !important;
 
+    font-family: var(--font-body-family, inherit) !important;
     font-size: 11px !important;
     font-weight: 700 !important;
 
     border-radius: 8px !important;
+  }
+
+  /* Nenhum pseudo-elemento pode criar texto adicional */
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__mix-and-match-bundles__toggle-btn::before,
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__mix-and-match-bundles__toggle-btn::after,
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__mix-and-match-bundles__remove-button::before,
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__mix-and-match-bundles__remove-button::after {
+    content: none !important;
+    display: none !important;
   }
 
 
