@@ -263,3 +263,748 @@
 .tn-sachet-bundle-toggle {
   font-family: var(--font-body-family, inherit) !important;
 }
+
+/* =========================================================
+   AMP BUNDLES — MIX & MATCH
+   THE NUTRITION
+========================================================= */
+
+/* ---------------------------------------------------------
+   ESTRUTURA GERAL
+--------------------------------------------------------- */
+
+#amp-mix-and-match-bundles-embed-section,
+#amp-mix-and-match-bundles-embed-section > *,
+.amp-bundles__mix-and-match-bundles {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles {
+  margin: 0 !important;
+
+  font-family: var(--font-body-family, inherit) !important;
+
+  --amp-mix-and-match-bundles-headline-font-size: 17px !important;
+  --amp-mix-and-match-bundles-headline-font-weight: 700 !important;
+
+  --amp-mix-and-match-bundles-card-border-width: 1px !important;
+  --amp-mix-and-match-bundles-card-border-radius: 12px !important;
+  --amp-mix-and-match-bundles-card-border-color: #e6e3de !important;
+  --amp-mix-and-match-bundles-card-bg: #ffffff !important;
+
+  --amp-mix-and-match-bundles-benefit-text-color: #bc8e4a !important;
+  --amp-mix-and-match-bundles-benefit-icon-color: #bc8e4a !important;
+
+  --amp-mix-and-match-bundles-total-label-color: #303030 !important;
+  --amp-mix-and-match-bundles-total-original-color: #77736d !important;
+  --amp-mix-and-match-bundles-total-discounted-color: #292929 !important;
+
+  --amp-mix-and-match-bundles-cta-color: #ffffff !important;
+  --amp-mix-and-match-bundles-cta-bg: #303030 !important;
+}
+
+
+/* ---------------------------------------------------------
+   TÍTULO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__headline {
+  width: 100% !important;
+
+  margin: 0 0 12px !important;
+
+  color: #303030 !important;
+
+  font-family:
+    var(
+      --font-heading-family,
+      var(--font-body-family, inherit)
+    ) !important;
+
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+
+
+/* ---------------------------------------------------------
+   ETAPAS
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__sections {
+  display: flex !important;
+  flex-direction: column !important;
+
+  gap: 10px !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section {
+  box-sizing: border-box !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin: 0 !important;
+
+  overflow: hidden !important;
+
+  background: #fcfcfb !important;
+
+  border: 1px solid #e6e3de !important;
+  border-radius: 12px !important;
+
+  box-shadow: none !important;
+}
+
+
+/* ---------------------------------------------------------
+   CABEÇALHO DA ETAPA
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__section-header {
+  box-sizing: border-box !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 52px !important;
+
+  margin: 0 !important;
+  padding: 13px 16px !important;
+
+  background: #fcfcfb !important;
+
+  border: 0 !important;
+
+  color: #303030 !important;
+
+  font-family: var(--font-body-family, inherit) !important;
+
+  cursor: pointer !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header[aria-expanded="true"] {
+  background: #faf5ec !important;
+
+  border-bottom: 1px solid #e6e3de !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__left,
+.amp-bundles__mix-and-match-bundles__section-header__right {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__left {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__right {
+  flex: 0 0 auto !important;
+
+  gap: 8px !important;
+
+  margin-left: 12px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-name {
+  color: #303030 !important;
+
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-progress {
+  color: #77736d !important;
+
+  font-size: 12px !important;
+  font-weight: 600 !important;
+
+  white-space: nowrap !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-progress--satisfied {
+  color: #846334 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__chevron {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 18px !important;
+  height: 18px !important;
+
+  transition: transform 0.2s ease !important;
+}
+
+
+/* ---------------------------------------------------------
+   ÁREA ABERTA
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__section-content {
+  box-sizing: border-box !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  padding: 14px !important;
+
+  background: #ffffff !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-description {
+  display: block !important;
+
+  margin: 0 0 10px !important;
+
+  color: #77736d !important;
+
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+
+/* ---------------------------------------------------------
+   PROGRESSO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__progress-container {
+  width: 100% !important;
+
+  margin: 0 0 14px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__progress-text {
+  display: none !important;
+}
+
+.amp-bundles__mix-and-match-bundles__progress-bar {
+  width: 100% !important;
+  height: 3px !important;
+
+  overflow: hidden !important;
+
+  background: #eee9e1 !important;
+
+  border-radius: 999px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__progress-bar__fill {
+  background: #bc8e4a !important;
+
+  border-radius: 999px !important;
+}
+
+
+/* ---------------------------------------------------------
+   GRID DE SABORES
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-grid {
+  box-sizing: border-box !important;
+
+  display: grid !important;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+
+  gap: 10px !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin: 0 !important;
+}
+
+
+/* ---------------------------------------------------------
+   CARD DO SABOR
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-wrapper {
+  box-sizing: border-box !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding: 8px !important;
+
+  background: #fcfcfb !important;
+
+  border: 1px solid #e6e3de !important;
+  border-radius: 12px !important;
+
+  box-shadow: none !important;
+
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-wrapper--selected {
+  background: #faf5ec !important;
+
+  border-color: #c6a263 !important;
+}
+
+
+/* ---------------------------------------------------------
+   PRODUTO INTERNO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-tile {
+  display: flex !important;
+  flex-direction: column !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  padding: 0 !important;
+
+  background: transparent !important;
+
+  border: 0 !important;
+
+  box-shadow: none !important;
+}
+
+
+/* ---------------------------------------------------------
+   IMAGEM
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-tile__image {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  aspect-ratio: 1 / 1 !important;
+
+  margin: 0 0 8px !important;
+
+  object-fit: cover !important;
+
+  border-radius: 8px !important;
+}
+
+
+/* ---------------------------------------------------------
+   INFORMAÇÕES
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-tile__info,
+.amp-bundles__mix-and-match-bundles__product-tile__info-inner {
+  display: flex !important;
+  flex-direction: column !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+
+  padding: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-tile__title {
+  display: -webkit-box !important;
+
+  min-height: 34px !important;
+
+  margin: 0 0 6px !important;
+
+  overflow: hidden !important;
+
+  color: #303030 !important;
+
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+
+/* ---------------------------------------------------------
+   PREÇOS
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-tile__prices {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+
+  gap: 4px 6px !important;
+
+  width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-tile__prices__original {
+  color: #77736d !important;
+
+  font-size: 10px !important;
+
+  text-decoration: line-through !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-tile__prices__discounted {
+  color: #292929 !important;
+
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+
+/* ---------------------------------------------------------
+   CONTROLES
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__controls {
+  width: 100% !important;
+
+  margin-top: auto !important;
+  padding-top: 9px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  box-sizing: border-box !important;
+
+  width: 100% !important;
+  min-height: 34px !important;
+
+  margin: 0 !important;
+  padding: 7px 10px !important;
+
+  color: #303030 !important;
+  background: #ffffff !important;
+
+  border: 1px solid #ddd4c6 !important;
+  border-radius: 8px !important;
+
+  font-family: var(--font-body-family, inherit) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+
+  cursor: pointer !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn:hover {
+  border-color: #c6a263 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn:disabled {
+  color: #bab5ad !important;
+  background: #f5f4f2 !important;
+
+  border-color: #e6e3de !important;
+
+  opacity: 1 !important;
+
+  cursor: not-allowed !important;
+}
+
+
+/* ---------------------------------------------------------
+   QUANTIDADE DO ITEM SELECIONADO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__quantity-controls {
+  display: grid !important;
+
+  grid-template-columns: 30px 1fr 30px !important;
+
+  gap: 5px !important;
+
+  width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__quantity-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 30px !important;
+  height: 30px !important;
+
+  padding: 0 !important;
+
+  color: #3d3a36 !important;
+  background: #ffffff !important;
+
+  border: 1px solid #ddd4c6 !important;
+  border-radius: 999px !important;
+
+  font-size: 15px !important;
+
+  opacity: 1 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__quantity-button:disabled {
+  color: #bab5ad !important;
+
+  opacity: 1 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__quantity-value {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  height: 30px !important;
+
+  color: #303030 !important;
+
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__remove-button {
+  grid-column: 1 / -1 !important;
+
+  width: 100% !important;
+
+  margin: 2px 0 0 !important;
+  padding: 0 !important;
+
+  color: #77736d !important;
+  background: transparent !important;
+
+  border: 0 !important;
+
+  font-family: var(--font-body-family, inherit) !important;
+  font-size: 10px !important;
+
+  text-decoration: underline !important;
+
+  cursor: pointer !important;
+}
+
+
+/* ---------------------------------------------------------
+   RESUMO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__summary {
+  width: 100% !important;
+
+  margin: 14px 0 0 !important;
+  padding: 14px 0 0 !important;
+
+  border-top: 1px solid #e6e3de !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  gap: 6px !important;
+
+  width: 100% !important;
+
+  margin-bottom: 10px !important;
+
+  color: #846334 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit-icon {
+  display: flex !important;
+
+  color: #bc8e4a !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit-icon svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit-text {
+  color: #846334 !important;
+
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+
+  gap: 16px !important;
+
+  width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-label {
+  color: #303030 !important;
+
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-amount {
+  display: flex !important;
+  align-items: baseline !important;
+
+  gap: 7px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-original {
+  color: #77736d !important;
+
+  font-size: 11px !important;
+
+  text-decoration: line-through !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-discounted {
+  color: #292929 !important;
+
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+
+/* ---------------------------------------------------------
+   CTA PRINCIPAL
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__cta {
+  box-sizing: border-box !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-height: 46px !important;
+
+  margin: 14px 0 0 !important;
+  padding: 11px 16px !important;
+
+  color: #ffffff !important;
+  background: #303030 !important;
+
+  border: 0 !important;
+  border-radius: 8px !important;
+
+  font-family: var(--font-body-family, inherit) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+
+  text-transform: uppercase !important;
+
+  cursor: pointer !important;
+}
+
+.amp-bundles__mix-and-match-bundles__cta:disabled {
+  color: #ffffff !important;
+  background: #d8d8d8 !important;
+
+  opacity: 1 !important;
+
+  cursor: not-allowed !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media screen and (max-width: 749px) {
+
+  .amp-bundles__mix-and-match-bundles__headline {
+    font-size: 16px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-header {
+    min-height: 48px !important;
+
+    padding: 11px 13px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-content {
+    padding: 10px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-grid {
+    gap: 7px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-wrapper {
+    padding: 6px !important;
+
+    border-radius: 10px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__image {
+    margin-bottom: 6px !important;
+
+    border-radius: 7px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__title {
+    min-height: 30px !important;
+
+    margin-bottom: 5px !important;
+
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__prices__discounted {
+    font-size: 11px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__prices__original {
+    font-size: 9px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__toggle-btn {
+    min-height: 30px !important;
+
+    padding: 6px !important;
+
+    font-size: 10px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__quantity-controls {
+    grid-template-columns: 27px 1fr 27px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__quantity-button {
+    width: 27px !important;
+    height: 27px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__quantity-value {
+    height: 27px !important;
+
+    font-size: 11px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__summary {
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+  }
+}
