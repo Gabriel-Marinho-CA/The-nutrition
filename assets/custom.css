@@ -971,38 +971,43 @@ html.tn-amp-mode-kit
   }
 
   /* Título */
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__headline {
-    margin-bottom: 14px !important;
+    margin: 0 0 14px !important;
 
     font-size: 18px !important;
     line-height: 1.25 !important;
   }
 
   /* Cabeçalho das etapas */
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__section-header {
     min-height: 52px !important;
 
     padding: 13px 14px !important;
   }
 
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__section-name {
     font-size: 14px !important;
   }
 
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__section-progress {
     font-size: 12px !important;
   }
 
-  /* Conteúdo aberto */
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__section-content {
     padding: 12px !important;
   }
 
-  /*
-    IMPORTANTE:
-    no mobile os produtos deixam de ser grid de 2/3 colunas.
-    Cada sabor ocupa uma linha inteira.
-  */
+
+  /* =====================================================
+     LISTA VERTICAL DE SABORES
+  ===================================================== */
+
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-grid {
     display: flex !important;
     flex-direction: column !important;
@@ -1010,17 +1015,20 @@ html.tn-amp-mode-kit
     gap: 10px !important;
 
     width: 100% !important;
+
+    margin: 0 !important;
   }
 
-  /*
-    Cada produto:
-    imagem | informações
-           | botão
-  */
+
+  /* =====================================================
+     CARD HORIZONTAL
+  ===================================================== */
+
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-wrapper {
     display: grid !important;
 
-    grid-template-columns: 108px minmax(0, 1fr) !important;
+    grid-template-columns: 110px minmax(0, 1fr) !important;
 
     grid-template-areas:
       "image info"
@@ -1032,99 +1040,178 @@ html.tn-amp-mode-kit
     align-items: start !important;
 
     width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
 
+    margin: 0 !important;
     padding: 10px !important;
 
     border-radius: 12px !important;
   }
 
+
   /*
-    Faz os elementos internos do product-tile
-    participarem diretamente do grid acima.
+    O AMP usa DUAS classes no tile compacto.
+    Precisamos sobrescrever exatamente essa combinação.
   */
-  .amp-bundles__mix-and-match-bundles__product-tile {
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__product-tile.amp-bundles__product-tile--compact.amp-bundles__mix-and-match-bundles__product-tile {
     display: contents !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
   }
 
-  /* Imagem */
-  .amp-bundles__mix-and-match-bundles__product-tile__image {
+
+  /* =====================================================
+     IMAGEM À ESQUERDA
+  ===================================================== */
+
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__product-tile__image.amp-bundles__mix-and-match-bundles__product-tile__image {
     grid-area: image !important;
 
     display: block !important;
 
-    width: 108px !important;
-    height: 108px !important;
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
 
-    aspect-ratio: 1 / 1 !important;
+    height: 110px !important;
+    min-height: 110px !important;
+    max-height: 110px !important;
+
+    aspect-ratio: auto !important;
 
     margin: 0 !important;
+    padding: 0 !important;
 
     object-fit: cover !important;
 
     border-radius: 9px !important;
   }
 
-  /* Informações */
+
+  /* =====================================================
+     INFORMAÇÕES À DIREITA
+  ===================================================== */
+
   #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__product-tile__info,
-  #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__mix-and-match-bundles__product-tile__info {
+  .amp-bundles__product-tile__info.amp-bundles__mix-and-match-bundles__product-tile__info {
     grid-area: info !important;
 
-    align-self: start !important;
+    display: block !important;
 
     width: 100% !important;
     min-width: 0 !important;
 
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
     margin: 0 !important;
     padding: 0 !important;
+
+    overflow: visible !important;
   }
+
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__product-tile__info-inner.amp-bundles__mix-and-match-bundles__product-tile__info-inner {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: visible !important;
+  }
+
 
   /* Nome completo */
   #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__product-tile__title,
-  #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__mix-and-match-bundles__product-tile__title {
+  .amp-bundles__product-tile__title.amp-bundles__mix-and-match-bundles__product-tile__title {
     display: block !important;
 
     width: 100% !important;
 
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
     margin: 0 0 7px !important;
+
+    overflow: visible !important;
+
+    color: #303030 !important;
 
     font-size: 14px !important;
     font-weight: 700 !important;
     line-height: 1.3 !important;
 
     white-space: normal !important;
-
-    overflow: visible !important;
     text-overflow: clip !important;
 
     -webkit-line-clamp: unset !important;
+    -webkit-box-orient: initial !important;
   }
 
-  /* Preços */
+
+  /* =====================================================
+     PREÇO
+  ===================================================== */
+
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-tile__prices {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: baseline !important;
 
     gap: 5px !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
   }
 
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-tile__prices__original {
     font-size: 11px !important;
   }
 
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-tile__prices__discounted {
     font-size: 15px !important;
+    font-weight: 700 !important;
   }
 
-  /* Controles ficam abaixo das informações, não da imagem */
+
+  /* =====================================================
+     BOTÃO À DIREITA, ABAIXO DAS INFORMAÇÕES
+  ===================================================== */
+
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__controls {
     grid-area: controls !important;
 
     align-self: end !important;
+
+    display: block !important;
 
     width: 100% !important;
 
@@ -1132,19 +1219,29 @@ html.tn-amp-mode-kit
     padding: 0 !important;
   }
 
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__toggle-btn,
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__remove-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
     width: 100% !important;
     min-height: 38px !important;
 
+    margin: 0 !important;
     padding: 8px 12px !important;
 
     font-size: 11px !important;
+    font-weight: 700 !important;
 
     border-radius: 8px !important;
   }
 
+
   /* CTA final */
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__cta {
     min-height: 50px !important;
 
