@@ -633,3 +633,14 @@
     min-height: 46px !important;
   }
 }
+
+.amp-bundles__mix-and-match-bundles,
+.amp-bundles__mix-and-match-bundles__sections,
+.amp-bundles__mix-and-match-bundles__section,
+.amp-bundles__mix-and-match-bundles__section-header,
+.amp-bundles__mix-and-match-bundles__summary,
+.amp-bundles__mix-and-match-bundles__cta {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
