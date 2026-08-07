@@ -76,9 +76,10 @@
       "cart-drawer"
   };
 
-  /*
-   * Kit Sachês — campanha Classic Bundle.
-   */
+  /* =====================================================
+     KIT SACHÊS
+  ===================================================== */
+
   const SACHET_BUNDLE_REFERENCE =
     "1785888881916_tn_sachets";
 
@@ -376,7 +377,6 @@
   ===================================================== */
 
   let integratedFlow = null;
-
   let flowSyncTimer = null;
 
   const scheduleFlowSync = () => {
@@ -682,6 +682,22 @@
       isKitMode
     ) => {
       if (!isKitMode) {
+        /*
+         * Ao voltar para 1 unidade,
+         * zeramos apenas os controles de
+         * automação visual.
+         *
+         * As escolhas do AMP continuam intactas.
+         */
+        delete productArea.dataset
+          .tnMixFirstOpened;
+
+        delete productArea.dataset
+          .tnMixSecondAutoOpened;
+
+        delete productArea.dataset
+          .tnMixAutoCollapsed;
+
         return;
       }
 
@@ -713,8 +729,11 @@
         );
 
       /*
-       * Primeiro acesso ao Kit com 2:
-       * já abre a escolha do primeiro sabor.
+       * ===================================================
+       * PRIMEIRO ACESSO AO KIT
+       * ===================================================
+       *
+       * Abre o primeiro sabor uma única vez.
        */
       if (
         !firstSatisfied &&
@@ -724,6 +743,10 @@
         productArea.dataset
           .tnMixFirstOpened =
           "true";
+
+        productArea.dataset
+          .tnMixSecondAutoOpened =
+          "false";
 
         window.setTimeout(
           () => {
@@ -736,15 +759,44 @@
       }
 
       /*
-       * Primeiro sabor escolhido:
-       * abre automaticamente o segundo.
+       * Se o primeiro sabor voltar a ficar vazio,
+       * permitimos que a abertura automática do
+       * segundo aconteça novamente numa próxima
+       * seleção.
+       */
+      if (!firstSatisfied) {
+        productArea.dataset
+          .tnMixSecondAutoOpened =
+          "false";
+
+        productArea.dataset
+          .tnMixAutoCollapsed =
+          "false";
+
+        return;
+      }
+
+      /*
+       * ===================================================
+       * PRIMEIRO SABOR ACABOU DE SER ESCOLHIDO
+       * ===================================================
+       *
+       * Abre o segundo sabor UMA ÚNICA VEZ.
+       *
+       * Depois disso não interferimos mais nos accordions.
+       * Assim o cliente pode voltar manualmente para
+       * "1º sabor" sem o script reabrir o segundo.
        */
       if (
         firstSatisfied &&
-        !secondSatisfied
+        !secondSatisfied &&
+        productArea.dataset
+          .tnMixSecondAutoOpened !==
+          "true"
       ) {
-        delete productArea.dataset
-          .tnMixAutoCollapsed;
+        productArea.dataset
+          .tnMixSecondAutoOpened =
+          "true";
 
         window.setTimeout(
           () => {
@@ -757,10 +809,27 @@
       }
 
       /*
-       * Os dois sabores escolhidos:
-       * fecha automaticamente a segunda etapa
-       * uma única vez para deixar a interface
-       * compacta e destacar o CTA.
+       * Se o segundo ainda não foi escolhido e já
+       * fizemos a abertura automática uma vez,
+       * NÃO fazemos mais nada.
+       *
+       * Daqui em diante a navegação é totalmente
+       * controlada pelo usuário.
+       */
+      if (
+        firstSatisfied &&
+        !secondSatisfied
+      ) {
+        return;
+      }
+
+      /*
+       * ===================================================
+       * OS DOIS SABORES ESTÃO ESCOLHIDOS
+       * ===================================================
+       *
+       * Fecha a seção aberta uma única vez para
+       * deixar o resumo compacto.
        */
       if (
         firstSatisfied &&
@@ -957,9 +1026,8 @@
       }
 
       /*
-       * Quando Kit com 2 está ativo,
-       * quem controla a compra é o CTA
-       * nativo do Mix & Match.
+       * No Kit com 2 o CTA do Mix & Match
+       * controla a compra.
        */
       if (
         productArea.classList.contains(
