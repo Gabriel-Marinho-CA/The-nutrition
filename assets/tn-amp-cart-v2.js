@@ -486,7 +486,49 @@
       }
     };
 
-  
+    title => {
+      const normalized =
+        String(
+          title || ""
+        ).toLowerCase();
+
+      if (
+        normalized.includes(
+          "cacao"
+        ) ||
+        normalized.includes(
+          "cacau"
+        )
+      ) {
+        return "Cacau";
+      }
+
+      if (
+        normalized.includes(
+          "strawberry"
+        ) ||
+        normalized.includes(
+          "morango"
+        )
+      ) {
+        return "Morango";
+      }
+
+      if (
+        normalized.includes(
+          "vanilla"
+        ) ||
+        normalized.includes(
+          "vanila"
+        )
+      ) {
+        return "Vanilla";
+      }
+
+      return title;
+    };
+
+  const decorateMixAndMatch =
     mixWidget => {
       const headline =
         mixWidget.querySelector(
@@ -522,22 +564,6 @@
           "2º sabor"
         );
       }
-
-      mixWidget
-        .querySelectorAll(
-          SELECTORS.mixProductTitle
-        )
-        .forEach(title => {
-          const simplified =
-            getSimplifiedFlavorName(
-              title.textContent
-            );
-
-          setTextIfDifferent(
-            title,
-            simplified
-          );
-        });
 
       mixWidget
         .querySelectorAll(
