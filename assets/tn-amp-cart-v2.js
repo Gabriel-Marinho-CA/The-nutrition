@@ -834,60 +834,55 @@
       }
     };
 
-  function syncIntegratedFlow() {
-    const context =
-      getIntegratedFlowElements();
+productArea.classList.add(
+  "tn-amp-commerce-flow"
+);
 
-    if (!context) {
-      return;
-    }
+decorateVolumeDiscount(
+  volumeWidget
+);
 
-    const {
-      productArea,
-      volumeWidget,
-      mixWidget
-    } = context;
+decorateMixAndMatch(
+  mixWidget
+);
 
-    productArea.classList.add(
-      "tn-amp-commerce-flow"
-    );
+const selectedTierIndex =
+  getSelectedVolumeTierIndex(
+    volumeWidget
+  );
 
-    decorateVolumeDiscount(
-      volumeWidget
-    );
+const isKitMode =
+  selectedTierIndex === 1;
 
-    decorateMixAndMatch(
-      mixWidget
-    );
+/*
+ * Estado local do produto.
+ * Mantemos porque outras partes do script usam essas classes.
+ */
+productArea.classList.toggle(
+  "tn-amp-mode-kit",
+  isKitMode
+);
 
-    /*
-     * Tier 0 = 1 unidade
-     * Tier 1 = Kit com 2
-     */
-    const selectedTierIndex =
-      getSelectedVolumeTierIndex(
-        volumeWidget
-      );
+productArea.classList.toggle(
+  "tn-amp-mode-single",
+  !isKitMode
+);
 
-    const isKitMode =
-      selectedTierIndex === 1;
+/*
+ * Estado global da página.
+ *
+ * Necessário porque no mobile o Shopify/Wonder pode renderizar
+ * os App Blocks em containers diferentes.
+ */
+document.documentElement.classList.toggle(
+  "tn-amp-mode-kit",
+  isKitMode
+);
 
-    productArea.classList.toggle(
-      "tn-amp-mode-kit",
-      isKitMode
-    );
-
-    productArea.classList.toggle(
-      "tn-amp-mode-single",
-      !isKitMode
-    );
-
-    handleMixAndMatchSteps(
-      productArea,
-      mixWidget,
-      isKitMode
-    );
-  }
+document.documentElement.classList.toggle(
+  "tn-amp-mode-single",
+  !isKitMode
+);
 
   const initializeIntegratedFlow =
     () => {
