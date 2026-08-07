@@ -202,27 +202,154 @@
   margin-top: 0 !important;
 }
 
-/* Mobile Volume Discount */
+/* =========================================================
+   MOBILE — VOLUME DISCOUNT
+========================================================= */
+
 @media screen and (max-width: 749px) {
+
+  /* Card */
   .wt-product__info:has(.amp-volume-discount-bundles)
-  .amp-bundles__volume-discount-bundles__tier-content {
-    padding: 17px 16px !important;
+  .amp-bundles__volume-discount-bundles__tier-option {
+    border-radius: 14px !important;
   }
 
+  /*
+    Estrutura:
+    radio | informação | preço
+  */
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-content {
+    display: grid !important;
+    grid-template-columns: 24px minmax(0, 1fr) auto !important;
+    align-items: center !important;
+
+    column-gap: 10px !important;
+    row-gap: 4px !important;
+
+    padding: 18px 16px !important;
+  }
+
+  /* Radio */
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-radio {
+    grid-column: 1 !important;
+
+    margin: 0 !important;
+  }
+
+  /*
+    Título + badge ficam empilhados.
+    Evita "Kit com 2" e "Economize 10%" brigando por espaço.
+  */
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-info {
+    grid-column: 2 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+
+    gap: 6px !important;
+
+    min-width: 0 !important;
+  }
+
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-text {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Badges menores e sem quebra */
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-badge {
+    width: fit-content !important;
+    max-width: 100% !important;
+
+    padding: 4px 9px !important;
+
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+
+    white-space: nowrap !important;
+  }
+
+  /*
+    Preços isolados na direita.
+    Evita sobreposição com badge/título.
+  */
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-prices {
+    grid-column: 3 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+
+    gap: 3px !important;
+
+    min-width: 100px !important;
+
+    text-align: right !important;
+
+    white-space: nowrap !important;
+  }
+
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-prices__original {
+    font-size: 11px !important;
+  }
+
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__tier-prices__discounted {
+    font-size: 17px !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Separador */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-divider {
     margin: 0 16px !important;
   }
 
+  /*
+    Quantidade fica em uma segunda linha limpa:
+    Quantidade                  - 2 +
+  */
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-controls {
-    padding: 14px 16px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 10px !important;
+
+    padding: 16px !important;
+  }
+
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__quantity-label {
+    margin-right: auto !important;
+
+    font-size: 13px !important;
   }
 
   .wt-product__info:has(.amp-volume-discount-bundles)
   .amp-bundles__volume-discount-bundles__quantity-button {
-    width: 34px !important;
-    height: 34px !important;
+    flex: 0 0 36px !important;
+
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .wt-product__info:has(.amp-volume-discount-bundles)
+  .amp-bundles__volume-discount-bundles__quantity-value {
+    flex: 0 0 26px !important;
+
+    min-width: 26px !important;
+    height: 36px !important;
+
+    font-size: 15px !important;
   }
 }
 
@@ -840,53 +967,189 @@ html.tn-amp-mode-kit
 
   html.tn-amp-mode-kit
   #amp-mix-and-match-bundles-embed-section {
-    margin-top: 8px !important;
+    margin-top: 10px !important;
   }
 
+  /* Título */
   .amp-bundles__mix-and-match-bundles__headline {
-    font-size: 15px !important;
+    margin-bottom: 14px !important;
+
+    font-size: 18px !important;
+    line-height: 1.25 !important;
   }
 
+  /* Cabeçalho das etapas */
   .amp-bundles__mix-and-match-bundles__section-header {
-    min-height: 46px !important;
-    padding: 11px 12px !important;
+    min-height: 52px !important;
+
+    padding: 13px 14px !important;
   }
 
+  .amp-bundles__mix-and-match-bundles__section-name {
+    font-size: 14px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-progress {
+    font-size: 12px !important;
+  }
+
+  /* Conteúdo aberto */
   .amp-bundles__mix-and-match-bundles__section-content {
-    padding: 8px !important;
+    padding: 12px !important;
   }
 
+  /*
+    IMPORTANTE:
+    no mobile os produtos deixam de ser grid de 2/3 colunas.
+    Cada sabor ocupa uma linha inteira.
+  */
   .amp-bundles__mix-and-match-bundles__product-grid {
-    gap: 6px !important;
+    display: flex !important;
+    flex-direction: column !important;
+
+    gap: 10px !important;
+
+    width: 100% !important;
   }
 
+  /*
+    Cada produto:
+    imagem | informações
+           | botão
+  */
   .amp-bundles__mix-and-match-bundles__product-wrapper {
-    padding: 5px !important;
+    display: grid !important;
+
+    grid-template-columns: 108px minmax(0, 1fr) !important;
+
+    grid-template-areas:
+      "image info"
+      "image controls" !important;
+
+    column-gap: 12px !important;
+    row-gap: 8px !important;
+
+    align-items: start !important;
+
+    width: 100% !important;
+
+    padding: 10px !important;
+
+    border-radius: 12px !important;
+  }
+
+  /*
+    Faz os elementos internos do product-tile
+    participarem diretamente do grid acima.
+  */
+  .amp-bundles__mix-and-match-bundles__product-tile {
+    display: contents !important;
+  }
+
+  /* Imagem */
+  .amp-bundles__mix-and-match-bundles__product-tile__image {
+    grid-area: image !important;
+
+    display: block !important;
+
+    width: 108px !important;
+    height: 108px !important;
+
+    aspect-ratio: 1 / 1 !important;
+
+    margin: 0 !important;
+
+    object-fit: cover !important;
+
     border-radius: 9px !important;
   }
 
-  .amp-bundles__mix-and-match-bundles__product-tile__image {
-    margin-bottom: 5px !important;
-    border-radius: 6px !important;
+  /* Informações */
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__product-tile__info,
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__mix-and-match-bundles__product-tile__info {
+    grid-area: info !important;
+
+    align-self: start !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
+  /* Nome completo */
+  #amp-mix-and-match-bundles-embed-section
+  .amp-bundles__product-tile__title,
+  #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-tile__title {
-    font-size: 10px !important;
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 7px !important;
+
+    font-size: 14px !important;
+    font-weight: 700 !important;
     line-height: 1.3 !important;
+
+    white-space: normal !important;
+
+    overflow: visible !important;
+    text-overflow: clip !important;
+
+    -webkit-line-clamp: unset !important;
+  }
+
+  /* Preços */
+  .amp-bundles__mix-and-match-bundles__product-tile__prices {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: baseline !important;
+
+    gap: 5px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__prices__original {
+    font-size: 11px !important;
   }
 
   .amp-bundles__mix-and-match-bundles__product-tile__prices__discounted {
-    font-size: 10px !important;
+    font-size: 15px !important;
+  }
+
+  /* Controles ficam abaixo das informações, não da imagem */
+  .amp-bundles__mix-and-match-bundles__controls {
+    grid-area: controls !important;
+
+    align-self: end !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .amp-bundles__mix-and-match-bundles__toggle-btn,
   .amp-bundles__mix-and-match-bundles__remove-button {
-    min-height: 29px !important;
-    padding: 5px !important;
-    font-size: 9px !important;
+    width: 100% !important;
+    min-height: 38px !important;
+
+    padding: 8px 12px !important;
+
+    font-size: 11px !important;
+
+    border-radius: 8px !important;
   }
 
+  /* CTA final */
   .amp-bundles__mix-and-match-bundles__cta {
-    margin-bottom: 16px !important;
+    min-height: 50px !important;
+
+    margin: 14px 0 18px !important;
+
+    font-size: 12px !important;
   }
 }
