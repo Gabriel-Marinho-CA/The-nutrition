@@ -718,3 +718,596 @@ cart-drawer-items::-webkit-scrollbar-track-piece {
     min-height: 3.4rem;
   }
 }
+
+/* =========================================================
+   AMP MIX & MATCH — REFINO FINAL DE UI / UX
+   Cole este bloco no FINAL do custom.css
+========================================================= */
+
+/* ---------------------------------------------------------
+   1) APROXIMA O MIX & MATCH DO BLOCO DE CIMA
+   e deixa mais claro que faz parte da mesma oferta
+--------------------------------------------------------- */
+
+.wt-product__info:has(#amp-mix-and-match-bundles-embed-section)
+#amp-mix-and-match-bundles-embed-section {
+  margin: 12px 0 0 !important;
+  padding-top: 16px !important;
+  border-top: 1px solid #e6e3de !important;
+}
+
+.wt-product__info:has(#amp-mix-and-match-bundles-embed-section)
+.shopify-app-block:has(#amp-mix-and-match-bundles-embed-section) {
+  margin-top: 0 !important;
+}
+
+/* ---------------------------------------------------------
+   2) ESTRUTURA GERAL
+--------------------------------------------------------- */
+
+#amp-mix-and-match-bundles-embed-section,
+#amp-mix-and-match-bundles-embed-section > *,
+.amp-bundles__mix-and-match-bundles {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.amp-bundles__mix-and-match-bundles {
+  margin: 0 !important;
+  --amp-mix-and-match-bundles-headline-font-size: 18px !important;
+  --amp-mix-and-match-bundles-headline-font-weight: 700 !important;
+}
+
+/* ---------------------------------------------------------
+   3) TÍTULO DO BLOCO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__headline {
+  margin: 0 0 14px !important;
+  color: #303030 !important;
+  font-family: var(--font-heading-family, var(--font-body-family, inherit)) !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+}
+
+/* ---------------------------------------------------------
+   4) ETAPAS / ACCORDION
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__sections {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section {
+  width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  background: #fcfcfb !important;
+  border: 1px solid #e6e3de !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  min-height: 56px !important;
+  margin: 0 !important;
+  padding: 15px 18px !important;
+  background: #fcfcfb !important;
+  border: 0 !important;
+  color: #303030 !important;
+  cursor: pointer !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header[aria-expanded="true"] {
+  background: #faf5ec !important;
+  border-bottom: 1px solid #e6e3de !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__left,
+.amp-bundles__mix-and-match-bundles__section-header__right {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__left {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__right {
+  flex: 0 0 auto !important;
+  gap: 10px !important;
+  margin-left: 12px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-name {
+  color: #303030 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-progress {
+  color: #77736d !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-progress--satisfied {
+  color: #846334 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-header__chevron {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  transition: transform 0.2s ease !important;
+}
+
+/* ---------------------------------------------------------
+   5) ÁREA INTERNA ABERTA
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__section-content {
+  width: 100% !important;
+  padding: 16px !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+.amp-bundles__mix-and-match-bundles__section-description {
+  display: block !important;
+  margin: 0 0 12px !important;
+  color: #77736d !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+/* ---------------------------------------------------------
+   6) BARRA DE PROGRESSO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__progress-container {
+  width: 100% !important;
+  margin: 0 0 16px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__progress-text {
+  display: none !important;
+}
+
+.amp-bundles__mix-and-match-bundles__progress-bar {
+  width: 100% !important;
+  height: 4px !important;
+  overflow: hidden !important;
+  background: #eee9e1 !important;
+  border-radius: 999px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__progress-bar__fill {
+  background: #bc8e4a !important;
+  border-radius: 999px !important;
+}
+
+/* ---------------------------------------------------------
+   7) GRID DOS PRODUTOS
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* ---------------------------------------------------------
+   8) CARD DE CADA SABOR
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 10px !important;
+  background: #fcfcfb !important;
+  border: 1px solid #e6e3de !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-wrapper--selected {
+  background: #faf5ec !important;
+  border-color: #c6a263 !important;
+}
+
+/* ---------------------------------------------------------
+   9) TILE INTERNO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-tile {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ---------------------------------------------------------
+   10) IMAGEM
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-tile__image {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 0 0 10px !important;
+  object-fit: cover !important;
+  border-radius: 10px !important;
+}
+
+/* ---------------------------------------------------------
+   11) INFO / TÍTULO / PREÇOS
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__product-tile__info,
+.amp-bundles__mix-and-match-bundles__product-tile__info-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-tile__title {
+  display: -webkit-box !important;
+  min-height: 42px !important;
+  margin: 0 0 8px !important;
+  overflow: hidden !important;
+  color: #303030 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-tile__prices {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 4px 6px !important;
+  width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-tile__prices__original {
+  color: #77736d !important;
+  font-size: 12px !important;
+  text-decoration: line-through !important;
+}
+
+.amp-bundles__mix-and-match-bundles__product-tile__prices__discounted {
+  color: #292929 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
+
+/* ---------------------------------------------------------
+   12) CONTROLES / BOTÃO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__controls {
+  width: 100% !important;
+  margin-top: auto !important;
+  padding-top: 12px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 8px 12px !important;
+  color: #303030 !important;
+  background: #ffffff !important;
+  border: 1px solid #ddd4c6 !important;
+  border-radius: 8px !important;
+  font-family: var(--font-body-family, inherit) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn:hover {
+  border-color: #c6a263 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn:disabled {
+  color: #bab5ad !important;
+  background: #f5f4f2 !important;
+  border-color: #e6e3de !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+/* ---------------------------------------------------------
+   13) CONTROLES DE QUANTIDADE
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__quantity-controls {
+  display: grid !important;
+  grid-template-columns: 34px 1fr 34px !important;
+  gap: 6px !important;
+  width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__quantity-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  color: #3d3a36 !important;
+  background: #ffffff !important;
+  border: 1px solid #ddd4c6 !important;
+  border-radius: 999px !important;
+  font-size: 16px !important;
+  opacity: 1 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__quantity-button:disabled {
+  color: #bab5ad !important;
+  opacity: 1 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__quantity-value {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 34px !important;
+  color: #303030 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__remove-button {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  margin: 4px 0 0 !important;
+  padding: 0 !important;
+  color: #77736d !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-family: var(--font-body-family, inherit) !important;
+  font-size: 11px !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+}
+
+/* ---------------------------------------------------------
+   14) RESUMO
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__summary {
+  width: 100% !important;
+  margin: 16px 0 0 !important;
+  padding: 16px 0 0 !important;
+  border-top: 1px solid #e6e3de !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+  color: #846334 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit-icon {
+  display: flex !important;
+  color: #bc8e4a !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit-icon svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__benefit-text {
+  color: #846334 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  width: 100% !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-label {
+  color: #303030 !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-amount {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-original {
+  color: #77736d !important;
+  font-size: 12px !important;
+  text-decoration: line-through !important;
+}
+
+.amp-bundles__mix-and-match-bundles__total-discounted {
+  color: #292929 !important;
+  font-size: 21px !important;
+  font-weight: 700 !important;
+}
+
+/* ---------------------------------------------------------
+   15) CTA PRINCIPAL
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__cta {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  margin: 18px 0 18px !important; /* separa do parcelamento abaixo */
+  padding: 12px 16px !important;
+  color: #ffffff !important;
+  background: #303030 !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  font-family: var(--font-body-family, inherit) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+}
+
+.amp-bundles__mix-and-match-bundles__cta:disabled {
+  color: #ffffff !important;
+  background: #d8d8d8 !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+/* ---------------------------------------------------------
+   16) TRADUÇÃO VISUAL DOS BOTÕES
+--------------------------------------------------------- */
+
+.amp-bundles__mix-and-match-bundles__toggle-btn {
+  font-size: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn::after {
+  content: "Escolher";
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.amp-bundles__mix-and-match-bundles__product-wrapper--selected
+.amp-bundles__mix-and-match-bundles__toggle-btn::after {
+  content: "Trocar";
+}
+
+.amp-bundles__mix-and-match-bundles__remove-button {
+  font-size: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__remove-button::after {
+  content: "Remover";
+  font-size: 11px;
+}
+
+/* ---------------------------------------------------------
+   17) MOBILE
+--------------------------------------------------------- */
+
+@media screen and (max-width: 749px) {
+  .amp-bundles__mix-and-match-bundles__headline {
+    font-size: 17px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-header {
+    min-height: 52px !important;
+    padding: 12px 14px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-name {
+    font-size: 13px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-progress {
+    font-size: 12px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-content {
+    padding: 12px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__section-description {
+    font-size: 12px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-wrapper {
+    padding: 8px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__title {
+    min-height: 38px !important;
+    font-size: 12px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__prices__discounted {
+    font-size: 14px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__product-tile__prices__original {
+    font-size: 11px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__toggle-btn::after {
+    font-size: 11px;
+  }
+
+  .amp-bundles__mix-and-match-bundles__remove-button::after {
+    font-size: 10px;
+  }
+
+  .amp-bundles__mix-and-match-bundles__total-label {
+    font-size: 17px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__total-discounted {
+    font-size: 19px !important;
+  }
+
+  .amp-bundles__mix-and-match-bundles__cta {
+    margin: 16px 0 18px !important;
+  }
+}
