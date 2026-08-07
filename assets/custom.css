@@ -574,7 +574,13 @@ product-form.wt-product__add-to-cart {
 
 
 /* Informações */
+#amp-mix-and-match-bundles-embed-section
+.amp-bundles__product-tile__info,
+#amp-mix-and-match-bundles-embed-section
+.amp-bundles__product-tile__info-inner,
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__product-tile__info,
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__product-tile__info-inner {
   display: flex !important;
   flex-direction: column !important;
@@ -583,6 +589,7 @@ product-form.wt-product__add-to-cart {
   min-width: 0 !important;
 
   height: auto !important;
+  min-height: 0 !important;
   max-height: none !important;
 
   padding: 0 !important;
@@ -591,20 +598,20 @@ product-form.wt-product__add-to-cart {
 }
 
 
-/*
-  Nome do produto completo.
-  Nenhum line-clamp ou overflow escondendo texto.
-*/
+/* Nome completo do produto */
+#amp-mix-and-match-bundles-embed-section
+.amp-bundles__product-tile__title,
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__product-tile__title {
   display: block !important;
 
   width: 100% !important;
 
-  min-height: 0 !important;
   height: auto !important;
+  min-height: 0 !important;
   max-height: none !important;
 
-  margin: 0 0 5px !important;
+  margin: 0 0 8px !important;
 
   overflow: visible !important;
 
@@ -612,13 +619,26 @@ product-form.wt-product__add-to-cart {
 
   font-size: 12px !important;
   font-weight: 700 !important;
-  line-height: 1.3 !important;
+  line-height: 1.35 !important;
 
   white-space: normal !important;
   text-overflow: clip !important;
 
   -webkit-line-clamp: unset !important;
   -webkit-box-orient: initial !important;
+}
+
+
+/* Remove limitações do tile compacto nativo do AMP */
+#amp-mix-and-match-bundles-embed-section
+.amp-bundles__product-tile--compact,
+#amp-mix-and-match-bundles-embed-section
+.amp-bundles__product-tile {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  overflow: visible !important;
 }
 
 
