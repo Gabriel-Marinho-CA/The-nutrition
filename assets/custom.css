@@ -1008,3 +1008,38 @@
     padding-top: 12px !important;
   }
 }
+
+/* =========================================================
+   AMP MIX & MATCH — TRADUÇÃO VISUAL DOS CONTROLES
+========================================================= */
+
+/* ADD -> ADICIONAR */
+.amp-bundles__mix-and-match-bundles__toggle-btn {
+  font-size: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__toggle-btn::after {
+  content: "Adicionar";
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* REMOVE -> REMOVER */
+.amp-bundles__mix-and-match-bundles__remove-button {
+  font-size: 0 !important;
+}
+
+.amp-bundles__mix-and-match-bundles__remove-button::after {
+  content: "Remover";
+  font-size: 10px;
+}
+
+@media screen and (max-width: 749px) {
+  .amp-bundles__mix-and-match-bundles__toggle-btn::after {
+    font-size: 10px;
+  }
+
+  .amp-bundles__mix-and-match-bundles__remove-button::after {
+    font-size: 9px;
+  }
+}
