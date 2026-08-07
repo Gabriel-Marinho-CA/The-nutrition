@@ -352,19 +352,44 @@
    AMP MIX & MATCH — FLUXO INTEGRADO COM VOLUME DISCOUNT
 ========================================================= */
 
-/* Compra de 1 unidade: Mix & Match oculto */
+/*
+  1 UNIDADE
+  O Mix & Match fica oculto.
+*/
 html.tn-amp-mode-single
 #amp-mix-and-match-bundles-embed-section {
   display: none !important;
 }
 
-/* Kit com 2: esconde somente o botão normal do produto */
+/*
+  1 UNIDADE
+  O botão normal do produto aparece.
+*/
+html.tn-amp-mode-single
+.wt-product__info:has(.amp-volume-discount-bundles)
+.product-form__buttons {
+  display: block !important;
+  width: 100% !important;
+}
+
+/*
+  KIT COM 2
+
+  IMPORTANTE:
+  Este seletor tem especificidade maior que a regra
+  do início do arquivo que força display:block.
+
+  Assim o CTA normal desaparece SOMENTE no Kit com 2.
+*/
 html.tn-amp-mode-kit
+.wt-product__info:has(.amp-volume-discount-bundles)
 .product-form__buttons {
   display: none !important;
 }
 
-/* Container que contém o Mix & Match */
+/*
+  Mantém o container do Mix & Match ativo.
+*/
 html.tn-amp-mode-kit
 .wt-product__add-to-cart_form.main-product__buy-buttons--container:has(
   #amp-mix-and-match-bundles-embed-section
@@ -375,7 +400,10 @@ html.tn-amp-mode-kit
   padding: 0 !important;
 }
 
-/* Kit com 2: Mix & Match visível */
+/*
+  Kit com 2:
+  Mix & Match aparece.
+*/
 html.tn-amp-mode-kit
 #amp-mix-and-match-bundles-embed-section {
   display: block !important;
@@ -385,14 +413,9 @@ html.tn-amp-mode-kit
   padding: 0 !important;
 }
 
-/* Compra de 1 unidade mantém CTA normal */
-html.tn-amp-mode-single
-.product-form__buttons {
-  display: block !important;
-  width: 100% !important;
-}
-
-/* Quantidade do kit é definida pelos dois sabores */
+/*
+  Quantidade do Kit é definida pelos dois sabores.
+*/
 html.tn-amp-mode-kit
 .amp-bundles__volume-discount-bundles__quantity-divider,
 html.tn-amp-mode-kit
@@ -729,17 +752,16 @@ html.tn-amp-mode-kit
 }
 
 
-/* Controles */
+/* =========================================================
+   BOTÃO ESCOLHER / TROCAR
+========================================================= */
+
 .amp-bundles__mix-and-match-bundles__controls {
   width: 100% !important;
   margin-top: auto !important;
   padding-top: 8px !important;
 }
 
-/*
-  Seletor propositalmente mais específico.
-  Garante que o texto real "Escolher" seja visível também no desktop.
-*/
 #amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__toggle-btn {
   display: flex !important;
@@ -774,7 +796,6 @@ html.tn-amp-mode-kit
   cursor: pointer !important;
 }
 
-/* Não permite texto extra por pseudo-elementos */
 #amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__toggle-btn::before,
 #amp-mix-and-match-bundles-embed-section
@@ -919,7 +940,6 @@ html.tn-amp-mode-kit
     margin-top: 10px !important;
   }
 
-  /* Título */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__headline {
     margin: 0 0 14px !important;
@@ -928,7 +948,6 @@ html.tn-amp-mode-kit
     line-height: 1.25 !important;
   }
 
-  /* Cabeçalho das etapas */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__section-header {
     min-height: 52px !important;
@@ -951,7 +970,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* LISTA VERTICAL DE SABORES */
+  /* Lista vertical */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-grid {
     display: flex !important;
@@ -965,7 +984,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* CARD HORIZONTAL */
+  /* Card horizontal */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-wrapper {
     display: grid !important;
@@ -1013,7 +1032,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* IMAGEM À ESQUERDA */
+  /* Imagem */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__image.amp-bundles__mix-and-match-bundles__product-tile__image {
     grid-area: image !important;
@@ -1039,7 +1058,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* INFORMAÇÕES À DIREITA */
+  /* Informações */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__info.amp-bundles__mix-and-match-bundles__product-tile__info {
     grid-area: info !important;
@@ -1076,7 +1095,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Nome completo */
+  /* Nome */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__title.amp-bundles__mix-and-match-bundles__product-tile__title {
     display: block !important;
@@ -1105,7 +1124,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* PREÇO */
+  /* Preços */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-tile__prices {
     display: flex !important;
@@ -1131,7 +1150,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* BOTÃO À DIREITA */
+  /* Controles */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__controls {
     grid-area: controls !important;
