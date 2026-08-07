@@ -265,7 +265,7 @@
 ========================================================= */
 
 /*
-  O estado agora fica no <html>.
+  O estado fica no <html>.
   Assim funciona mesmo quando o Wonder reorganiza
   os blocos no mobile.
 */
@@ -278,16 +278,15 @@ html.tn-amp-mode-single
 
 /*
   No Kit com 2 o formulário normal não é utilizado.
+  Não depende de onde o Volume Discount está no DOM.
 */
 html.tn-amp-mode-kit
-.wt-product__info:has(.amp-volume-discount-bundles)
 product-form.wt-product__add-to-cart {
   display: none !important;
 }
 
 /*
   Container que contém o Mix & Match.
-  Não depende da posição dele dentro do layout.
 */
 html.tn-amp-mode-kit
 .wt-product__add-to-cart_form.main-product__buy-buttons--container:has(
@@ -803,10 +802,6 @@ html.tn-amp-mode-kit
   width: 100% !important;
   min-height: 46px !important;
 
-  /*
-    Top: separa das escolhas.
-    Bottom: separa da informação de parcelamento.
-  */
   margin: 12px 0 18px !important;
 
   padding: 11px 16px !important;
