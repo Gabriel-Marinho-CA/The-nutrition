@@ -358,9 +358,9 @@ html.tn-amp-mode-single
   display: none !important;
 }
 
-/* Kit com 2: CTA normal do produto não é utilizado */
+/* Kit com 2: esconde somente o botão normal do produto */
 html.tn-amp-mode-kit
-product-form:has(.js-add-to-cart) {
+.product-form__buttons {
   display: none !important;
 }
 
@@ -387,7 +387,6 @@ html.tn-amp-mode-kit
 
 /* Compra de 1 unidade mantém CTA normal */
 html.tn-amp-mode-single
-.wt-product__info:has(.amp-volume-discount-bundles)
 .product-form__buttons {
   display: block !important;
   width: 100% !important;
@@ -737,6 +736,11 @@ html.tn-amp-mode-kit
   padding-top: 8px !important;
 }
 
+/*
+  Seletor propositalmente mais específico.
+  Garante que o texto real "Escolher" seja visível também no desktop.
+*/
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__toggle-btn {
   display: flex !important;
   align-items: center !important;
@@ -760,23 +764,31 @@ html.tn-amp-mode-kit
 
   font-size: 10px !important;
   font-weight: 700 !important;
+  line-height: 1.2 !important;
 
   text-transform: uppercase !important;
+
+  visibility: visible !important;
+  opacity: 1 !important;
 
   cursor: pointer !important;
 }
 
-/* Garante que somente o texto real do botão seja exibido */
+/* Não permite texto extra por pseudo-elementos */
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__toggle-btn::before,
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__toggle-btn::after {
   content: none !important;
   display: none !important;
 }
 
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__toggle-btn:hover {
   border-color: #c6a263 !important;
 }
 
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__toggle-btn:disabled {
   color: #bab5ad !important;
   background: #f5f4f2 !important;
@@ -799,6 +811,7 @@ html.tn-amp-mode-kit
   width: 100% !important;
 }
 
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__remove-button {
   display: flex !important;
   align-items: center !important;
@@ -822,6 +835,10 @@ html.tn-amp-mode-kit
 
   font-size: 10px !important;
   font-weight: 700 !important;
+  line-height: 1.2 !important;
+
+  visibility: visible !important;
+  opacity: 1 !important;
 
   text-decoration: none !important;
   text-transform: uppercase !important;
@@ -829,8 +846,9 @@ html.tn-amp-mode-kit
   cursor: pointer !important;
 }
 
-/* Garante que somente o texto real do botão seja exibido */
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__remove-button::before,
+#amp-mix-and-match-bundles-embed-section
 .amp-bundles__mix-and-match-bundles__remove-button::after {
   content: none !important;
   display: none !important;
@@ -841,7 +859,6 @@ html.tn-amp-mode-kit
    RESUMO
 ========================================================= */
 
-/* O preço, economia e total já são exibidos no Kit com 2 */
 html.tn-amp-mode-kit
 .amp-bundles__mix-and-match-bundles__summary {
   display: none !important;
@@ -915,7 +932,6 @@ html.tn-amp-mode-kit
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__section-header {
     min-height: 52px !important;
-
     padding: 13px 14px !important;
   }
 
@@ -935,10 +951,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* =====================================================
-     LISTA VERTICAL DE SABORES
-  ===================================================== */
-
+  /* LISTA VERTICAL DE SABORES */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-grid {
     display: flex !important;
@@ -952,10 +965,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* =====================================================
-     CARD HORIZONTAL
-  ===================================================== */
-
+  /* CARD HORIZONTAL */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-wrapper {
     display: grid !important;
@@ -1003,10 +1013,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* =====================================================
-     IMAGEM À ESQUERDA
-  ===================================================== */
-
+  /* IMAGEM À ESQUERDA */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__image.amp-bundles__mix-and-match-bundles__product-tile__image {
     grid-area: image !important;
@@ -1032,10 +1039,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* =====================================================
-     INFORMAÇÕES À DIREITA
-  ===================================================== */
-
+  /* INFORMAÇÕES À DIREITA */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__info.amp-bundles__mix-and-match-bundles__product-tile__info {
     grid-area: info !important;
@@ -1101,10 +1105,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* =====================================================
-     PREÇO
-  ===================================================== */
-
+  /* PREÇO */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-tile__prices {
     display: flex !important;
@@ -1130,10 +1131,7 @@ html.tn-amp-mode-kit
   }
 
 
-  /* =====================================================
-     BOTÃO À DIREITA
-  ===================================================== */
-
+  /* BOTÃO À DIREITA */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__controls {
     grid-area: controls !important;
@@ -1163,23 +1161,15 @@ html.tn-amp-mode-kit
     padding: 8px 12px !important;
 
     font-family: var(--font-body-family, inherit) !important;
+
     font-size: 11px !important;
     font-weight: 700 !important;
+    line-height: 1.2 !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
 
     border-radius: 8px !important;
-  }
-
-  /* Nenhum pseudo-elemento pode criar texto adicional */
-  #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__mix-and-match-bundles__toggle-btn::before,
-  #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__mix-and-match-bundles__toggle-btn::after,
-  #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__mix-and-match-bundles__remove-button::before,
-  #amp-mix-and-match-bundles-embed-section
-  .amp-bundles__mix-and-match-bundles__remove-button::after {
-    content: none !important;
-    display: none !important;
   }
 
 
