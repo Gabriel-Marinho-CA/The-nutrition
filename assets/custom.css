@@ -280,7 +280,6 @@ html.tn-amp-mode-single
   No Kit com 2 o formulário normal não é utilizado.
 */
 html.tn-amp-mode-kit
-.wt-product__info:has(.amp-volume-discount-bundles)
 product-form.wt-product__add-to-cart {
   display: none !important;
 }
