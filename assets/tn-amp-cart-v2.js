@@ -244,6 +244,83 @@
     };
 
 
+  /*
+    Busca primeiro o Volume Discount que já tenha
+    uma opção selecionada.
+
+    Isso é importante no carregamento inicial,
+    porque o AMP pode existir no DOM antes de
+    ficar oficialmente "visível".
+  */
+  const getBestVolumeWidget = () => {
+    const widgets =
+      Array.from(
+        document.querySelectorAll(
+          SELECTORS.volumeWidget
+        )
+      );
+
+    if (!widgets.length) {
+      return null;
+    }
+
+    const visibleWithSelection =
+      widgets.find(widget => {
+        return (
+          isVisible(widget) &&
+          Boolean(
+            widget.querySelector(
+              SELECTORS.selectedVolumeTier
+            )
+          )
+        );
+      });
+
+    if (visibleWithSelection) {
+      return visibleWithSelection;
+    }
+
+    const withSelection =
+      widgets.find(widget => {
+        return Boolean(
+          widget.querySelector(
+            SELECTORS.selectedVolumeTier
+          )
+        );
+      });
+
+    if (withSelection) {
+      return withSelection;
+    }
+
+    return (
+      widgets.find(isVisible) ||
+      widgets[0] ||
+      null
+    );
+  };
+
+
+  const getBestMixWidget = () => {
+    const widgets =
+      Array.from(
+        document.querySelectorAll(
+          SELECTORS.mixWidget
+        )
+      );
+
+    if (!widgets.length) {
+      return null;
+    }
+
+    return (
+      widgets.find(isVisible) ||
+      widgets[0] ||
+      null
+    );
+  };
+
+
   const getSelectedVolumeTier =
     ampWidget => {
       return ampWidget?.querySelector(
@@ -426,36 +503,13 @@
      MIX & MATCH — PRODUTOS SELECIONADOS
   ===================================================== */
 
-  /*
-    Guardamos qual produto foi escolhido em cada etapa.
-
-    0 = primeiro sabor
-    1 = segundo sabor
-  */
-
   const mixSelections =
     new Map();
 
 
-  /*
-    Cache dos produtos consultados na Shopify.
-  */
-
   const productCache =
     new Map();
 
-
-  /*
-    Converte o título do Shopify para o handle.
-
-    Exemplo:
-
-    Whey Isolado e Hidrolisado Cacao (405g) - The Nutrition
-
-    vira:
-
-    whey-isolado-e-hidrolisado-cacao-405g-the-nutrition
-  */
 
   const titleToHandle =
     title => {
@@ -474,13 +528,6 @@
         .replace(/^-+|-+$/g, "");
     };
 
-
-  /*
-    Consulta o produto diretamente na Shopify
-    e retorna a variante.
-
-    Não precisamos deixar IDs hardcoded.
-  */
 
   const getVariantFromProduct =
     async selection => {
@@ -858,11 +905,6 @@
         isKitMode;
 
 
-      /*
-        Ao voltar para 1 unidade,
-        limpamos o estado do Mix.
-      */
-
       if (!isKitMode) {
         mixSelections.clear();
       }
@@ -872,7 +914,7 @@
   const syncGlobalModeFromWidget =
     volumeWidget => {
       if (!volumeWidget) {
-        return;
+        return false;
       }
 
       const selectedTierIndex =
@@ -883,12 +925,14 @@
       if (
         selectedTierIndex < 0
       ) {
-        return;
+        return false;
       }
 
       setGlobalMode(
         selectedTierIndex === 1
       );
+
+      return true;
     };
 
 
@@ -1072,15 +1116,6 @@
       }
 
 
-      /*
-        BLOQUEIA completamente o clique nativo.
-
-        Assim:
-        - AMP não redireciona
-        - Yampi não redireciona
-        - nós controlamos a inclusão na Shopify
-      */
-
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
@@ -1116,14 +1151,6 @@
         !firstSelection ||
         !secondSelection
       ) {
-        console.error(
-          "Seleções do Mix & Match não encontradas.",
-          {
-            firstSelection,
-            secondSelection
-          }
-        );
-
         alert(
           "Escolha os dois sabores antes de adicionar ao carrinho."
         );
@@ -1153,12 +1180,6 @@
 
 
       try {
-
-        /*
-          Busca os IDs reais diretamente
-          dos produtos da Shopify.
-        */
-
         const [
           firstVariant,
           secondVariant
@@ -1173,11 +1194,6 @@
             )
           ]);
 
-
-        /*
-          Caso a pessoa escolha o mesmo sabor
-          duas vezes, enviamos quantity: 2.
-        */
 
         const quantities =
           new Map();
@@ -1196,15 +1212,6 @@
           );
         });
 
-
-        /*
-          Mantém o MESMO padrão de propriedades
-          usado pelo Volume Discount.
-
-          O Mix & Match é apenas a interface
-          usada para escolher quais 2 Wheys
-          compõem a oferta.
-        */
 
         const items =
           Array.from(
@@ -1227,11 +1234,6 @@
             })
           );
 
-
-        /*
-          Mesma lógica dos demais:
-          adiciona diretamente no carrinho Shopify.
-        */
 
         const response =
           await fetch(
@@ -1275,14 +1277,6 @@
           );
         }
 
-
-        /*
-          MESMA FINALIZAÇÃO DOS OUTROS CARDS:
-
-          - atualiza brindes
-          - atualiza drawer
-          - abre drawer
-        */
 
         await finalizeCartUpdate();
 
@@ -1354,26 +1348,30 @@
     );
 
 
-    const visibleVolume =
-      volumeWidgets.find(
-        isVisible
-      );
+    /*
+      Não depende mais apenas do elemento visível.
 
-    if (visibleVolume) {
+      Primeiro procura o widget que efetivamente
+      possui uma tier selecionada.
+    */
+    const bestVolume =
+      getBestVolumeWidget();
+
+
+    if (bestVolume) {
       syncGlobalModeFromWidget(
-        visibleVolume
+        bestVolume
       );
     }
 
 
-    const visibleMix =
-      mixWidgets.find(
-        isVisible
-      );
+    const bestMix =
+      getBestMixWidget();
 
-    if (visibleMix) {
+
+    if (bestMix) {
       handleMixAndMatchSteps(
-        visibleMix
+        bestMix
       );
     }
   };
@@ -1390,6 +1388,141 @@
         40
       );
   };
+
+
+  /* =====================================================
+     BOOTSTRAP RESILIENTE DO AMP
+  ===================================================== */
+
+  let bootstrapTimer =
+    null;
+
+  let bootstrapAttempts =
+    0;
+
+  const BOOTSTRAP_INTERVAL =
+    150;
+
+  const BOOTSTRAP_MAX_ATTEMPTS =
+    50;
+
+
+  const stopBootstrap = () => {
+    if (!bootstrapTimer) {
+      return;
+    }
+
+    window.clearInterval(
+      bootstrapTimer
+    );
+
+    bootstrapTimer =
+      null;
+  };
+
+
+  const bootstrapIntegratedFlow =
+    () => {
+      stopBootstrap();
+
+      bootstrapAttempts =
+        0;
+
+
+      /*
+        Faz uma tentativa imediatamente.
+      */
+      syncUI();
+
+
+      /*
+        Depois continua tentando enquanto
+        o AMP termina de injetar/renderizar
+        os componentes.
+
+        50 × 150ms = até 7,5 segundos.
+      */
+      bootstrapTimer =
+        window.setInterval(
+          () => {
+            bootstrapAttempts += 1;
+
+
+            syncUI();
+
+
+            const volumeWidget =
+              getBestVolumeWidget();
+
+
+            const selectedIndex =
+              getSelectedVolumeTierIndex(
+                volumeWidget
+              );
+
+
+            /*
+              Se ainda não existe tier selecionada,
+              o AMP ainda não terminou.
+            */
+            if (selectedIndex < 0) {
+              if (
+                bootstrapAttempts >=
+                BOOTSTRAP_MAX_ATTEMPTS
+              ) {
+                stopBootstrap();
+              }
+
+              return;
+            }
+
+
+            /*
+              Se for 1 unidade, já conseguimos
+              determinar o estado da página.
+            */
+            if (selectedIndex === 0) {
+              stopBootstrap();
+              return;
+            }
+
+
+            /*
+              Se for Kit com 2, só encerramos
+              quando o Mix & Match também existir.
+
+              Assim evitamos:
+              Kit selecionado + Mix ainda não carregado.
+            */
+            const mixWidget =
+              getBestMixWidget();
+
+
+            if (mixWidget) {
+              decorateMixAndMatch(
+                mixWidget
+              );
+
+              handleMixAndMatchSteps(
+                mixWidget
+              );
+
+              stopBootstrap();
+              return;
+            }
+
+
+            if (
+              bootstrapAttempts >=
+              BOOTSTRAP_MAX_ATTEMPTS
+            ) {
+              stopBootstrap();
+            }
+
+          },
+          BOOTSTRAP_INTERVAL
+        );
+    };
 
 
   /* =====================================================
@@ -1444,11 +1577,6 @@
       if (
         clickedIndex === 1
       ) {
-        /*
-          Novo Kit:
-          começa novamente a escolha.
-        */
-
         mixSelections.clear();
 
         mixState.firstOpened =
@@ -1462,8 +1590,13 @@
       }
 
 
+      /*
+        Reativa o bootstrap porque o AMP
+        pode reconstruir o Mix ao trocar
+        de opção.
+      */
       window.setTimeout(
-        scheduleSync,
+        bootstrapIntegratedFlow,
         80
       );
     },
@@ -1477,7 +1610,9 @@
 
   const pageObserver =
     new MutationObserver(
-      scheduleSync
+      () => {
+        scheduleSync();
+      }
     );
 
 
@@ -1499,19 +1634,36 @@
   );
 
 
+  /* =====================================================
+     PAGE SHOW
+  ===================================================== */
+
+  /*
+    pageshow também cobre situações em que
+    o navegador restaura a página pelo cache
+    de navegação (bfcache).
+  */
+  window.addEventListener(
+    "pageshow",
+    () => {
+      bootstrapIntegratedFlow();
+    }
+  );
+
+
   if (
     document.readyState ===
     "loading"
   ) {
     document.addEventListener(
       "DOMContentLoaded",
-      scheduleSync,
+      bootstrapIntegratedFlow,
       {
         once: true
       }
     );
   } else {
-    scheduleSync();
+    bootstrapIntegratedFlow();
   }
 
 
@@ -1533,11 +1685,6 @@
       }
 
 
-      /*
-        Kit com 2 utiliza exclusivamente
-        o Mix & Match.
-      */
-
       if (currentKitMode) {
         event.preventDefault();
         event.stopPropagation();
@@ -1558,9 +1705,7 @@
 
 
       const ampWidget =
-        getVisibleElement(
-          SELECTORS.volumeWidget
-        );
+        getBestVolumeWidget();
 
       if (!ampWidget) {
         return;
