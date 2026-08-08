@@ -286,54 +286,53 @@
 
 
 /* =========================================================
-   ESTADO — 1 UNIDADE
+   ESTADO NATIVO AMP — 1 UNIDADE
 ========================================================= */
 
-html.tn-amp-mode-single
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:first-child.amp-bundles__volume-discount-bundles__tier-option--selected
+)
 #amp-mix-and-match-bundles-embed-section {
   display: none !important;
 }
 
 
-html.tn-amp-mode-single
-.wt-product__info:has(.amp-volume-discount-bundles)
-.product-form__buttons {
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:first-child.amp-bundles__volume-discount-bundles__tier-option--selected
+)
+.wt-product__add-to-cart_form.main-product__buy-buttons--container
+> product-form.wt-product__add-to-cart {
   display: block !important;
   width: 100% !important;
 }
 
 
 /* =========================================================
-   ESTADO — KIT COM 2
+   ESTADO NATIVO AMP — KIT COM 2
 ========================================================= */
 
 /*
-  IMPORTANTE:
+  O CSS lê diretamente a opção selecionada pelo AMP.
 
-  O product-form normal e o Mix & Match são irmãos dentro de:
-
-  .wt-product__add-to-cart_form.main-product__buy-buttons--container
-
-  Por isso escondemos SOMENTE o product-form direto desse container.
-
-  Isso remove:
-  - o botão preto duplicado
-  - o espaço vazio deixado por ele
-
-  E NÃO afeta:
-  - Escolher
-  - Trocar
-  - Adicionar 2 ao carrinho
+  Não existe mais:
+  html.tn-amp-mode-kit
+  html.tn-amp-mode-single
 */
-html.tn-amp-mode-kit
+
+
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected
+)
 .wt-product__add-to-cart_form.main-product__buy-buttons--container
 > product-form.wt-product__add-to-cart {
   display: none !important;
 }
 
 
-/* Container permanece ativo para receber o Mix */
-html.tn-amp-mode-kit
+/* Container que recebe o Mix */
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected
+)
 .wt-product__add-to-cart_form.main-product__buy-buttons--container:has(
   #amp-mix-and-match-bundles-embed-section
 ) {
@@ -348,8 +347,10 @@ html.tn-amp-mode-kit
 }
 
 
-/* Mix aparece imediatamente */
-html.tn-amp-mode-kit
+/* Mix */
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected
+)
 #amp-mix-and-match-bundles-embed-section {
   display: block !important;
 
@@ -361,18 +362,14 @@ html.tn-amp-mode-kit
 }
 
 
-/* Remove qualquer margem que o tema deixe no formulário anterior */
-html.tn-amp-mode-kit
-.wt-product__add-to-cart_form.main-product__buy-buttons--container
-> product-form.wt-product__add-to-cart + #amp-mix-and-match-bundles-embed-section {
-  margin-top: 10px !important;
-}
-
-
-/* No kit a quantidade é definida pelos dois sabores */
-html.tn-amp-mode-kit
+/* Quantidade do Volume não é usada no Kit */
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected
+)
 .amp-bundles__volume-discount-bundles__quantity-divider,
-html.tn-amp-mode-kit
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected
+)
 .amp-bundles__volume-discount-bundles__quantity-controls {
   display: none !important;
 }
@@ -455,7 +452,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Cabeçalho */
 .amp-bundles__mix-and-match-bundles__section-header {
   box-sizing: border-box !important;
 
@@ -543,7 +539,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Conteúdo */
 .amp-bundles__mix-and-match-bundles__section-content {
   box-sizing: border-box !important;
 
@@ -555,7 +550,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Esconde textos redundantes */
 .amp-bundles__mix-and-match-bundles__section-description,
 .amp-bundles__mix-and-match-bundles__progress-container {
   display: none !important;
@@ -625,7 +619,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Imagem */
 .amp-bundles__mix-and-match-bundles__product-tile__image {
   display: block !important;
 
@@ -641,7 +634,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Informações */
 #amp-mix-and-match-bundles-embed-section
 .amp-bundles__product-tile__info,
 #amp-mix-and-match-bundles-embed-section
@@ -666,7 +658,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Nome */
 #amp-mix-and-match-bundles-embed-section
 .amp-bundles__product-tile__title,
 #amp-mix-and-match-bundles-embed-section
@@ -697,7 +688,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Remove limitações do AMP */
 #amp-mix-and-match-bundles-embed-section
 .amp-bundles__product-tile--compact,
 #amp-mix-and-match-bundles-embed-section
@@ -710,7 +700,6 @@ html.tn-amp-mode-kit
 }
 
 
-/* Preços */
 .amp-bundles__mix-and-match-bundles__product-tile__prices {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -874,7 +863,9 @@ html.tn-amp-mode-kit
    MIX & MATCH — RESUMO
 ========================================================= */
 
-html.tn-amp-mode-kit
+.wt-product__info:has(
+  .amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected
+)
 .amp-bundles__mix-and-match-bundles__summary {
   display: none !important;
 }
@@ -1028,7 +1019,9 @@ html.tn-amp-mode-kit
 
 @media screen and (max-width: 749px) {
 
-  html.tn-amp-mode-kit
+  .wt-product__info:has(
+    .amp-bundles__volume-discount-bundles__tier-option:nth-child(2).amp-bundles__volume-discount-bundles__tier-option--selected
+  )
   #amp-mix-and-match-bundles-embed-section {
     margin-top: 8px !important;
   }
@@ -1069,7 +1062,6 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Lista vertical de sabores */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-grid {
     display: flex !important;
@@ -1083,7 +1075,6 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Card horizontal */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-wrapper {
     display: grid !important;
@@ -1113,14 +1104,12 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Remove wrapper vertical interno do AMP */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile.amp-bundles__product-tile--compact.amp-bundles__mix-and-match-bundles__product-tile {
     display: contents !important;
   }
 
 
-  /* Imagem à esquerda */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__image.amp-bundles__mix-and-match-bundles__product-tile__image {
     grid-area: image !important;
@@ -1146,7 +1135,6 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Informações à direita */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__info.amp-bundles__mix-and-match-bundles__product-tile__info {
     grid-area: info !important;
@@ -1182,7 +1170,6 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Nome */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__product-tile__title.amp-bundles__mix-and-match-bundles__product-tile__title {
     display: block !important;
@@ -1208,7 +1195,6 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Preço */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__product-tile__prices {
     width: 100% !important;
@@ -1223,7 +1209,6 @@ html.tn-amp-mode-kit
   }
 
 
-  /* Botão */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__controls {
     grid-area: controls !important;
@@ -1264,7 +1249,6 @@ html.tn-amp-mode-kit
   }
 
 
-  /* CTA */
   #amp-mix-and-match-bundles-embed-section
   .amp-bundles__mix-and-match-bundles__cta {
     min-height: 50px !important;
