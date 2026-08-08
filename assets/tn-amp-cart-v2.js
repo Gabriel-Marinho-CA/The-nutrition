@@ -122,11 +122,9 @@
       "/cart.js",
       {
         method: "GET",
-
         headers: {
           Accept: "application/json"
         },
-
         cache: "no-store"
       }
     );
@@ -227,31 +225,6 @@
   };
 
 
-  const getVisibleElement =
-    selector => {
-      const elements =
-        Array.from(
-          document.querySelectorAll(
-            selector
-          )
-        );
-
-      return (
-        elements.find(isVisible) ||
-        elements[0] ||
-        null
-      );
-    };
-
-
-  /*
-    Busca primeiro o Volume Discount que já tenha
-    uma opção selecionada.
-
-    Isso é importante no carregamento inicial,
-    porque o AMP pode existir no DOM antes de
-    ficar oficialmente "visível".
-  */
   const getBestVolumeWidget = () => {
     const widgets =
       Array.from(
@@ -264,36 +237,27 @@
       return null;
     }
 
-    const visibleWithSelection =
-      widgets.find(widget => {
-        return (
-          isVisible(widget) &&
-          Boolean(
-            widget.querySelector(
-              SELECTORS.selectedVolumeTier
-            )
-          )
-        );
-      });
+    const visibleSelected =
+      widgets.find(widget =>
+        isVisible(widget) &&
+        widget.querySelector(
+          SELECTORS.selectedVolumeTier
+        )
+      );
 
-    if (visibleWithSelection) {
-      return visibleWithSelection;
+    if (visibleSelected) {
+      return visibleSelected;
     }
 
-    const withSelection =
-      widgets.find(widget => {
-        return Boolean(
-          widget.querySelector(
-            SELECTORS.selectedVolumeTier
-          )
-        );
-      });
-
-    if (withSelection) {
-      return withSelection;
-    }
+    const selected =
+      widgets.find(widget =>
+        widget.querySelector(
+          SELECTORS.selectedVolumeTier
+        )
+      );
 
     return (
+      selected ||
       widgets.find(isVisible) ||
       widgets[0] ||
       null
@@ -308,10 +272,6 @@
           SELECTORS.mixWidget
         )
       );
-
-    if (!widgets.length) {
-      return null;
-    }
 
     return (
       widgets.find(isVisible) ||
@@ -373,15 +333,15 @@
       return quantityShown;
     }
 
-    const quantityFromTierText =
+    const quantityFromText =
       parsePositiveInteger(
         selectedTier?.querySelector(
           SELECTORS.volumeTierText
         )?.textContent
       );
 
-    if (quantityFromTierText) {
-      return quantityFromTierText;
+    if (quantityFromText) {
+      return quantityFromText;
     }
 
     const quantityInput =
@@ -389,12 +349,11 @@
         'input[name="quantity"]'
       );
 
-    const formQuantity =
+    return (
       parsePositiveInteger(
         quantityInput?.value
-      );
-
-    return formQuantity || 1;
+      ) || 1
+    );
   };
 
 
@@ -414,15 +373,13 @@
           SELECTORS.volumeTierBadge
         )?.textContent;
 
-      const discountFromBadge =
+      const fromBadge =
         parsePercentage(
           badgeText
         );
 
-      if (
-        discountFromBadge > 0
-      ) {
-        return discountFromBadge;
+      if (fromBadge > 0) {
+        return fromBadge;
       }
 
       return parsePercentage(
@@ -482,7 +439,6 @@
         "function"
       ) {
         cartDrawer.open();
-
         return;
       }
 
@@ -500,12 +456,11 @@
 
 
   /* =====================================================
-     MIX & MATCH — PRODUTOS SELECIONADOS
+     MIX & MATCH — PRODUTOS
   ===================================================== */
 
   const mixSelections =
     new Map();
-
 
   const productCache =
     new Map();
@@ -551,13 +506,10 @@
         await fetch(
           `/products/${selection.handle}.js`,
           {
-            method: "GET",
-
             headers: {
               Accept:
                 "application/json"
             },
-
             cache: "no-store"
           }
         );
@@ -649,14 +601,10 @@
         return;
       }
 
-      const titleElement =
+      const title =
         wrapper.querySelector(
           SELECTORS.mixProductTitle
-        );
-
-      const title =
-        titleElement?.textContent
-          ?.trim();
+        )?.textContent?.trim();
 
       if (!title) {
         return;
@@ -680,18 +628,16 @@
           button
         );
 
-      if (sectionIndex < 0) {
-        return;
+      if (sectionIndex >= 0) {
+        mixSelections.delete(
+          sectionIndex
+        );
       }
-
-      mixSelections.delete(
-        sectionIndex
-      );
     };
 
 
   /* =====================================================
-     MIX & MATCH — INTERFACE
+     INTERFACE AMP
   ===================================================== */
 
   const setTextIfDifferent = (
@@ -847,15 +793,13 @@
         );
 
       if (
-        !header ||
+        header &&
         header.getAttribute(
           "aria-expanded"
-        ) === "true"
+        ) !== "true"
       ) {
-        return;
+        header.click();
       }
-
-      header.click();
     };
 
 
@@ -867,24 +811,25 @@
         );
 
       if (
-        !header ||
+        header &&
         header.getAttribute(
           "aria-expanded"
-        ) !== "true"
+        ) === "true"
       ) {
-        return;
+        header.click();
       }
-
-      header.click();
     };
 
 
   /* =====================================================
-     ESTADO GLOBAL
+     ESTADO
   ===================================================== */
 
   let currentKitMode =
     null;
+
+  let ampMixRecoveryRunning =
+    false;
 
 
   const setGlobalMode =
@@ -904,7 +849,6 @@
       currentKitMode =
         isKitMode;
 
-
       if (!isKitMode) {
         mixSelections.clear();
       }
@@ -917,19 +861,17 @@
         return false;
       }
 
-      const selectedTierIndex =
+      const selectedIndex =
         getSelectedVolumeTierIndex(
           volumeWidget
         );
 
-      if (
-        selectedTierIndex < 0
-      ) {
+      if (selectedIndex < 0) {
         return false;
       }
 
       setGlobalMode(
-        selectedTierIndex === 1
+        selectedIndex === 1
       );
 
       return true;
@@ -937,7 +879,144 @@
 
 
   /* =====================================================
-     AUTO-ABERTURA DO MIX & MATCH
+     RECOVERY DO MIX & MATCH
+  ===================================================== */
+
+  /*
+    BUG DO AMP:
+
+    Em alguns carregamentos mobile,
+    "Kit com 2" já nasce selecionado,
+    porém o AMP não monta o Mix & Match.
+
+    Manualmente:
+    1 unidade -> Kit com 2
+    faz o AMP montar o componente.
+
+    Esta função reproduz exatamente isso
+    automaticamente quando necessário.
+  */
+
+  const forceAmpMixInitialization =
+    async () => {
+      if (ampMixRecoveryRunning) {
+        return;
+      }
+
+      if (getBestMixWidget()) {
+        return;
+      }
+
+      const volumeWidget =
+        getBestVolumeWidget();
+
+      if (!volumeWidget) {
+        return;
+      }
+
+      const tiers =
+        Array.from(
+          volumeWidget.querySelectorAll(
+            SELECTORS.volumeTier
+          )
+        );
+
+      if (tiers.length < 2) {
+        return;
+      }
+
+      const selectedIndex =
+        getSelectedVolumeTierIndex(
+          volumeWidget
+        );
+
+      if (selectedIndex !== 1) {
+        return;
+      }
+
+
+      ampMixRecoveryRunning =
+        true;
+
+
+      /*
+        Mantemos visualmente o site em modo Kit
+        durante a recuperação.
+      */
+      setGlobalMode(true);
+
+
+      try {
+
+        /*
+          Primeiro tenta simplesmente disparar
+          novamente a opção Kit.
+
+          Alguns builds do AMP inicializam
+          apenas com isso.
+        */
+        tiers[1].click();
+
+        await wait(250);
+
+
+        if (getBestMixWidget()) {
+          return;
+        }
+
+
+        /*
+          Se o AMP continuar travado,
+          reproduz o comportamento que
+          resolveu manualmente no celular:
+
+          1 unidade -> Kit com 2
+        */
+        tiers[0].click();
+
+        /*
+          Nossa interface continua em Kit,
+          evitando que o produto normal
+          apareça durante esse processo.
+        */
+        setGlobalMode(true);
+
+        await wait(120);
+
+
+        tiers[1].click();
+
+        setGlobalMode(true);
+
+        await wait(350);
+
+
+      } catch (error) {
+
+        console.warn(
+          "Não foi possível reinicializar o Mix & Match:",
+          error
+        );
+
+
+      } finally {
+
+        /*
+          O estado final precisa obrigatoriamente
+          permanecer no Kit.
+        */
+        setGlobalMode(true);
+
+        ampMixRecoveryRunning =
+          false;
+
+        scheduleSync();
+      }
+    };
+
+
+  /* =====================================================
+     AUTO-ABERTURA MIX
   ===================================================== */
 
   const mixState = {
@@ -963,9 +1042,7 @@
           )
         );
 
-      if (
-        sections.length < 2
-      ) {
+      if (sections.length < 2) {
         return;
       }
 
@@ -1039,14 +1116,6 @@
 
       if (
         firstSatisfied &&
-        !secondSatisfied
-      ) {
-        return;
-      }
-
-
-      if (
-        firstSatisfied &&
         secondSatisfied &&
         !mixState.autoCollapsed
       ) {
@@ -1064,7 +1133,7 @@
 
 
   /* =====================================================
-     MIX & MATCH — CAPTURA DAS ESCOLHAS
+     CAPTURA ESCOLHAS MIX
   ===================================================== */
 
   document.addEventListener(
@@ -1083,7 +1152,6 @@
         return;
       }
 
-
       const removeButton =
         event.target.closest(
           SELECTORS.mixRemoveButton
@@ -1100,7 +1168,7 @@
 
 
   /* =====================================================
-     MIX & MATCH — ADICIONAR 2 AO CARRINHO
+     MIX — ADICIONAR AO CARRINHO
   ===================================================== */
 
   document.addEventListener(
@@ -1115,7 +1183,6 @@
         return;
       }
 
-
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
@@ -1125,16 +1192,9 @@
         button.disabled ||
         button.getAttribute(
           "aria-disabled"
-        ) === "true"
-      ) {
-        return;
-      }
-
-
-      if (
-        button.dataset
-          .tnMixAdding ===
-        "true"
+        ) === "true" ||
+        button.dataset.tnMixAdding ===
+          "true"
       ) {
         return;
       }
@@ -1159,8 +1219,7 @@
       }
 
 
-      button.dataset
-        .tnMixAdding =
+      button.dataset.tnMixAdding =
         "true";
 
       button.disabled =
@@ -1180,6 +1239,7 @@
 
 
       try {
+
         const [
           firstVariant,
           secondVariant
@@ -1315,7 +1375,7 @@
 
 
   /* =====================================================
-     SINCRONIZAÇÃO DOS WIDGETS
+     SINCRONIZAÇÃO
   ===================================================== */
 
   let syncTimer =
@@ -1349,29 +1409,30 @@
 
 
     /*
-      Não depende mais apenas do elemento visível.
+      Durante o recovery não aceitamos
+      o estado temporário "1 unidade".
 
-      Primeiro procura o widget que efetivamente
-      possui uma tier selecionada.
+      Isso evita flicker e mantém o CSS
+      em modo Kit.
     */
-    const bestVolume =
-      getBestVolumeWidget();
+    if (!ampMixRecoveryRunning) {
+      const volume =
+        getBestVolumeWidget();
 
-
-    if (bestVolume) {
-      syncGlobalModeFromWidget(
-        bestVolume
-      );
+      if (volume) {
+        syncGlobalModeFromWidget(
+          volume
+        );
+      }
     }
 
 
-    const bestMix =
+    const mix =
       getBestMixWidget();
 
-
-    if (bestMix) {
+    if (mix) {
       handleMixAndMatchSteps(
-        bestMix
+        mix
       );
     }
   };
@@ -1391,7 +1452,7 @@
 
 
   /* =====================================================
-     BOOTSTRAP RESILIENTE DO AMP
+     BOOTSTRAP AMP
   ===================================================== */
 
   let bootstrapTimer =
@@ -1400,24 +1461,32 @@
   let bootstrapAttempts =
     0;
 
+  let recoveryAttempts =
+    0;
+
+
   const BOOTSTRAP_INTERVAL =
     150;
 
   const BOOTSTRAP_MAX_ATTEMPTS =
-    50;
+    60;
+
+  const RECOVERY_AFTER_ATTEMPTS =
+    5;
+
+  const MAX_RECOVERY_ATTEMPTS =
+    2;
 
 
   const stopBootstrap = () => {
-    if (!bootstrapTimer) {
-      return;
+    if (bootstrapTimer) {
+      window.clearInterval(
+        bootstrapTimer
+      );
+
+      bootstrapTimer =
+        null;
     }
-
-    window.clearInterval(
-      bootstrapTimer
-    );
-
-    bootstrapTimer =
-      null;
   };
 
 
@@ -1428,44 +1497,26 @@
       bootstrapAttempts =
         0;
 
+      recoveryAttempts =
+        0;
 
-      /*
-        Faz uma tentativa imediatamente.
-      */
       syncUI();
 
 
-      /*
-        Depois continua tentando enquanto
-        o AMP termina de injetar/renderizar
-        os componentes.
-
-        50 × 150ms = até 7,5 segundos.
-      */
       bootstrapTimer =
         window.setInterval(
-          () => {
-            bootstrapAttempts += 1;
+          async () => {
 
+            bootstrapAttempts += 1;
 
             syncUI();
 
 
-            const volumeWidget =
+            const volume =
               getBestVolumeWidget();
 
 
-            const selectedIndex =
-              getSelectedVolumeTierIndex(
-                volumeWidget
-              );
-
-
-            /*
-              Se ainda não existe tier selecionada,
-              o AMP ainda não terminou.
-            */
-            if (selectedIndex < 0) {
+            if (!volume) {
               if (
                 bootstrapAttempts >=
                 BOOTSTRAP_MAX_ATTEMPTS
@@ -1477,9 +1528,20 @@
             }
 
 
+            const selectedIndex =
+              getSelectedVolumeTierIndex(
+                volume
+              );
+
+
+            if (selectedIndex < 0) {
+              return;
+            }
+
+
             /*
-              Se for 1 unidade, já conseguimos
-              determinar o estado da página.
+              1 unidade:
+              não existe Mix para aguardar.
             */
             if (selectedIndex === 0) {
               stopBootstrap();
@@ -1488,27 +1550,52 @@
 
 
             /*
-              Se for Kit com 2, só encerramos
-              quando o Mix & Match também existir.
-
-              Assim evitamos:
-              Kit selecionado + Mix ainda não carregado.
+              Kit com 2 + Mix carregado:
+              tudo certo.
             */
-            const mixWidget =
+            const mix =
               getBestMixWidget();
 
 
-            if (mixWidget) {
+            if (mix) {
+              setGlobalMode(true);
+
               decorateMixAndMatch(
-                mixWidget
+                mix
               );
 
               handleMixAndMatchSteps(
-                mixWidget
+                mix
               );
 
               stopBootstrap();
               return;
+            }
+
+
+            /*
+              Kit está selecionado mas o AMP
+              ainda não criou o Mix.
+
+              Depois de 750ms já tratamos como
+              possível travamento do AMP.
+            */
+            if (
+              bootstrapAttempts >=
+                RECOVERY_AFTER_ATTEMPTS &&
+              recoveryAttempts <
+                MAX_RECOVERY_ATTEMPTS &&
+              !ampMixRecoveryRunning
+            ) {
+              recoveryAttempts += 1;
+
+              await forceAmpMixInitialization();
+
+
+              if (getBestMixWidget()) {
+                stopBootstrap();
+                return;
+              }
             }
 
 
@@ -1526,7 +1613,7 @@
 
 
   /* =====================================================
-     VOLUME DISCOUNT — TROCA DE OPÇÃO
+     TROCA VOLUME
   ===================================================== */
 
   document.addEventListener(
@@ -1541,6 +1628,7 @@
         return;
       }
 
+
       const widget =
         tier.closest(
           SELECTORS.volumeWidget
@@ -1549,6 +1637,7 @@
       if (!widget) {
         return;
       }
+
 
       const tiers =
         Array.from(
@@ -1562,9 +1651,18 @@
           tier
         );
 
-      if (
-        clickedIndex < 0
-      ) {
+      if (clickedIndex < 0) {
+        return;
+      }
+
+
+      /*
+        Durante o recovery ignoramos
+        o estado temporário do clique em
+        "1 unidade".
+      */
+      if (ampMixRecoveryRunning) {
+        setGlobalMode(true);
         return;
       }
 
@@ -1574,9 +1672,8 @@
       );
 
 
-      if (
-        clickedIndex === 1
-      ) {
+      if (clickedIndex === 1) {
+
         mixSelections.clear();
 
         mixState.firstOpened =
@@ -1590,11 +1687,6 @@
       }
 
 
-      /*
-        Reativa o bootstrap porque o AMP
-        pode reconstruir o Mix ao trocar
-        de opção.
-      */
       window.setTimeout(
         bootstrapIntegratedFlow,
         80
@@ -1610,9 +1702,7 @@
 
   const pageObserver =
     new MutationObserver(
-      () => {
-        scheduleSync();
-      }
+      scheduleSync
     );
 
 
@@ -1620,9 +1710,7 @@
     document.documentElement,
     {
       subtree: true,
-
       childList: true,
-
       attributes: true,
 
       attributeFilter: [
@@ -1635,14 +1723,9 @@
 
 
   /* =====================================================
-     PAGE SHOW
+     INICIALIZAÇÃO
   ===================================================== */
 
-  /*
-    pageshow também cobre situações em que
-    o navegador restaura a página pelo cache
-    de navegação (bfcache).
-  */
   window.addEventListener(
     "pageshow",
     () => {
@@ -1668,8 +1751,7 @@
 
 
   /* =====================================================
-     VOLUME DISCOUNT
-     COMPRA DE 1 UNIDADE
+     VOLUME — 1 UNIDADE
   ===================================================== */
 
   document.addEventListener(
@@ -1718,8 +1800,7 @@
 
 
       if (
-        button.dataset
-          .tnAmpAdding ===
+        button.dataset.tnAmpAdding ===
         "true"
       ) {
         return;
@@ -1734,8 +1815,7 @@
       }
 
 
-      button.dataset
-        .tnAmpAdding =
+      button.dataset.tnAmpAdding =
         "true";
 
       button.setAttribute(
@@ -1781,9 +1861,7 @@
         );
 
 
-        if (
-          discountPercent > 0
-        ) {
+        if (discountPercent > 0) {
 
           formData.set(
             "properties[_tn_amp_campaign]",
@@ -1834,9 +1912,7 @@
             cartDrawer
           );
 
-        if (
-          sectionIds.length
-        ) {
+        if (sectionIds.length) {
           formData.set(
             "sections",
             sectionIds.join(",")
@@ -1927,8 +2003,7 @@
 
 
   /* =====================================================
-     CLASSIC BUNDLE
-     KIT COM 6 SACHÊS
+     CLASSIC BUNDLE — SACHÊS
   ===================================================== */
 
   const addClassicBundleToCart =
@@ -2029,16 +2104,14 @@
 
 
       if (
-        button.dataset
-          .tnBundleAdding ===
+        button.dataset.tnBundleAdding ===
         "true"
       ) {
         return;
       }
 
 
-      button.dataset
-        .tnBundleAdding =
+      button.dataset.tnBundleAdding =
         "true";
 
       button.disabled =
