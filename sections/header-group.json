@@ -143,7 +143,7 @@
         "paragraph_cWH86n": {
           "type": "paragraph",
           "settings": {
-            "paragraph": "<p>Deixe seu e-mail e ganhe <strong>10% OFF</strong> na sua primeira compra.</p>",
+            "paragraph": "<p>Deixe seu e-mail e ganhe <strong>5% OFF</strong> na sua primeira compra.</p>",
             "text_disable_on_mobile": false
           }
         },
@@ -160,7 +160,7 @@
         "paragraph_cWH86n",
         "email_form_7gkLN3"
       ],
-      "name": "Popup - 10%",
+      "name": "Popup - 5%",
       "settings": {
         "max_width": 450,
         "delay": 0,
