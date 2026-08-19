@@ -89,7 +89,6 @@
         },
         "variant_picker_WQEbez": {
           "type": "variant_picker",
-          "disabled": true,
           "settings": {
             "picker_type": "button",
             "hide_unavailable_options": false,
