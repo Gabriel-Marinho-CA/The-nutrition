@@ -1,0 +1,190 @@
+{% comment %}
+  Monte seu kit.
+
+  Os itens selecionáveis vêm do metafield de lista de produtos
+  `custom.produtos_kit` do produto da página. Cada variante disponível dos
+  produtos referenciados vira uma linha com seu próprio contador de quantidade
+  (é assim que a pessoa varia os sabores).
+
+  O botão de adicionar ao carrinho só é liberado quando o total selecionado
+  atinge o mínimo do bloco (padrão: 4 itens). Ao enviar, todas as linhas vão
+  juntas em uma única chamada `/cart/add.js` (`items: [...]`).
+
+  Aceita:
+    - block: o bloco `kit_builder` da seção (settings de mínimo, textos, cores)
+    - product: o produto dono do metafield
+{% endcomment %}
+
+{{ 'component-kit-builder.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kit-builder.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign kit_products = product.metafields.custom.produtos_kit.value
+  assign min_items = block.settings.min_items | at_least: 1
+  assign max_items = block.settings.max_items | at_least: 0
+  if max_items > 0 and max_items < min_items
+    assign max_items = min_items
+  endif
+  assign min_flavors = block.settings.min_flavors | at_least: 0
+-%}
+
+{%- if kit_products == blank -%}
+  {%- if request.design_mode -%}
+    <div class="kit-builder kit-builder--empty" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+      Preencha o metafield de lista de produtos <code>custom.produtos_kit</code> deste produto
+      para exibir o "Monte seu kit".
+    </div>
+  {%- endif -%}
+{%- else -%}
+  <kit-builder
+    class="kit-builder{% if settings.animations %} scroll-trigger animate--slide-in{% endif %}{% if settings.disabled_animations_on_mobile %} disabled-on-mobile{% endif %}"
+    data-block-id="{{ block.id }}"
+    data-min="{{ min_items }}"
+    data-max="{{ max_items }}"
+    data-min-flavors="{{ min_flavors }}"
+    data-currency="{{ cart.currency.iso_code }}"
+    data-kit-name="{{ product.title | escape }}"
+    data-text-incomplete="{{ block.settings.status_incomplete | escape }}"
+    data-text-complete="{{ block.settings.status_complete | escape }}"
+    data-text-max="{{ block.settings.status_max | escape }}"
+    data-text-error="{{ block.settings.error_message | escape }}"
+    style="
+      {% if block.settings.background_color != blank %}--kit-background: {{ block.settings.background_color }};{% endif %}
+      {% if block.settings.text_color != blank %}--kit-text: {{ block.settings.text_color }};{% endif %}
+      {% if block.settings.accent_color != blank %}--kit-accent: {{ block.settings.accent_color }};{% endif %}
+    "
+    {{ block.shopify_attributes }}
+  >
+    <div class="kit-builder__header">
+      {%- if block.settings.title != blank -%}
+        <p class="kit-builder__title">{{ block.settings.title }}</p>
+      {%- endif -%}
+      {%- if block.settings.subtitle != blank -%}
+        <p class="kit-builder__subtitle">{{ block.settings.subtitle }}</p>
+      {%- endif -%}
+
+      <div class="kit-builder__progress" aria-hidden="true">
+        <span class="kit-builder__progress-bar" data-kit-progress></span>
+      </div>
+
+      <p class="kit-builder__status" data-kit-status role="status"></p>
+    </div>
+
+    <ul class="kit-builder__items" role="list">
+      {%- for kit_product in kit_products -%}
+        {%- for variant in kit_product.variants -%}
+          {%- liquid
+            assign item_label = kit_product.title
+            unless variant.title contains 'Default Title'
+              assign item_label = item_label | append: ' - ' | append: variant.title
+            endunless
+            assign item_image = variant.image | default: kit_product.featured_image
+          -%}
+          <li
+            class="kit-builder__item{% unless variant.available %} kit-builder__item--sold-out{% endunless %}"
+            data-kit-item
+            data-variant-id="{{ variant.id }}"
+            data-price="{{ variant.price }}"
+            data-available="{% if variant.available %}true{% else %}false{% endif %}"
+          >
+            <div class="kit-builder__item-media">
+              {%- if item_image -%}
+                {{
+                  item_image
+                  | image_url: width: 200
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '80, 120, 160, 200',
+                    sizes: '60px',
+                    alt: item_label,
+                    class: 'kit-builder__item-image'
+                }}
+              {%- endif -%}
+            </div>
+
+            <div class="kit-builder__item-info">
+              <p class="kit-builder__item-title">{{ item_label }}</p>
+              <p class="kit-builder__item-price">
+                {%- if variant.available -%}
+                  <span class="kit-builder__item-money">{{ variant.price | money }}</span>
+                  {%- if variant.compare_at_price > variant.price -%}
+                    <s class="kit-builder__item-compare">{{ variant.compare_at_price | money }}</s>
+                  {%- endif -%}
+                {%- else -%}
+                  <span class="kit-builder__item-unavailable">
+                    {{ 'products.product.sold_out' | t }}
+                  </span>
+                {%- endif -%}
+              </p>
+            </div>
+
+            <div class="kit-builder__qty">
+              <button
+                type="button"
+                class="kit-builder__qty-btn"
+                data-kit-decrease
+                aria-label="Remover uma unidade de {{ item_label | escape }}"
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                {% render 'icons', id: 'minus' %}
+              </button>
+              <input
+                class="kit-builder__qty-input"
+                data-kit-qty
+                type="number"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                min="0"
+                step="1"
+                value="0"
+                aria-label="Quantidade de {{ item_label | escape }}"
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+              <button
+                type="button"
+                class="kit-builder__qty-btn"
+                data-kit-increase
+                aria-label="Adicionar uma unidade de {{ item_label | escape }}"
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                {% render 'icons', id: 'plus' %}
+              </button>
+            </div>
+          </li>
+        {%- endfor -%}
+      {%- endfor -%}
+    </ul>
+
+    <div class="kit-builder__footer">
+      {%- if block.settings.show_total -%}
+        <div class="kit-builder__summary">
+          <span class="kit-builder__summary-label">Total</span>
+          <span class="kit-builder__total" data-kit-total>{{ 0 | money }}</span>
+        </div>
+      {%- endif -%}
+
+      <button
+        type="button"
+        class="kit-builder__submit wt-button wt-button--primary wt-button--full-width"
+        data-kit-submit
+        disabled
+      >
+        {% if settings['enable-bag-icon'] %}
+          {% render 'icons', id: 'bag' %}
+        {% endif %}
+        <span data-kit-submit-label>
+          {{- block.settings.button_label | default: 'Adicionar kit ao carrinho' -}}
+        </span>
+        {% render 'button-loading-indicator' %}
+      </button>
+
+      <p class="kit-builder__error" data-kit-error role="alert" hidden></p>
+    </div>
+  </kit-builder>
+{%- endif -%}

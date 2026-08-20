@@ -1,0 +1,254 @@
+{% comment %}
+  Bundle com desconto progressivo (bloco `bundle_deal` da seção main-product).
+
+  Cada opção é um "leve N" com sua própria porcentagem de desconto (configurável
+  no bloco). Quando a opção escolhida leva mais de 1 unidade, o componente abre a
+  lista de produtos do metafield `custom.itens_do_bundle` do produto da página
+  para a pessoa montar os sabores — no máximo N itens. O que não for escolhido
+  entra como o produto/variante atual.
+
+  Aceita:
+    - block: o bloco `bundle_deal` da seção (quantidades, descontos, textos, cores)
+    - product: o produto dono do metafield
+    - section_id: id da seção (para acompanhar a troca de variante)
+{% endcomment %}
+
+{{ 'component-bundle-deal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bundle-deal.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign bundle_products = product.metafields.custom.itens_do_bundle.value
+  assign current_variant = product.selected_or_first_available_variant
+  assign base_price = current_variant.price | default: product.price
+  assign section_id = section_id | default: section.id
+-%}
+
+<bundle-deal
+  class="bundle-deal{% if settings.animations %} scroll-trigger animate--slide-in{% endif %}{% if settings.disabled_animations_on_mobile %} disabled-on-mobile{% endif %}"
+  data-block-id="{{ block.id }}"
+  data-section-id="{{ section_id }}"
+  data-base-price="{{ base_price }}"
+  data-variant-id="{{ current_variant.id }}"
+  data-currency="{{ cart.currency.iso_code }}"
+  data-product-title="{{ product.title | escape }}"
+  data-text-remaining="{{ block.settings.text_remaining | escape }}"
+  data-text-complete="{{ block.settings.text_complete | escape }}"
+  data-text-rest="{{ block.settings.text_rest | escape }}"
+  style="
+    {% if block.settings.background_color != blank %}--bundle-background: {{ block.settings.background_color }};{% endif %}
+    {% if block.settings.text_color != blank %}--bundle-text: {{ block.settings.text_color }};{% endif %}
+    {% if block.settings.accent_color != blank %}--bundle-accent: {{ block.settings.accent_color }};{% endif %}
+    {% if block.settings.highlight_color != blank %}--bundle-highlight: {{ block.settings.highlight_color }};{% endif %}
+    {% if block.settings.highlight_text_color != blank %}--bundle-highlight-text: {{ block.settings.highlight_text_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.title != blank or block.settings.subtitle != blank -%}
+    <div class="bundle-deal__header">
+      {%- if block.settings.title != blank -%}
+        <p class="bundle-deal__title">{{ block.settings.title }}</p>
+      {%- endif -%}
+      {%- if block.settings.subtitle != blank -%}
+        <p class="bundle-deal__subtitle">{{ block.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="bundle-deal__options">
+    {%- for i in (1..3) -%}
+      {%- liquid
+        assign enabled_key = 'option_' | append: i | append: '_enabled'
+        assign qty_key = 'option_' | append: i | append: '_quantity'
+        assign discount_key = 'option_' | append: i | append: '_discount'
+        assign label_key = 'option_' | append: i | append: '_label'
+        assign tag_key = 'option_' | append: i | append: '_tag'
+        assign highlight_key = 'option_' | append: i | append: '_highlight'
+        assign code_key = 'option_' | append: i | append: '_discount_code'
+        assign default_key = 'option_' | append: i | append: '_default'
+
+        assign is_enabled = block.settings[enabled_key]
+        assign quantity = block.settings[qty_key] | at_least: 1
+        assign discount = block.settings[discount_key] | default: 0
+
+        assign compare_total = base_price | times: quantity
+        assign discounted = 100 | minus: discount
+        assign option_total = compare_total | times: discounted | divided_by: 100
+
+        assign label = block.settings[label_key] | replace: '[qty]', quantity
+        assign tag = block.settings[tag_key] | replace: '[discount]', discount | replace: '[qty]', quantity
+      -%}
+
+      {%- if is_enabled -%}
+        <div
+          class="bundle-deal__option"
+          data-bundle-option
+          data-quantity="{{ quantity }}"
+          data-discount="{{ discount }}"
+          data-discount-code="{{ block.settings[code_key] | escape }}"
+          data-label="{{ label | escape }}"
+        >
+          {%- if block.settings[highlight_key] != blank -%}
+            <span class="bundle-deal__flag">{{ block.settings[highlight_key] }}</span>
+          {%- endif -%}
+
+          <label class="bundle-deal__option-head">
+            <input
+              class="bundle-deal__input visually-hidden"
+              type="radio"
+              name="bundle-deal-{{ block.id }}"
+              value="{{ i }}"
+              data-bundle-radio
+              {% if block.settings[default_key] %}
+                checked
+              {% endif %}
+            >
+            <span class="bundle-deal__radio" aria-hidden="true"></span>
+
+            <span class="bundle-deal__option-info">
+              <span class="bundle-deal__option-label">{{ label }}</span>
+              {%- if tag != blank -%}
+                <span class="bundle-deal__option-tag{% if discount > 0 %} bundle-deal__option-tag--save{% endif %}">
+                  {{- tag -}}
+                </span>
+              {%- endif -%}
+            </span>
+
+            <span class="bundle-deal__option-prices">
+              {%- if discount > 0 -%}
+                <s class="bundle-deal__compare" data-bundle-compare>{{ compare_total | money }}</s>
+              {%- endif -%}
+              <strong class="bundle-deal__total" data-bundle-total>{{ option_total | money }}</strong>
+            </span>
+          </label>
+
+          {%- if quantity > 1 and bundle_products != blank -%}
+            <div class="bundle-deal__picker" data-bundle-picker hidden>
+              <div class="bundle-deal__picker-head">
+                <p class="bundle-deal__picker-title">
+                  {{ block.settings.picker_title | default: 'Selecione os Produtos:' }}
+                </p>
+                <p class="bundle-deal__picker-status" data-bundle-status role="status"></p>
+              </div>
+
+              <ul class="bundle-deal__products" role="list">
+                {%- for bundle_product in bundle_products -%}
+                  {%- liquid
+                    assign item_variant = bundle_product.selected_or_first_available_variant
+                    assign item_image = item_variant.image | default: bundle_product.featured_image
+                    assign has_variants = false
+                    if bundle_product.variants.size > 1
+                      assign has_variants = true
+                    endif
+                  -%}
+                  <li
+                    class="bundle-deal__product{% unless bundle_product.available %} bundle-deal__product--sold-out{% endunless %}"
+                    data-bundle-item
+                    data-variant-id="{{ item_variant.id }}"
+                    data-price="{{ item_variant.price }}"
+                    data-available="{% if bundle_product.available %}true{% else %}false{% endif %}"
+                    data-selected="false"
+                  >
+                    <button
+                      type="button"
+                      class="bundle-deal__product-btn"
+                      data-bundle-select
+                      aria-pressed="false"
+                      {% unless bundle_product.available %}
+                        disabled
+                      {% endunless %}
+                    >
+                      <span class="bundle-deal__product-media">
+                        {%- if item_image -%}
+                          {{
+                            item_image
+                            | image_url: width: 240
+                            | image_tag:
+                              loading: 'lazy',
+                              widths: '80, 120, 160, 240',
+                              sizes: '90px',
+                              alt: bundle_product.title,
+                              class: 'bundle-deal__product-image'
+                          }}
+                        {%- endif -%}
+                        <span class="bundle-deal__product-count" data-bundle-count hidden>0</span>
+                      </span>
+                      <span class="bundle-deal__product-title">{{ bundle_product.title }}</span>
+                    </button>
+
+                    {%- if has_variants -%}
+                      <select
+                        class="bundle-deal__product-variants"
+                        data-bundle-variant-select
+                        aria-label="Sabor de {{ bundle_product.title | escape }}"
+                      >
+                        {%- for variant in bundle_product.variants -%}
+                          <option
+                            value="{{ variant.id }}"
+                            data-price="{{ variant.price }}"
+                            {% unless variant.available %}
+                              disabled
+                            {% endunless %}
+                            {% if variant.id == item_variant.id %}
+                              selected
+                            {% endif %}
+                          >
+                            {{ variant.title }}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                    {%- endif -%}
+
+                    <div class="bundle-deal__stepper" data-bundle-stepper hidden>
+                      <button
+                        type="button"
+                        class="bundle-deal__stepper-btn"
+                        data-bundle-decrease
+                        aria-label="Remover uma unidade de {{ bundle_product.title | escape }}"
+                      >
+                        {% render 'icons', id: 'minus' %}
+                      </button>
+                      <span class="bundle-deal__stepper-qty" data-bundle-qty>0</span>
+                      <button
+                        type="button"
+                        class="bundle-deal__stepper-btn"
+                        data-bundle-increase
+                        aria-label="Adicionar uma unidade de {{ bundle_product.title | escape }}"
+                      >
+                        {% render 'icons', id: 'plus' %}
+                      </button>
+                    </div>
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+              <p class="bundle-deal__rest" data-bundle-rest hidden></p>
+            </div>
+          {%- elsif quantity > 1 and request.design_mode -%}
+            <div class="bundle-deal__picker bundle-deal__picker--empty" data-bundle-picker hidden>
+              Preencha o metafield de lista de produtos <code>custom.itens_do_bundle</code> deste
+              produto para deixar a pessoa escolher os sabores desta opção.
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- if block.settings.show_button -%}
+    <button
+      type="button"
+      class="bundle-deal__submit wt-button wt-button--primary wt-button--full-width"
+      data-bundle-submit
+    >
+      {% if settings['enable-bag-icon'] %}
+        {% render 'icons', id: 'bag' %}
+      {% endif %}
+      <span data-bundle-submit-label>
+        {{- block.settings.button_label | default: 'Adicionar ao carrinho' -}}
+      </span>
+      {% render 'button-loading-indicator' %}
+    </button>
+  {%- endif -%}
+
+  <p class="bundle-deal__error" data-bundle-error role="alert" hidden></p>
+</bundle-deal>

@@ -3246,6 +3246,10 @@
             {%- unless block.settings.hide_widget and block.settings.discount_code == blank -%}
               {% render 'countdown-with-discount', block: block %}
             {%- endunless -%}
+          {%- when 'kit_builder' -%}
+            {% render 'kit-builder', block: block, product: product %}
+          {%- when 'bundle_deal' -%}
+            {% render 'bundle-deal', block: block, product: product, section_id: section.id %}
           {%- endcase -%}
         {%- endfor -%}
       </div>
@@ -7435,6 +7439,396 @@
           "type": "color",
           "id": "counter_item_bg",
           "label": "t:blocks.countdown_discount.settings.counter_item_bg.label"
+        }
+      ]
+    },
+    {
+      "type": "kit_builder",
+      "name": "Monte seu kit",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Os itens vêm do metafield de lista de produtos custom.produtos_kit deste produto. Cada variante disponível vira uma opção de sabor."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Monte seu kit",
+          "label": "Título"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "default": "Escolha os sabores e monte o kit do seu jeito.",
+          "label": "Subtítulo"
+        },
+        {
+          "type": "range",
+          "id": "min_items",
+          "min": 1,
+          "max": 24,
+          "step": 1,
+          "default": 4,
+          "label": "Mínimo de itens",
+          "info": "O botão de adicionar ao carrinho só é liberado a partir dessa quantidade."
+        },
+        {
+          "type": "range",
+          "id": "max_items",
+          "min": 0,
+          "max": 48,
+          "step": 1,
+          "default": 0,
+          "label": "Máximo de itens",
+          "info": "0 = sem limite."
+        },
+        {
+          "type": "range",
+          "id": "min_flavors",
+          "min": 0,
+          "max": 12,
+          "step": 1,
+          "default": 0,
+          "label": "Mínimo de sabores diferentes",
+          "info": "0 = não exige variedade."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_total",
+          "default": true,
+          "label": "Mostrar total do kit"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Adicionar kit ao carrinho",
+          "label": "Texto do botão"
+        },
+        {
+          "type": "header",
+          "content": "Mensagens",
+          "info": "Use [count] para a quantidade que falta, [total] para a selecionada, [min] e [max] para os limites."
+        },
+        {
+          "type": "text",
+          "id": "status_incomplete",
+          "default": "Selecione mais [count] item(ns) para liberar o kit",
+          "label": "Kit incompleto"
+        },
+        {
+          "type": "text",
+          "id": "status_complete",
+          "default": "Kit liberado! Adicione ao carrinho.",
+          "label": "Kit completo"
+        },
+        {
+          "type": "text",
+          "id": "status_max",
+          "default": "Máximo de [max] itens atingido.",
+          "label": "Limite atingido"
+        },
+        {
+          "type": "text",
+          "id": "error_message",
+          "default": "Monte um kit com pelo menos [min] itens.",
+          "label": "Erro ao enviar"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.global.colors"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "t:sections.settings.settings.background-color.label"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "t:sections.settings.settings.text-color.label"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Cor de destaque"
+        }
+      ]
+    },
+    {
+      "type": "bundle_deal",
+      "name": "Bundle com desconto progressivo",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Até 3 opções de \"leve N\". Quando a opção leva mais de 1 unidade, a pessoa escolhe os sabores no metafield de lista de produtos custom.itens_do_bundle deste produto (no máximo N itens). O que ela não escolher entra como a variante atual."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Escolha seu combo",
+          "label": "Título"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "default": "Quanto mais leva, mais economiza.",
+          "label": "Subtítulo"
+        },
+        {
+          "type": "text",
+          "id": "picker_title",
+          "default": "Selecione os Produtos:",
+          "label": "Título da seleção de produtos"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_button",
+          "default": true,
+          "label": "Mostrar botão de adicionar ao carrinho"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Adicionar ao carrinho",
+          "label": "Texto do botão"
+        },
+        {
+          "type": "header",
+          "content": "Opção 1"
+        },
+        {
+          "type": "checkbox",
+          "id": "option_1_enabled",
+          "default": true,
+          "label": "Ativar opção 1"
+        },
+        {
+          "type": "checkbox",
+          "id": "option_1_default",
+          "default": true,
+          "label": "Selecionada por padrão"
+        },
+        {
+          "type": "range",
+          "id": "option_1_quantity",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 1,
+          "label": "Quantidade (leve N)"
+        },
+        {
+          "type": "range",
+          "id": "option_1_discount",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "%",
+          "default": 0,
+          "label": "Desconto"
+        },
+        {
+          "type": "text",
+          "id": "option_1_label",
+          "default": "Leve [qty]",
+          "label": "Título da opção",
+          "info": "Use [qty] para a quantidade."
+        },
+        {
+          "type": "text",
+          "id": "option_1_tag",
+          "default": "Preço normal",
+          "label": "Selo ao lado do título",
+          "info": "Use [discount] para a porcentagem e [qty] para a quantidade."
+        },
+        {
+          "type": "text",
+          "id": "option_1_highlight",
+          "label": "Etiqueta de destaque",
+          "info": "Ex.: Mais escolhido. Deixe vazio para esconder."
+        },
+        {
+          "type": "text",
+          "id": "option_1_discount_code",
+          "label": "Código de desconto",
+          "info": "Aplicado na sessão ao adicionar. Deixe vazio se usar desconto automático."
+        },
+        {
+          "type": "header",
+          "content": "Opção 2"
+        },
+        {
+          "type": "checkbox",
+          "id": "option_2_enabled",
+          "default": true,
+          "label": "Ativar opção 2"
+        },
+        {
+          "type": "checkbox",
+          "id": "option_2_default",
+          "default": false,
+          "label": "Selecionada por padrão"
+        },
+        {
+          "type": "range",
+          "id": "option_2_quantity",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 2,
+          "label": "Quantidade (leve N)"
+        },
+        {
+          "type": "range",
+          "id": "option_2_discount",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "%",
+          "default": 10,
+          "label": "Desconto"
+        },
+        {
+          "type": "text",
+          "id": "option_2_label",
+          "default": "Leve [qty]",
+          "label": "Título da opção",
+          "info": "Use [qty] para a quantidade."
+        },
+        {
+          "type": "text",
+          "id": "option_2_tag",
+          "default": "Economize [discount]%",
+          "label": "Selo ao lado do título",
+          "info": "Use [discount] para a porcentagem e [qty] para a quantidade."
+        },
+        {
+          "type": "text",
+          "id": "option_2_highlight",
+          "default": "Mais escolhido",
+          "label": "Etiqueta de destaque",
+          "info": "Ex.: Mais escolhido. Deixe vazio para esconder."
+        },
+        {
+          "type": "text",
+          "id": "option_2_discount_code",
+          "label": "Código de desconto",
+          "info": "Aplicado na sessão ao adicionar. Deixe vazio se usar desconto automático."
+        },
+        {
+          "type": "header",
+          "content": "Opção 3"
+        },
+        {
+          "type": "checkbox",
+          "id": "option_3_enabled",
+          "default": true,
+          "label": "Ativar opção 3"
+        },
+        {
+          "type": "checkbox",
+          "id": "option_3_default",
+          "default": false,
+          "label": "Selecionada por padrão"
+        },
+        {
+          "type": "range",
+          "id": "option_3_quantity",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 3,
+          "label": "Quantidade (leve N)"
+        },
+        {
+          "type": "range",
+          "id": "option_3_discount",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "%",
+          "default": 15,
+          "label": "Desconto"
+        },
+        {
+          "type": "text",
+          "id": "option_3_label",
+          "default": "Leve [qty]",
+          "label": "Título da opção",
+          "info": "Use [qty] para a quantidade."
+        },
+        {
+          "type": "text",
+          "id": "option_3_tag",
+          "default": "Economize [discount]%",
+          "label": "Selo ao lado do título",
+          "info": "Use [discount] para a porcentagem e [qty] para a quantidade."
+        },
+        {
+          "type": "text",
+          "id": "option_3_highlight",
+          "label": "Etiqueta de destaque",
+          "info": "Ex.: Melhor custo-benefício. Deixe vazio para esconder."
+        },
+        {
+          "type": "text",
+          "id": "option_3_discount_code",
+          "label": "Código de desconto",
+          "info": "Aplicado na sessão ao adicionar. Deixe vazio se usar desconto automático."
+        },
+        {
+          "type": "header",
+          "content": "Mensagens",
+          "info": "Use [count] para o que falta, [total] para o que já foi escolhido, [max] para o limite e [product] para o produto atual."
+        },
+        {
+          "type": "text",
+          "id": "text_remaining",
+          "default": "Escolha até mais [count] item(ns)",
+          "label": "Ainda faltam itens"
+        },
+        {
+          "type": "text",
+          "id": "text_complete",
+          "default": "[max] de [max] selecionados",
+          "label": "Seleção completa"
+        },
+        {
+          "type": "text",
+          "id": "text_rest",
+          "default": "[count]x [product] (opção atual) completam o combo",
+          "label": "Aviso do restante"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.global.colors"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "t:sections.settings.settings.background-color.label"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "t:sections.settings.settings.text-color.label"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Cor de destaque"
+        },
+        {
+          "type": "color",
+          "id": "highlight_color",
+          "label": "Cor da etiqueta de destaque"
+        },
+        {
+          "type": "color",
+          "id": "highlight_text_color",
+          "label": "Cor do texto da etiqueta"
         }
       ]
     }
