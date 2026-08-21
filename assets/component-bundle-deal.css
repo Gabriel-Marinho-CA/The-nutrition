@@ -50,7 +50,7 @@
 .bundle-deal__option[data-active='true'] {
   border-color: var(--bundle-accent);
   box-shadow: 0 0 0 1px var(--bundle-accent);
-  background: color-mix(in srgb, var(--bundle-accent) 6%, var(--bundle-background));
+  background: #faf5ec;
 }
 
 /* "Mais escolhido" */
@@ -60,13 +60,36 @@
   right: 1.6rem;
   transform: translateY(-50%);
   padding: 0.4rem 1rem;
-  border-radius: 999px;
+  border-radius: 2px;
   background: var(--bundle-highlight);
   color: var(--bundle-highlight-text);
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: 6px;
+    height: 6px;
+    border-style: solid;
+    border-width: 0 0 6px 6px;
+    border-color: transparent transparent var(--amp-volume-discount-bundles-ribbon-bg-dark, var(--amp-bundles-color-accent)) transparent;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 0;
+    width: 6px;
+    height: 6px;
+    border-style: solid;
+    border-width: 0 6px 6px 0;
+    border-color: transparent transparent var(--amp-volume-discount-bundles-ribbon-bg-dark, var(--amp-bundles-color-accent)) transparent;
+  }
 }
 
 .bundle-deal__option-head {
