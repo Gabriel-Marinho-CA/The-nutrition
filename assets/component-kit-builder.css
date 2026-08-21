@@ -141,39 +141,54 @@
 /* Contador -------------------------------------------------------------- */
 
 .kit-builder__qty {
+  --kit-qty-size: 3.2rem;
+
   display: flex;
   align-items: center;
-  gap: 0.2rem;
-  border: 1px solid var(--kit-border);
-  border-radius: 999px;
-  padding: 0.2rem;
+  gap: 0.4rem;
 }
 
+/* O tema aplica padding/min-width nos <button> globais — daí as "bolinhas"
+   saírem ovais. Fixamos a caixa aqui para manter o círculo. */
 .kit-builder__qty-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.8rem;
-  height: 2.8rem;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: var(--kit-qty-size);
+  height: var(--kit-qty-size);
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
   border: 0;
   border-radius: 50%;
-  background: transparent;
-  color: inherit;
+  background: #000;
+  color: #fff;
   cursor: pointer;
+  transition: opacity 0.15s ease;
 }
 
 .kit-builder__qty-btn:hover:not(:disabled) {
-  background: rgba(var(--color-foreground), 0.08);
+  background: #000;
+  opacity: 0.85;
 }
 
 .kit-builder__qty-btn:disabled {
-  opacity: 0.35;
+  background: #000;
+  color: #fff;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
+/* Os ícones do tema são formas preenchidas (fill), não traçadas. */
 .kit-builder__qty-btn svg {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: block;
+  fill: currentColor;
+  color: currentColor;
 }
 
 .kit-builder__qty-input {
