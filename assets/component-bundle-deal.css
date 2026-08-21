@@ -285,6 +285,7 @@
 }
 
 .bundle-deal__stepper {
+  display: none !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
