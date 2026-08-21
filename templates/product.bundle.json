@@ -80,9 +80,9 @@
             "text_remaining": "Escolha até mais [count] item(ns)",
             "text_complete": "[max] de [max] selecionados",
             "text_rest": "[count]x [product] (opção atual) completam o combo",
-            "background_color": "#F8F8F7",
+            "background_color": "",
             "text_color": "",
-            "accent_color": "#FAF5EC",
+            "accent_color": "",
             "highlight_color": "",
             "highlight_text_color": ""
           }
