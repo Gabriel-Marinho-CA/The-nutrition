@@ -11,37 +11,6 @@
   "type": "header",
   "name": "Header Group",
   "sections": {
-    "promo_countdown_bar_Fa3BbQ": {
-      "type": "promo-countdown-bar",
-      "disabled": true,
-      "name": "Barra promocional",
-      "settings": {
-        "start_date": "2026-08-22 00:01",
-        "end_date": "2026-08-25 23:59:59",
-        "timezone_offset": "-03:00",
-        "show_before_start": false,
-        "visibility_mode": "window",
-        "preview_state": "auto",
-        "message": "PROMOÇÃO EM TODO O SITE — TERMINA EM",
-        "message_before": "A PROMOÇÃO COMEÇA EM",
-        "label_days": "dias",
-        "label_hours": "hrs",
-        "label_minutes": "min",
-        "label_seconds": "seg",
-        "cta_text": "Ver ofertas",
-        "cta_link": "",
-        "timer_style": "boxed",
-        "sticky": false,
-        "show_close": false,
-        "scale_desktop": 100,
-        "scale_mobile": 85,
-        "background_color": "#000000",
-        "text_color": "#ffffff",
-        "timer_background_color": "",
-        "cta_background_color": "#ffffff",
-        "cta_text_color": "#000000"
-      }
-    },
     "announcement-bar": {
       "type": "announcement-bar",
       "blocks": {
@@ -205,12 +174,41 @@
         "color-body-text": "{{ settings.colors.primary }}",
         "background_color": "{{ settings.colors.background }}"
       }
+    },
+    "promo_countdown_bar_Fa3BbQ": {
+      "type": "promo-countdown-bar",
+      "name": "Barra promocional",
+      "settings": {
+        "start_date": "2026-08-23 00:01",
+        "end_date": "2026-08-25 23:59:59",
+        "show_before_start": true,
+        "visibility_mode": "window",
+        "preview_state": "auto",
+        "message": "PROMOÇÃO EM TODO O SITE — TERMINA EM",
+        "message_before": "A PROMOÇÃO COMEÇA EM",
+        "label_days": "dias",
+        "label_hours": "hrs",
+        "label_minutes": "min",
+        "label_seconds": "seg",
+        "cta_text": "Ver ofertas",
+        "cta_link": "",
+        "timer_style": "boxed",
+        "sticky": false,
+        "show_close": false,
+        "scale_desktop": 100,
+        "scale_mobile": 85,
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "timer_background_color": "",
+        "cta_background_color": "#ffffff",
+        "cta_text_color": "#000000"
+      }
     }
   },
   "order": [
-    "promo_countdown_bar_Fa3BbQ",
     "announcement-bar",
     "header",
-    "notification_popup_fWqKgz"
+    "notification_popup_fWqKgz",
+    "promo_countdown_bar_Fa3BbQ"
   ]
 }
