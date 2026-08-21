@@ -7,9 +7,16 @@ if (!customElements.get("promo-countdown-bar")) {
         this.tick = this.tick.bind(this);
       }
 
+      // "2026-08-20 00:01" -> timestamp no fuso do próprio navegador.
+      // A troca de "-" por "/" é o que faz o Safari aceitar o formato.
+      static parseDate(value) {
+        if (!value) return NaN;
+        return new Date(String(value).trim().replace(/-/g, "/")).getTime();
+      }
+
       connectedCallback() {
-        this.startTs = parseInt(this.dataset.start, 10) * 1000;
-        this.endTs = parseInt(this.dataset.end, 10) * 1000;
+        this.startTs = PromoCountdownBar.parseDate(this.dataset.start);
+        this.endTs = PromoCountdownBar.parseDate(this.dataset.end);
         this.preview = this.dataset.preview === "true";
         this.showBefore = this.dataset.showBefore === "true";
         this.mode = this.dataset.mode || "window";
@@ -19,13 +26,13 @@ if (!customElements.get("promo-countdown-bar")) {
         this.textActive = this.dataset.textActive || "";
         this.textBefore = this.dataset.textBefore || "";
 
-        // The visitor's clock can be wrong (or set to another timezone). We
-        // anchor on the server time rendered by Liquid so everybody sees the
-        // promotion open and close at the same absolute instant.
-        const serverNow = parseInt(this.dataset.serverNow, 10) * 1000;
-        this.skew = serverNow ? serverNow - Date.now() : 0;
+        if (!this.display) return;
 
-        if (!this.startTs || !this.endTs || !this.display) return;
+        if (isNaN(this.startTs) || isNaN(this.endTs) || this.endTs <= this.startTs) {
+          this.reportBadDates();
+          return;
+        }
+
         if (this.dismissed()) return;
 
         this.setupDismiss();
@@ -38,7 +45,17 @@ if (!customElements.get("promo-countdown-bar")) {
       }
 
       now() {
-        return Date.now() + this.skew;
+        return Date.now();
+      }
+
+      // Só aparece no editor de tema, onde o Liquid rendeu o container.
+      reportBadDates() {
+        const box = document.querySelector(
+          '[data-promo-bar-error="' + this.dataset.sectionId + '"]',
+        );
+        if (!box) return;
+        box.textContent =
+          "Barra promocional: datas inválidas. Use AAAA-MM-DD HH:MM e garanta que o fim seja depois do início.";
       }
 
       dismissKey() {

@@ -8,143 +8,114 @@
 
 {{ 'promo-countdown-bar.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%}
+  As datas vão cruas para o HTML e quem interpreta é o new Date() do navegador.
+  Tentar converter para timestamp aqui no Liquid derrubava a seção inteira
+  quando o filtro date não engolia o formato.
+{%- endcomment -%}
+
 {%- liquid
-  assign tz = section.settings.timezone_offset | default: '-03:00'
-  assign start_ts = section.settings.start_date | append: ' ' | append: tz | date: '%s' | plus: 0
-  assign end_ts = section.settings.end_date | append: ' ' | append: tz | date: '%s' | plus: 0
-  assign server_now = 'now' | date: '%s' | plus: 0
-
-  assign dates_valid = true
-  if start_ts == 0 or end_ts == 0 or end_ts <= start_ts
-    assign dates_valid = false
-  endif
-
-  comment
-    Depois do fim a seção não renderiza nada — nem HTML, nem JS. Antes disso o
-    markup vai para a página marcado como hidden e o JS decide a exibição, o
-    que mantém a virada correta mesmo em página servida de cache.
-  endcomment
-  assign should_render = false
-  if dates_valid and server_now < end_ts
-    assign should_render = true
-  endif
-
-  comment
-    O modo "sempre visível" ignora a janela, então precisa renderizar mesmo
-    depois do fim.
-  endcomment
-  if dates_valid and section.settings.visibility_mode == 'always'
-    assign should_render = true
-  endif
+  assign bg = section.settings.background_color | default: '#000000'
+  assign text_color = section.settings.text_color | default: '#ffffff'
+  assign unit_bg = section.settings.timer_background_color
+  assign cta_bg = section.settings.cta_background_color | default: '#ffffff'
+  assign cta_text = section.settings.cta_text_color | default: '#000000'
 -%}
 
-{%- if request.design_mode and dates_valid == false -%}
-  <div class="wt-promo-bar__error">
-    Barra promocional: datas inválidas. Use o formato AAAA-MM-DD HH:MM e garanta
-    que o fim seja depois do início.
-  </div>
-{%- endif -%}
-
-{%- if should_render or request.design_mode -%}
-  {%- if dates_valid -%}
-    {%- liquid
-      assign bg = section.settings.background_color | default: '#000000'
-      assign text_color = section.settings.text_color | default: '#ffffff'
-      assign unit_bg = section.settings.timer_background_color
-      assign cta_bg = section.settings.cta_background_color | default: '#ffffff'
-      assign cta_text = section.settings.cta_text_color | default: '#000000'
-    -%}
-
-    {%- comment -%}
-      data-state controla o display: none (antes) -> block (durante) -> none
-      (depois). Começa em "init" para que o CSS mantenha display:none até o JS
-      decidir a fase, sem piscar a barra na tela.
-    {%- endcomment -%}
-    <promo-countdown-bar
-      class="wt-promo-bar__wrapper"
-      data-state="init"
-      data-section-id="{{ section.id }}"
-      data-start="{{ start_ts }}"
-      data-end="{{ end_ts }}"
-      data-server-now="{{ server_now }}"
-      data-preview="{% if request.design_mode %}true{% else %}false{% endif %}"
-      data-mode="{{ section.settings.visibility_mode }}"
-      data-force-state="{% if request.design_mode %}{{ section.settings.preview_state }}{% else %}auto{% endif %}"
-      data-show-before="{{ section.settings.show_before_start }}"
-      data-text-active="{{ section.settings.message | escape }}"
-      data-text-before="{{ section.settings.message_before | escape }}"
-      data-label-days="{{ section.settings.label_days | escape }}"
-      data-label-hours="{{ section.settings.label_hours | escape }}"
-      data-label-minutes="{{ section.settings.label_minutes | escape }}"
-      data-label-seconds="{{ section.settings.label_seconds | escape }}"
-    >
-      <div
-        class="wt-promo-bar"
-        data-sticky="{{ section.settings.sticky }}"
-        data-timer-style="{{ section.settings.timer_style }}"
-        role="region"
-        aria-label="{{ section.settings.message | escape }}"
-        style="
-          --wt-promo-bar-bg: {{ bg }};
-          --wt-promo-bar-text: {{ text_color }};
-          --wt-promo-bar-cta-bg: {{ cta_bg }};
-          --wt-promo-bar-cta-text: {{ cta_text }};
-          --wt-promo-bar-scale: {{ section.settings.scale_desktop | divided_by: 100.0 }};
-          --wt-promo-bar-scale-mobile: {{ section.settings.scale_mobile | divided_by: 100.0 }};
-          {%- if unit_bg != blank and unit_bg != 'transparent' -%}
-            --wt-promo-bar-unit-bg: {{ unit_bg }};
-          {%- endif -%}
-        "
-      >
-        <div class="wt-promo-bar__inner">
-          <span class="wt-promo-bar__message">{{ section.settings.message }}</span>
-
-          {%- comment -%} Preenchido pelo componente a cada segundo. {%- endcomment -%}
-          <span class="wt-promo-bar__timer" role="timer" aria-live="off"></span>
-
-          {%- if section.settings.cta_text != blank and section.settings.cta_link != blank -%}
-            <a class="wt-promo-bar__cta" href="{{ section.settings.cta_link }}">
-              {{- section.settings.cta_text -}}
-            </a>
-          {%- endif -%}
-        </div>
-
-        {%- if section.settings.show_close -%}
-          <button
-            type="button"
-            class="wt-promo-bar__close"
-            aria-label="{{ 'accessibility.close' | t }}"
-          >
-            {%- render 'icon-close' -%}
-          </button>
-        {%- endif -%}
-      </div>
-    </promo-countdown-bar>
-
-    {%- comment -%}
-      Nas fases ocultas o editor mostraria uma seção vazia, que parece defeito.
-      Este aviso existe só dentro do editor e nunca vai para a loja.
-    {%- endcomment -%}
-    {%- if request.design_mode and section.settings.visibility_mode != 'always' -%}
-      {%- liquid
-        assign hidden_phase = false
-        if section.settings.preview_state == 'ended'
-          assign hidden_phase = true
-        endif
-        if section.settings.preview_state == 'before' and section.settings.show_before_start == false
-          assign hidden_phase = true
-        endif
-      -%}
-      {%- if hidden_phase -%}
-        <div class="wt-promo-bar__note">
-          Nesta fase a barra fica oculta (display: none) — na loja não aparece nada aqui.
-        </div>
+{%- comment -%}
+  data-state controla o display: none (antes) -> block (durante) -> none
+  (depois). Começa em "init" para que o CSS mantenha display:none até o JS
+  decidir a fase, sem piscar a barra na tela.
+{%- endcomment -%}
+<promo-countdown-bar
+  class="wt-promo-bar__wrapper"
+  data-state="init"
+  data-section-id="{{ section.id }}"
+  data-start="{{ section.settings.start_date | escape }}"
+  data-end="{{ section.settings.end_date | escape }}"
+  data-preview="{% if request.design_mode %}true{% else %}false{% endif %}"
+  data-mode="{{ section.settings.visibility_mode }}"
+  data-force-state="{% if request.design_mode %}{{ section.settings.preview_state }}{% else %}auto{% endif %}"
+  data-show-before="{{ section.settings.show_before_start }}"
+  data-text-active="{{ section.settings.message | escape }}"
+  data-text-before="{{ section.settings.message_before | escape }}"
+  data-label-days="{{ section.settings.label_days | escape }}"
+  data-label-hours="{{ section.settings.label_hours | escape }}"
+  data-label-minutes="{{ section.settings.label_minutes | escape }}"
+  data-label-seconds="{{ section.settings.label_seconds | escape }}"
+>
+  <div
+    class="wt-promo-bar"
+    data-sticky="{{ section.settings.sticky }}"
+    data-timer-style="{{ section.settings.timer_style }}"
+    role="region"
+    aria-label="{{ section.settings.message | escape }}"
+    style="
+      --wt-promo-bar-bg: {{ bg }};
+      --wt-promo-bar-text: {{ text_color }};
+      --wt-promo-bar-cta-bg: {{ cta_bg }};
+      --wt-promo-bar-cta-text: {{ cta_text }};
+      --wt-promo-bar-scale: {{ section.settings.scale_desktop | divided_by: 100.0 }};
+      --wt-promo-bar-scale-mobile: {{ section.settings.scale_mobile | divided_by: 100.0 }};
+      {%- if unit_bg != blank and unit_bg != 'transparent' -%}
+        --wt-promo-bar-unit-bg: {{ unit_bg }};
       {%- endif -%}
-    {%- endif -%}
+    "
+  >
+    <div class="wt-promo-bar__inner">
+      <span class="wt-promo-bar__message">{{ section.settings.message }}</span>
 
-    <script src="{{ 'promo-countdown-bar.js' | asset_url }}" defer="defer"></script>
+      {%- comment -%} Preenchido pelo componente a cada segundo. {%- endcomment -%}
+      <span class="wt-promo-bar__timer" role="timer" aria-live="off"></span>
+
+      {%- if section.settings.cta_text != blank and section.settings.cta_link != blank -%}
+        <a class="wt-promo-bar__cta" href="{{ section.settings.cta_link }}">
+          {{- section.settings.cta_text -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_close -%}
+      <button
+        type="button"
+        class="wt-promo-bar__close"
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        {%- render 'icon-close' -%}
+      </button>
+    {%- endif -%}
+  </div>
+</promo-countdown-bar>
+
+{%- comment -%}
+  Nas fases ocultas o editor mostraria uma seção vazia, que parece defeito.
+  Este aviso existe só dentro do editor e nunca vai para a loja.
+{%- endcomment -%}
+{%- if request.design_mode and section.settings.visibility_mode != 'always' -%}
+  {%- liquid
+    assign hidden_phase = false
+    if section.settings.preview_state == 'ended'
+      assign hidden_phase = true
+    endif
+    if section.settings.preview_state == 'before' and section.settings.show_before_start == false
+      assign hidden_phase = true
+    endif
+  -%}
+  {%- if hidden_phase -%}
+    <div class="wt-promo-bar__note">
+      Nesta fase a barra fica oculta (display: none) — na loja não aparece nada aqui.
+    </div>
   {%- endif -%}
 {%- endif -%}
+
+{%- comment -%}
+  Aviso de data inválida: o JS preenche este bloco. Fica só no editor.
+{%- endcomment -%}
+{%- if request.design_mode -%}
+  <div class="wt-promo-bar__error" data-promo-bar-error="{{ section.id }}"></div>
+{%- endif -%}
+
+<script src="{{ 'promo-countdown-bar.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {
@@ -175,13 +146,6 @@
       "info": "Formato AAAA-MM-DD HH:MM:SS. Use 23:59:59 para valer até o último segundo do dia.",
       "default": "2026-08-25 23:59:59",
       "placeholder": "AAAA-MM-DD HH:MM:SS"
-    },
-    {
-      "type": "text",
-      "id": "timezone_offset",
-      "label": "Fuso horário",
-      "info": "Horário de Brasília = -03:00. Garante que a promoção abre e fecha no mesmo instante para todo mundo, independente do relógio do visitante.",
-      "default": "-03:00"
     },
     {
       "type": "checkbox",
