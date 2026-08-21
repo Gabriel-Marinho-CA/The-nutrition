@@ -45,6 +45,25 @@
             "size_text_mobile": 100
           }
         },
+        "kit_builder_3FNVnQ": {
+          "type": "kit_builder",
+          "settings": {
+            "title": "Monte seu kit",
+            "subtitle": "Escolha os sabores e monte o kit do seu jeito.",
+            "min_items": 4,
+            "max_items": 0,
+            "min_flavors": 0,
+            "show_total": true,
+            "button_label": "Adicionar kit ao carrinho",
+            "status_incomplete": "Selecione mais [count] item(ns) para liberar o kit",
+            "status_complete": "Kit liberado! Adicione ao carrinho.",
+            "status_max": "Máximo de [max] itens atingido.",
+            "error_message": "Monte um kit com pelo menos [min] itens.",
+            "background_color": "",
+            "text_color": "",
+            "accent_color": ""
+          }
+        },
         "feature_tags_ktxUht": {
           "type": "feature_tags",
           "disabled": true,
@@ -120,6 +139,7 @@
         },
         "price": {
           "type": "price",
+          "disabled": true,
           "settings": {
             "show_tax_included": true,
             "show_shipping_policy": true,
@@ -260,6 +280,7 @@
       "block_order": [
         "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e",
         "title",
+        "kit_builder_3FNVnQ",
         "feature_tags_ktxUht",
         "separator_reBrRK",
         "text_LQ6bM9",
