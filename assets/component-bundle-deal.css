@@ -43,14 +43,14 @@
   position: relative;
   border: 1px solid var(--bundle-border);
   border-radius: var(--bundle-radius);
-  background: var(--bundle-background);
+  background: #f8f8f7;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .bundle-deal__option[data-active='true'] {
   border-color: var(--bundle-accent);
   box-shadow: 0 0 0 1px var(--bundle-accent);
-  background: color-mix(in srgb, var(--bundle-accent) 6%, var(--bundle-background));
+  background: #faf5ec;
 }
 
 /* "Mais escolhido" */
