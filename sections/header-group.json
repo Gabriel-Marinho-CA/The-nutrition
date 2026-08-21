@@ -61,7 +61,7 @@
         "show_before_start": true,
         "visibility_mode": "window",
         "preview_state": "auto",
-        "message": "PROMOÇÃO EM TODO O SITE — TERMINA EM",
+        "message": "A PROMOÇÃO ENCERRA EM",
         "message_before": "A PROMOÇÃO COMEÇA EM",
         "label_days": "dias",
         "label_hours": "hrs",
