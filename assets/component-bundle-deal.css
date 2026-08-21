@@ -144,7 +144,7 @@
 .bundle-deal__option-tag {
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
-  background: rgba(var(--color-foreground), 0.08);
+  background: #eeeeec;
   font-size: 1.15rem;
   font-weight: 600;
   line-height: 1;
