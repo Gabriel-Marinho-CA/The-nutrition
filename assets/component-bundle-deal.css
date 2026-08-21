@@ -50,7 +50,7 @@
 .bundle-deal__option[data-active='true'] {
   border-color: var(--bundle-accent);
   box-shadow: 0 0 0 1px var(--bundle-accent);
-  background: #faf5ec;
+  background: color-mix(in srgb, var(--bundle-accent) 6%, var(--bundle-background));
 }
 
 /* "Mais escolhido" */
@@ -72,7 +72,7 @@
     content: "";
     position: absolute;
     left: -6px;
-    top: 0;
+    top: 2px;
     width: 6px;
     height: 6px;
     border-style: solid;
@@ -83,7 +83,7 @@
     content: "";
     position: absolute;
     right: -6px;
-    top: 0;
+    top: 2px;
     width: 6px;
     height: 6px;
     border-style: solid;
@@ -91,6 +91,7 @@
     border-color: transparent transparent var(--amp-volume-discount-bundles-ribbon-bg-dark, var(--amp-bundles-color-accent)) transparent;
   }
 }
+
 
 .bundle-deal__option-head {
   display: flex;
