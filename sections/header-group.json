@@ -206,8 +206,8 @@
     }
   },
   "order": [
-    "promo_countdown_bar_Fa3BbQ",
     "announcement-bar",
+    "promo_countdown_bar_Fa3BbQ",
     "header",
     "notification_popup_fWqKgz"
   ]
