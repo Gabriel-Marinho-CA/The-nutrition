@@ -1,4 +1,35 @@
+/*
+  As três fases da promoção. O JS também escreve o display inline (que ganha de
+  qualquer CSS do tema); estas regras são a base antes do JS rodar e o fallback
+  caso o inline seja removido.
+
+    1. antes de começar .... display: none
+    2. durante ............. display: block
+    3. depois de acabar .... display: none
+*/
 promo-countdown-bar {
+  display: none;
+}
+
+promo-countdown-bar[data-state="before"] {
+  display: none;
+}
+
+/* Contagem de aquecimento ligada: aparece antes de começar também. */
+promo-countdown-bar[data-state="before"][data-show-before="true"] {
+  display: block;
+}
+
+promo-countdown-bar[data-state="active"] {
+  display: block;
+}
+
+promo-countdown-bar[data-state="ended"] {
+  display: none;
+}
+
+/* Modo "sempre visível" (para testar no editor). */
+promo-countdown-bar[data-mode="always"] {
   display: block;
 }
 
@@ -139,6 +170,22 @@ promo-countdown-bar[hidden] {
 
 .wt-promo-bar__wrapper {
   position: relative;
+}
+
+/* Aviso exclusivo do editor de tema. */
+.wt-promo-bar__note {
+  padding: 10px 16px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.04),
+    rgba(0, 0, 0, 0.04) 10px,
+    rgba(0, 0, 0, 0.08) 10px,
+    rgba(0, 0, 0, 0.08) 20px
+  );
+  color: var(--color-text, #333);
+  font-family: var(--font-base);
+  font-size: 1.3rem;
+  text-align: center;
 }
 
 .wt-promo-bar__error {

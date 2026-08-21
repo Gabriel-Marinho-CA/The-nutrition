@@ -28,6 +28,14 @@
   if dates_valid and server_now < end_ts
     assign should_render = true
   endif
+
+  comment
+    O modo "sempre visível" ignora a janela, então precisa renderizar mesmo
+    depois do fim.
+  endcomment
+  if dates_valid and section.settings.visibility_mode == 'always'
+    assign should_render = true
+  endif
 -%}
 
 {%- if request.design_mode and dates_valid == false -%}
@@ -47,14 +55,21 @@
       assign cta_text = section.settings.cta_text_color | default: '#000000'
     -%}
 
+    {%- comment -%}
+      data-state controla o display: none (antes) -> block (durante) -> none
+      (depois). Começa em "init" para que o CSS mantenha display:none até o JS
+      decidir a fase, sem piscar a barra na tela.
+    {%- endcomment -%}
     <promo-countdown-bar
       class="wt-promo-bar__wrapper"
-      hidden
+      data-state="init"
       data-section-id="{{ section.id }}"
       data-start="{{ start_ts }}"
       data-end="{{ end_ts }}"
       data-server-now="{{ server_now }}"
       data-preview="{% if request.design_mode %}true{% else %}false{% endif %}"
+      data-mode="{{ section.settings.visibility_mode }}"
+      data-force-state="{% if request.design_mode %}{{ section.settings.preview_state }}{% else %}auto{% endif %}"
       data-show-before="{{ section.settings.show_before_start }}"
       data-text-active="{{ section.settings.message | escape }}"
       data-text-before="{{ section.settings.message_before | escape }}"
@@ -106,6 +121,27 @@
       </div>
     </promo-countdown-bar>
 
+    {%- comment -%}
+      Nas fases ocultas o editor mostraria uma seção vazia, que parece defeito.
+      Este aviso existe só dentro do editor e nunca vai para a loja.
+    {%- endcomment -%}
+    {%- if request.design_mode and section.settings.visibility_mode != 'always' -%}
+      {%- liquid
+        assign hidden_phase = false
+        if section.settings.preview_state == 'ended'
+          assign hidden_phase = true
+        endif
+        if section.settings.preview_state == 'before' and section.settings.show_before_start == false
+          assign hidden_phase = true
+        endif
+      -%}
+      {%- if hidden_phase -%}
+        <div class="wt-promo-bar__note">
+          Nesta fase a barra fica oculta (display: none) — na loja não aparece nada aqui.
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
     <script src="{{ 'promo-countdown-bar.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 {%- endif -%}
@@ -153,6 +189,34 @@
       "label": "Mostrar contagem antes de começar",
       "info": "Liga a barra de aquecimento (\"começa em...\") antes do início.",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "Exibição"
+    },
+    {
+      "type": "select",
+      "id": "visibility_mode",
+      "label": "Quando exibir",
+      "info": "No modo automático a barra fica oculta (display: none) antes do início, visível (display: block) durante a promoção e some de novo (display: none) quando acabar.",
+      "options": [
+        { "value": "window", "label": "Somente durante a promoção (automático)" },
+        { "value": "always", "label": "Sempre visível (ignora as datas)" }
+      ],
+      "default": "window"
+    },
+    {
+      "type": "select",
+      "id": "preview_state",
+      "label": "Pré-visualizar fase",
+      "info": "Só funciona aqui dentro do editor de tema — a loja publicada sempre usa a fase real. Use para conferir como cada momento vai ficar.",
+      "options": [
+        { "value": "auto", "label": "Fase real (pela data de hoje)" },
+        { "value": "before", "label": "Antes de começar" },
+        { "value": "active", "label": "Durante a promoção" },
+        { "value": "ended", "label": "Depois de acabar" }
+      ],
+      "default": "auto"
     },
     {
       "type": "header",

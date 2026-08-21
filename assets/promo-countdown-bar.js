@@ -12,6 +12,8 @@ if (!customElements.get("promo-countdown-bar")) {
         this.endTs = parseInt(this.dataset.end, 10) * 1000;
         this.preview = this.dataset.preview === "true";
         this.showBefore = this.dataset.showBefore === "true";
+        this.mode = this.dataset.mode || "window";
+        this.forceState = this.dataset.forceState || "auto";
         this.display = this.querySelector(".wt-promo-bar__timer");
         this.message = this.querySelector(".wt-promo-bar__message");
         this.textActive = this.dataset.textActive || "";
@@ -66,49 +68,65 @@ if (!customElements.get("promo-countdown-bar")) {
         });
       }
 
+      // Visibility is driven by an explicit inline display, so it wins over any
+      // theme CSS and is readable in devtools. The stylesheet starts the element
+      // at display:none so nothing flashes before this script runs.
       show() {
-        if (this.hasAttribute("hidden")) this.removeAttribute("hidden");
+        this.style.display = "block";
       }
 
       hide() {
-        if (!this.hasAttribute("hidden")) this.setAttribute("hidden", "");
+        this.style.display = "none";
+      }
+
+      // Which of the three phases we are in: before / active / ended.
+      phaseFor(now) {
+        if (this.forceState !== "auto") return this.forceState;
+        if (now < this.startTs) return "before";
+        if (now < this.endTs) return "active";
+        return "ended";
       }
 
       tick() {
         const now = this.now();
+        const phase = this.phaseFor(now);
+        this.setPhase(phase);
 
-        if (now >= this.endTs) {
-          // Promotion is over — the bar takes itself down.
-          this.hide();
+        if (phase === "ended") {
+          // Promotion is over — display:none and stop ticking for good.
+          if (this.mode === "always") {
+            this.show();
+            this.render(0);
+          } else {
+            this.hide();
+          }
           clearInterval(this.interval);
           return;
         }
 
-        let target;
-        if (now < this.startTs) {
-          // Warm-up phase, counting down to the opening.
-          if (!this.showBefore && !this.preview) {
+        if (phase === "before") {
+          // Warm-up phase. Stay at display:none unless the merchant asked for
+          // the teaser — but keep ticking so we flip to block at the start.
+          if (!this.showBefore && this.mode !== "always") {
             this.hide();
             return;
           }
-          this.setState("before");
-          target = this.startTs;
-        } else {
-          this.setState("active");
-          target = this.endTs;
+          this.show();
+          this.render(Math.max(this.startTs - now, 0));
+          return;
         }
 
         this.show();
-        this.render(target - now);
+        this.render(Math.max(this.endTs - now, 0));
       }
 
-      setState(state) {
-        if (this.state === state) return;
-        this.state = state;
-        this.dataset.state = state;
+      setPhase(phase) {
+        if (this.phase === phase) return;
+        this.phase = phase;
+        this.dataset.state = phase;
         if (this.message) {
           this.message.textContent =
-            state === "before" ? this.textBefore : this.textActive;
+            phase === "before" ? this.textBefore : this.textActive;
         }
       }
 
