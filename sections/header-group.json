@@ -203,20 +203,12 @@
         "color-body-text": "{{ settings.colors.primary }}",
         "background_color": "{{ settings.colors.background }}"
       }
-    },
-    "custom_liquid_TwYTfj": {
-      "type": "custom-liquid",
-      "name": "t:sections.custom-liquid.presets.name",
-      "settings": {
-        "custom_liquid": "<div style=\"background:#000; color:#fff; text-align:center; font-size:12px; line-height:1.2; padding:8px 10px 10px; margin:0;\">\n  * Desconto será aplicado no checkout\n</div>"
-      }
     }
   },
   "order": [
     "announcement-bar",
     "promo_countdown_bar_Fa3BbQ",
     "header",
-    "notification_popup_fWqKgz",
-    "custom_liquid_TwYTfj"
+    "notification_popup_fWqKgz"
   ]
 }
