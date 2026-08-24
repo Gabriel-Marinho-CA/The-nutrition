@@ -58,6 +58,11 @@ if (!customElements.get('bundle-deal')) {
 
       // — estado ————————————————————————————————————————————————————————
 
+      /** Exige que a pessoa preencha todas as vagas da opção antes de comprar. */
+      get requireFull() {
+        return this.dataset.requireFull !== 'false';
+      }
+
       get checkedRadio() {
         return this.querySelector('[data-bundle-radio]:checked');
       }
@@ -94,6 +99,12 @@ if (!customElements.get('bundle-deal')) {
         return Number(select?.value || item.dataset.variantId);
       }
 
+      /** Quantas unidades ainda cabem na opção. */
+      remainingOf(option) {
+        const used = this.itemsOf(option).reduce((sum, item) => sum + this.qtyOf(item), 0);
+        return Math.max(0, this.quantityOf(option) - used);
+      }
+
       selectionOf(option) {
         return this.itemsOf(option)
           .filter((item) => item.dataset.available === 'true' && this.qtyOf(item) > 0)
@@ -123,8 +134,10 @@ if (!customElements.get('bundle-deal')) {
         } else if (event.target.closest('[data-bundle-increase]')) {
           this.setQty(item, current + 1, option);
         } else if (event.target.closest('[data-bundle-select]')) {
-          // Clique no card: marca com 1 ou desmarca de vez.
-          this.setQty(item, current > 0 ? 0 : 1, option);
+          // Clique no card soma 1 (dá para repetir o mesmo sabor até o limite).
+          // Sem espaço sobrando, o clique zera a linha e libera as vagas.
+          const room = this.remainingOf(option);
+          this.setQty(item, room > 0 ? current + 1 : 0, option);
         } else {
           return;
         }
@@ -172,12 +185,39 @@ if (!customElements.get('bundle-deal')) {
           this.updateItems(option);
         });
 
+        this.updateSubmit(selected);
         this.showError(false);
       }
 
+      /** Trava o botão enquanto faltar produto para fechar a opção escolhida. */
+      updateSubmit(option) {
+        if (!this.submitButton) return;
+
+        const locked = this.requireFull && this.isIncomplete(option);
+        this.submitButton.disabled = locked;
+        this.dataset.complete = locked ? 'false' : 'true';
+      }
+
+      /** Só cobra seleção completa de opções que realmente têm produtos para escolher. */
+      isIncomplete(option) {
+        if (!option || !this.itemsOf(option).length) return false;
+        return this.remainingOf(option) > 0;
+      }
+
+      /**
+       * Preço cheio da opção: os itens escolhidos no metacampo valem o próprio
+       * preço, e as vagas que sobraram valem a variante atual da página.
+       */
+      subtotalOf(option) {
+        const items = this.itemsOf(option);
+        if (!items.length) return this.basePrice * this.quantityOf(option);
+
+        const chosen = items.reduce((sum, item) => sum + this.priceOf(item) * this.qtyOf(item), 0);
+        return chosen + this.remainingOf(option) * this.basePrice;
+      }
+
       updatePrices(option) {
-        const quantity = this.quantityOf(option);
-        const compare = this.basePrice * quantity;
+        const compare = this.subtotalOf(option);
         const total = Math.round((compare * (100 - this.discountOf(option))) / 100);
 
         const compareEl = option.querySelector('[data-bundle-compare]');
@@ -193,7 +233,7 @@ if (!customElements.get('bundle-deal')) {
 
         const max = this.quantityOf(option);
         const total = items.reduce((sum, item) => sum + this.qtyOf(item), 0);
-        const remaining = Math.max(0, max - total);
+        const remaining = this.remainingOf(option);
 
         items.forEach((item) => {
           const qty = this.qtyOf(item);
@@ -230,10 +270,10 @@ if (!customElements.get('bundle-deal')) {
           statusEl.dataset.complete = remaining === 0 ? 'true' : 'false';
         }
 
-        // O que a pessoa não escolher continua sendo o produto da página.
+        // Sem exigir seleção completa, o que sobrar vira o produto da página.
         const restEl = option.querySelector('[data-bundle-rest]');
         if (restEl) {
-          restEl.hidden = remaining === 0;
+          restEl.hidden = remaining === 0 || this.requireFull;
           restEl.textContent = (this.dataset.textRest || '[count]x [product] (opção atual)')
             .replace('[count]', remaining)
             .replace('[product]', this.dataset.productTitle || '');
@@ -275,6 +315,16 @@ if (!customElements.get('bundle-deal')) {
         const chosen = selection.reduce((sum, line) => sum + line.quantity, 0);
         const remaining = Math.max(0, quantity - chosen);
         const label = option.dataset.label || `Leve ${quantity}`;
+
+        if (this.requireFull && this.isIncomplete(option)) {
+          this.showError(
+            (this.dataset.textError || 'Selecione os [max] produtos para continuar.')
+              .replace('[count]', remaining)
+              .replace('[total]', chosen)
+              .replace('[max]', quantity)
+          );
+          return;
+        }
 
         const items = selection.map(({ id, quantity: qty }) => ({
           id,

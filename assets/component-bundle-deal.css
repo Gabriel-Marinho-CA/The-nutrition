@@ -362,6 +362,11 @@
   margin-top: 1.4rem;
 }
 
+.bundle-deal__submit[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .bundle-deal__submit .loading-overlay__spinner {
   width: 1.8rem;
 }

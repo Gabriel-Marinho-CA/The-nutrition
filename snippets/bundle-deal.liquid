@@ -34,6 +34,8 @@
   data-text-remaining="{{ block.settings.text_remaining | escape }}"
   data-text-complete="{{ block.settings.text_complete | escape }}"
   data-text-rest="{{ block.settings.text_rest | escape }}"
+  data-text-error="{{ block.settings.text_error | escape }}"
+  data-require-full="{% if block.settings.require_full_selection %}true{% else %}false{% endif %}"
   style="
     {% if block.settings.background_color != blank %}--bundle-background: {{ block.settings.background_color }};{% endif %}
     {% if block.settings.text_color != blank %}--bundle-text: {{ block.settings.text_color }};{% endif %}
@@ -76,6 +78,17 @@
 
         assign label = block.settings[label_key] | replace: '[qty]', quantity
         assign tag = block.settings[tag_key] | replace: '[discount]', discount | replace: '[qty]', quantity
+
+        # Guarda a quantidade da opção que já nasce marcada, para o botão poder
+        # nascer bloqueado quando ela exigir escolha de produtos.
+        if is_enabled
+          if first_quantity == blank
+            assign first_quantity = quantity
+          endif
+          if block.settings[default_key]
+            assign checked_quantity = quantity
+          endif
+        endif
       -%}
 
       {%- if is_enabled -%}
@@ -234,11 +247,22 @@
     {%- endfor -%}
   </div>
 
+  {%- liquid
+    assign checked_quantity = checked_quantity | default: first_quantity | default: 1
+    assign starts_locked = false
+    if block.settings.require_full_selection and checked_quantity > 1 and bundle_products != blank
+      assign starts_locked = true
+    endif
+  -%}
+
   {%- if block.settings.show_button -%}
     <button
       type="button"
       class="bundle-deal__submit wt-button wt-button--primary wt-button--full-width"
       data-bundle-submit
+      {% if starts_locked %}
+        disabled
+      {% endif %}
     >
       {% if settings['enable-bag-icon'] %}
         {% render 'icons', id: 'bag' %}

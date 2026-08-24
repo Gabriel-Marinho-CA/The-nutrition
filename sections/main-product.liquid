@@ -7589,6 +7589,13 @@
           "label": "Mostrar botão de adicionar ao carrinho"
         },
         {
+          "type": "checkbox",
+          "id": "require_full_selection",
+          "default": true,
+          "label": "Exigir seleção completa dos produtos",
+          "info": "O botão fica bloqueado até a pessoa escolher a quantidade da opção. Desligado, as vagas que sobrarem viram a variante atual."
+        },
+        {
           "type": "text",
           "id": "button_label",
           "default": "Adicionar ao carrinho",
@@ -7799,7 +7806,14 @@
           "type": "text",
           "id": "text_rest",
           "default": "[count]x [product] (opção atual) completam o combo",
-          "label": "Aviso do restante"
+          "label": "Aviso do restante",
+          "info": "Só aparece com a seleção completa desligada."
+        },
+        {
+          "type": "text",
+          "id": "text_error",
+          "default": "Selecione os [max] produtos para continuar.",
+          "label": "Erro de seleção incompleta"
         },
         {
           "type": "header",
