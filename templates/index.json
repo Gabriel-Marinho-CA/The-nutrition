@@ -33,7 +33,7 @@
             "button_select": "link",
             "button_label": "Faça a reposição da sua suplementação!",
             "button_disable_on_mobile": false,
-            "button_link": "shopify://collections/activewear",
+            "button_link": "shopify://collections/proteinas",
             "second_button_select": "primary",
             "second_button_label": "",
             "button_disable_on_mobile_second": false,
