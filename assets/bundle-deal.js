@@ -52,7 +52,31 @@ if (!customElements.get('bundle-deal')) {
 
           this.basePrice = variant.price;
           this.variantId = variant.id;
+          this.syncMainItems(variant);
           this.update();
+        });
+      }
+
+      /**
+       * O card do produto da página não tem select próprio: ele segue o seletor
+       * de variantes da seção.
+       */
+      syncMainItems(variant) {
+        this.querySelectorAll('[data-bundle-main]').forEach((item) => {
+          item.dataset.variantId = variant.id;
+          item.dataset.price = variant.price;
+          item.dataset.available = variant.available ? 'true' : 'false';
+
+          if (!variant.available) item.dataset.qty = 0;
+          item.classList.toggle('bundle-deal__product--sold-out', !variant.available);
+          item.querySelector('[data-bundle-select]').disabled = !variant.available;
+
+          const image = item.querySelector('.bundle-deal__product-image');
+          const source = variant.featured_image || variant.featured_media?.preview_image;
+          if (image && source?.src) {
+            image.removeAttribute('srcset');
+            image.src = `${source.src}${source.src.includes('?') ? '&' : '?'}width=240`;
+          }
         });
       }
 

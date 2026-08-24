@@ -1,0 +1,100 @@
+{% comment %}
+  Um card selecionável do bundle (`snippets/bundle-deal.liquid`).
+
+  Aceita:
+    - item_product: o produto do card
+    - item_variant: a variante que o card começa usando
+    - is_main: true quando o card é o produto da própria página (ele acompanha
+      o seletor de variantes da seção em vez de ter select próprio)
+{% endcomment %}
+
+{%- liquid
+  assign item_variant = item_variant | default: item_product.selected_or_first_available_variant
+  assign item_image = item_variant.image | default: item_product.featured_image
+  assign has_variants = false
+  if is_main != true and item_product.variants.size > 1
+    assign has_variants = true
+  endif
+-%}
+
+<li
+  class="bundle-deal__product{% unless item_product.available %} bundle-deal__product--sold-out{% endunless %}{% if is_main %} bundle-deal__product--main{% endif %}"
+  data-bundle-item
+  {% if is_main %}
+    data-bundle-main
+  {% endif %}
+  data-variant-id="{{ item_variant.id }}"
+  data-price="{{ item_variant.price }}"
+  data-available="{% if item_product.available %}true{% else %}false{% endif %}"
+  data-selected="false"
+>
+  <button
+    type="button"
+    class="bundle-deal__product-btn"
+    data-bundle-select
+    aria-pressed="false"
+    {% unless item_product.available %}
+      disabled
+    {% endunless %}
+  >
+    <span class="bundle-deal__product-media">
+      {%- if item_image -%}
+        {{
+          item_image
+          | image_url: width: 240
+          | image_tag:
+            loading: 'lazy',
+            widths: '80, 120, 160, 240',
+            sizes: '90px',
+            alt: item_product.title,
+            class: 'bundle-deal__product-image'
+        }}
+      {%- endif -%}
+      <span class="bundle-deal__product-count" data-bundle-count hidden>0</span>
+    </span>
+    <span class="bundle-deal__product-title">{{ item_product.title }}</span>
+  </button>
+
+  {%- if has_variants -%}
+    <select
+      class="bundle-deal__product-variants"
+      data-bundle-variant-select
+      aria-label="Sabor de {{ item_product.title | escape }}"
+    >
+      {%- for variant in item_product.variants -%}
+        <option
+          value="{{ variant.id }}"
+          data-price="{{ variant.price }}"
+          {% unless variant.available %}
+            disabled
+          {% endunless %}
+          {% if variant.id == item_variant.id %}
+            selected
+          {% endif %}
+        >
+          {{ variant.title }}
+        </option>
+      {%- endfor -%}
+    </select>
+  {%- endif -%}
+
+  <div class="bundle-deal__stepper" data-bundle-stepper hidden>
+    <button
+      type="button"
+      class="bundle-deal__stepper-btn"
+      data-bundle-decrease
+      aria-label="Remover uma unidade de {{ item_product.title | escape }}"
+    >
+      {% render 'icons', id: 'minus' %}
+    </button>
+    <span class="bundle-deal__stepper-qty" data-bundle-qty>0</span>
+    <button
+      type="button"
+      class="bundle-deal__stepper-btn"
+      data-bundle-increase
+      aria-label="Adicionar uma unidade de {{ item_product.title | escape }}"
+    >
+      {% render 'icons', id: 'plus' %}
+    </button>
+  </div>
+</li>

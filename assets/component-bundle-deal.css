@@ -182,10 +182,11 @@
   border-top: 1px solid var(--bundle-border);
 }
 
-.bundle-deal__picker--empty {
-  font-size: 1.3rem;
+.bundle-deal__picker-empty {
+  margin: 1rem 0 0;
+  font-size: 1.2rem;
   line-height: 1.5;
-  padding-bottom: 1.4rem;
+  opacity: 0.75;
 }
 
 .bundle-deal__picker-head {

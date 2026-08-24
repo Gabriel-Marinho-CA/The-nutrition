@@ -3,9 +3,9 @@
 
   Cada opção é um "leve N" com sua própria porcentagem de desconto (configurável
   no bloco). Quando a opção escolhida leva mais de 1 unidade, o componente abre a
-  lista de produtos do metafield `custom.itens_do_bundle` do produto da página
-  para a pessoa montar os sabores — no máximo N itens. O que não for escolhido
-  entra como o produto/variante atual.
+  lista de produtos do metafield `custom.itens_do_bundle` do produto da página —
+  mais o próprio produto da página — para a pessoa montar os sabores, no máximo
+  N itens (podendo repetir o mesmo item).
 
   Aceita:
     - block: o bloco `bundle_deal` da seção (quantidades, descontos, textos, cores)
@@ -134,7 +134,7 @@
             </span>
           </label>
 
-          {%- if quantity > 1 and bundle_products != blank -%}
+          {%- if quantity > 1 -%}
             <div class="bundle-deal__picker" data-bundle-picker hidden>
               <div class="bundle-deal__picker-head">
                 <p class="bundle-deal__picker-title">
@@ -144,102 +144,28 @@
               </div>
 
               <ul class="bundle-deal__products" role="list">
+                {%- comment -%} O produto da página também entra como opção do combo. {%- endcomment -%}
+                {% render 'bundle-deal-item',
+                  item_product: product,
+                  item_variant: current_variant,
+                  is_main: true
+                %}
+
                 {%- for bundle_product in bundle_products -%}
-                  {%- liquid
-                    assign item_variant = bundle_product.selected_or_first_available_variant
-                    assign item_image = item_variant.image | default: bundle_product.featured_image
-                    assign has_variants = false
-                    if bundle_product.variants.size > 1
-                      assign has_variants = true
-                    endif
-                  -%}
-                  <li
-                    class="bundle-deal__product{% unless bundle_product.available %} bundle-deal__product--sold-out{% endunless %}"
-                    data-bundle-item
-                    data-variant-id="{{ item_variant.id }}"
-                    data-price="{{ item_variant.price }}"
-                    data-available="{% if bundle_product.available %}true{% else %}false{% endif %}"
-                    data-selected="false"
-                  >
-                    <button
-                      type="button"
-                      class="bundle-deal__product-btn"
-                      data-bundle-select
-                      aria-pressed="false"
-                      {% unless bundle_product.available %}
-                        disabled
-                      {% endunless %}
-                    >
-                      <span class="bundle-deal__product-media">
-                        {%- if item_image -%}
-                          {{
-                            item_image
-                            | image_url: width: 240
-                            | image_tag:
-                              loading: 'lazy',
-                              widths: '80, 120, 160, 240',
-                              sizes: '90px',
-                              alt: bundle_product.title,
-                              class: 'bundle-deal__product-image'
-                          }}
-                        {%- endif -%}
-                        <span class="bundle-deal__product-count" data-bundle-count hidden>0</span>
-                      </span>
-                      <span class="bundle-deal__product-title">{{ bundle_product.title }}</span>
-                    </button>
-
-                    {%- if has_variants -%}
-                      <select
-                        class="bundle-deal__product-variants"
-                        data-bundle-variant-select
-                        aria-label="Sabor de {{ bundle_product.title | escape }}"
-                      >
-                        {%- for variant in bundle_product.variants -%}
-                          <option
-                            value="{{ variant.id }}"
-                            data-price="{{ variant.price }}"
-                            {% unless variant.available %}
-                              disabled
-                            {% endunless %}
-                            {% if variant.id == item_variant.id %}
-                              selected
-                            {% endif %}
-                          >
-                            {{ variant.title }}
-                          </option>
-                        {%- endfor -%}
-                      </select>
-                    {%- endif -%}
-
-                    <div class="bundle-deal__stepper" data-bundle-stepper hidden>
-                      <button
-                        type="button"
-                        class="bundle-deal__stepper-btn"
-                        data-bundle-decrease
-                        aria-label="Remover uma unidade de {{ bundle_product.title | escape }}"
-                      >
-                        {% render 'icons', id: 'minus' %}
-                      </button>
-                      <span class="bundle-deal__stepper-qty" data-bundle-qty>0</span>
-                      <button
-                        type="button"
-                        class="bundle-deal__stepper-btn"
-                        data-bundle-increase
-                        aria-label="Adicionar uma unidade de {{ bundle_product.title | escape }}"
-                      >
-                        {% render 'icons', id: 'plus' %}
-                      </button>
-                    </div>
-                  </li>
+                  {%- unless bundle_product.id == product.id -%}
+                    {% render 'bundle-deal-item', item_product: bundle_product %}
+                  {%- endunless -%}
                 {%- endfor -%}
               </ul>
 
+              {%- if bundle_products == blank and request.design_mode -%}
+                <p class="bundle-deal__picker-empty">
+                  Preencha o metafield de lista de produtos <code>custom.itens_do_bundle</code>
+                  deste produto para oferecer outros sabores nesta opção.
+                </p>
+              {%- endif -%}
+
               <p class="bundle-deal__rest" data-bundle-rest hidden></p>
-            </div>
-          {%- elsif quantity > 1 and request.design_mode -%}
-            <div class="bundle-deal__picker bundle-deal__picker--empty" data-bundle-picker hidden>
-              Preencha o metafield de lista de produtos <code>custom.itens_do_bundle</code> deste
-              produto para deixar a pessoa escolher os sabores desta opção.
             </div>
           {%- endif -%}
         </div>
@@ -250,7 +176,7 @@
   {%- liquid
     assign checked_quantity = checked_quantity | default: first_quantity | default: 1
     assign starts_locked = false
-    if block.settings.require_full_selection and checked_quantity > 1 and bundle_products != blank
+    if block.settings.require_full_selection and checked_quantity > 1
       assign starts_locked = true
     endif
   -%}
