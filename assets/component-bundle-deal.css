@@ -267,6 +267,7 @@
   border-radius: 0.6rem;
   overflow: hidden;
   background: rgba(var(--color-foreground), 0.06);
+  margin-bottom: auto;
 }
 
 .bundle-deal__product-image {
