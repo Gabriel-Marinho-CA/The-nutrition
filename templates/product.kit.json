@@ -55,7 +55,7 @@
             "min_flavors": 0,
             "show_total": true,
             "button_label": "Adicionar kit ao carrinho",
-            "status_incomplete": "Selecione mais [count] item(ns) para liberar o kit",
+            "status_incomplete": "Selecione [count] itens para liberar o kit",
             "status_complete": "Kit liberado! Adicione ao carrinho.",
             "status_max": "Máximo de [max] itens atingido.",
             "error_message": "Monte um kit com pelo menos [min] itens.",
