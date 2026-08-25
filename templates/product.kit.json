@@ -51,7 +51,7 @@
             "title": "Monte seu kit",
             "subtitle": "Escolha os sabores e monte o kit do seu jeito.",
             "min_items": 4,
-            "max_items": 0,
+            "max_items": 4,
             "min_flavors": 0,
             "show_total": true,
             "button_label": "Adicionar kit ao carrinho",
