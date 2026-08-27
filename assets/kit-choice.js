@@ -31,7 +31,26 @@ if (!customElements.get('kit-choice')) {
         this.addEventListener('change', this.onChange.bind(this));
         this.listenToVariantChange();
 
+        this.normalizeFixed();
         this.update();
+      }
+
+      /**
+       * O item fixo entra sempre, com a quantidade da etapa — sem depender do
+       * que veio no HTML. Se ele não tiver variante, a etapa fica marcada como
+       * quebrada e o botão avisa em vez de mandar um kit incompleto.
+       */
+      normalizeFixed() {
+        this.fixedSlots().forEach((slot) => {
+          const item = slot.querySelector('[data-kit-fixed]');
+          if (!item) return;
+
+          item.dataset.qty = this.quantityOf(slot);
+
+          if (!this.variantIdOf(item)) {
+            console.warn('[kit-choice] Item fixo sem variante disponível:', slot.dataset.title || slot);
+          }
+        });
       }
 
       disconnectedCallback() {
@@ -128,10 +147,19 @@ if (!customElements.get('kit-choice')) {
         return this.slots.filter((slot) => this.isChoice(slot) && this.remainingOf(slot) > 0);
       }
 
-      soldOutFixed() {
-        return this.slots.filter(
-          (slot) => !this.isChoice(slot) && slot.querySelector('[data-kit-fixed][data-available="false"]')
-        );
+      fixedSlots() {
+        return this.slots.filter((slot) => !this.isChoice(slot));
+      }
+
+      /**
+       * Etapas fixas que não têm como ir para o carrinho: sem item, sem variante
+       * ou esgotadas. Melhor avisar do que adicionar o kit pela metade.
+       */
+      brokenFixed() {
+        return this.fixedSlots().filter((slot) => {
+          const item = slot.querySelector('[data-kit-fixed]');
+          return !item || !this.variantIdOf(item) || item.dataset.available !== 'true';
+        });
       }
 
       // — interação —————————————————————————————————————————————————————
@@ -266,7 +294,7 @@ if (!customElements.get('kit-choice')) {
         if (!this.submitButton) return;
 
         const blocked =
-          this.soldOutFixed().length > 0 || (this.requireChoice && this.incompleteSlots().length > 0);
+          this.brokenFixed().length > 0 || (this.requireChoice && this.incompleteSlots().length > 0);
 
         this.submitButton.disabled = blocked;
         this.dataset.complete = blocked ? 'false' : 'true';
@@ -299,7 +327,7 @@ if (!customElements.get('kit-choice')) {
       // — envio —————————————————————————————————————————————————————————
 
       async onSubmit() {
-        const soldOut = this.soldOutFixed()[0];
+        const soldOut = this.brokenFixed()[0];
         if (soldOut) {
           this.showError(
             (this.dataset.textSoldOut || 'O item [slot] está indisponível no momento.').replace(
@@ -373,19 +401,22 @@ if (!customElements.get('kit-choice')) {
         );
       }
 
-      /** O kit é o próprio produto da página; as escolhas viram propriedades. */
+      /**
+       * O kit é o próprio produto da página: só ele vai para o carrinho, e cada
+       * etapa (escolha ou item fixo) vira uma propriedade da linha.
+       */
       pageItems() {
         if (!this.variantId) return [];
 
         const properties = {};
 
-        this.slots.filter((slot) => this.isChoice(slot)).forEach((slot) => {
+        this.slots.forEach((slot) => {
           const chosen = this.linesOf(slot).map(({ title, quantity }) =>
             quantity > 1 ? `${quantity}x ${title}` : title
           );
           if (!chosen.length) return;
 
-          const label = slot.dataset.title || 'Escolha';
+          const label = slot.dataset.title || 'Item do kit';
           let key = label;
           let suffix = 2;
           while (key in properties) key = `${label} (${suffix++})`;

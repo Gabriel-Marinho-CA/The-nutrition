@@ -220,6 +220,13 @@
                 </span>
               </span>
             </div>
+
+            {%- if request.design_mode and fixed_variant.available != true -%}
+              <p class="kit-choice__notice">
+                O produto fixo desta etapa não tem variante disponível para venda — ele
+                não entra no carrinho e o botão fica bloqueado.
+              </p>
+            {%- endif -%}
           {%- else -%}
             <ul class="kit-choice__products" role="list">
               {%- if slot_source == 'variants' -%}
