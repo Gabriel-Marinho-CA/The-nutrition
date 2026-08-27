@@ -90,6 +90,7 @@
         },
         "product_variations_7LBAAU": {
           "type": "product_variations",
+          "disabled": true,
           "settings": {
             "option_name": "Choose Supplement",
             "picker_type": "swatch",
@@ -131,8 +132,69 @@
             "margin-bottom": 4
           }
         },
+        "kit_choice_T3XqBk": {
+          "type": "kit_choice",
+          "settings": {
+            "title": "Monte seu kit",
+            "subtitle": "Escolha os sabores e leve o kit completo.",
+            "kit_name": "",
+            "cart_mode": "components",
+            "discount": 0,
+            "discount_code": "",
+            "require_choice": true,
+            "show_total": true,
+            "total_label": "Total do kit",
+            "show_button": true,
+            "button_label": "Adicionar kit ao carrinho",
+            "slot_1_enabled": true,
+            "slot_1_type": "choice",
+            "slot_1_title": "Escolha o sabor do Whey",
+            "slot_1_quantity": 1,
+            "slot_1_product": "creatine-monohydrate",
+            "slot_1_products": [
+              "whey-isolado-e-hidrolisado-cacao-405g-the-nutrition",
+              "whey-isolado-e-hidrolisado-cacao-sache-27g-the-nutrition",
+              "whey-isolado-e-hidrolisado-strawberry-405g-the-nutrition",
+              "whey-isolado-e-hidrolisado-strawberry-sache-27g-the-nutrition",
+              "whey-isolado-e-hidrolisado-vanilla-cream-405g-the-nutrition",
+              "whey-isolado-e-hidrolisado-vanilla-cream-sache-27g-the-nutrition"
+            ],
+            "slot_1_source": "variants",
+            "slot_2_enabled": false,
+            "slot_2_type": "fixed",
+            "slot_2_title": "Creatina",
+            "slot_2_quantity": 1,
+            "slot_2_product": "",
+            "slot_2_products": [],
+            "slot_2_source": "variants",
+            "slot_3_enabled": false,
+            "slot_3_type": "choice",
+            "slot_3_title": "Escolha o sabor do Colágeno",
+            "slot_3_quantity": 1,
+            "slot_3_product": "",
+            "slot_3_products": [],
+            "slot_3_source": "variants",
+            "slot_4_enabled": false,
+            "slot_4_type": "fixed",
+            "slot_4_title": "",
+            "slot_4_quantity": 1,
+            "slot_4_product": "",
+            "slot_4_products": [],
+            "slot_4_source": "variants",
+            "text_remaining": "Escolha [count] item(ns)",
+            "text_complete": "[max] de [max] escolhido(s)",
+            "text_error": "Escolha os itens de [slot] para continuar.",
+            "text_sold_out": "O item [slot] está indisponível no momento.",
+            "fixed_badge": "Incluso",
+            "fixed_note": "já incluso no kit",
+            "background_color": "",
+            "text_color": "",
+            "accent_color": ""
+          }
+        },
         "price": {
           "type": "price",
+          "disabled": true,
           "settings": {
             "show_tax_included": true,
             "show_shipping_policy": true,
@@ -142,12 +204,14 @@
         },
         "amp_bundles_amp_volume_discount_bundles_GGDLY4": {
           "type": "shopify://apps/amp-bundles/blocks/amp-volume-discount-bundles/7161efe5-6fe7-4f63-bef9-72179702263a",
+          "disabled": true,
           "settings": {
             "product": "{{product}}"
           }
         },
         "buy_buttons": {
           "type": "buy_buttons",
+          "disabled": true,
           "settings": {
             "show_dynamic_checkout": false,
             "show_gift_card_recipient": true,
@@ -280,6 +344,7 @@
         "product_variations_7LBAAU",
         "variant_picker_WQEbez",
         "separator_xgqTJM",
+        "kit_choice_T3XqBk",
         "price",
         "amp_bundles_amp_volume_discount_bundles_GGDLY4",
         "buy_buttons",
