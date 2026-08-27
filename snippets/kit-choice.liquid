@@ -1,0 +1,302 @@
+{% comment %}
+  Kit com itens fixos + escolha de sabor (bloco `kit_choice` da seção main-product).
+
+  O kit é montado em etapas ("slots"), configuradas no bloco:
+    - Item fixo: um produto definido no bloco que entra sempre no kit (a pessoa
+      não escolhe nada, só vê o que está incluso).
+    - Escolha: a pessoa escolhe N itens de uma lista de produtos do bloco. A
+      lista pode aparecer por sabor (uma opção por variante) ou por produto
+      (cada produto com seu próprio seletor de sabor).
+
+  Exemplo — KIT PERFORMANCE (1 whey + 1 creatina): slot 1 = escolha do sabor do
+  whey, slot 2 = creatina fixa.
+
+  Ao adicionar ao carrinho o bloco pode:
+    - "Itens do kit" (padrão): manda cada item como uma linha do carrinho, com a
+      propriedade `_kit`; ou
+    - "Produto da página": manda o produto desta página e registra as escolhas
+      nas propriedades da linha (para kits que já têm preço próprio).
+
+  Aceita:
+    - block: o bloco `kit_choice` da seção
+    - product: o produto da página
+    - section_id: id da seção (para acompanhar a troca de variante)
+{% endcomment %}
+
+{{ 'component-kit-choice.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kit-choice.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign base_price = current_variant.price | default: product.price
+  assign section_id = section_id | default: section.id
+  assign cart_mode = block.settings.cart_mode | default: 'components'
+  assign discount = block.settings.discount | default: 0
+  assign kit_name = block.settings.kit_name | default: product.title
+  assign computed_total = 0
+  assign slot_count = 0
+-%}
+
+<kit-choice
+  class="kit-choice{% if settings.animations %} scroll-trigger animate--slide-in{% endif %}{% if settings.disabled_animations_on_mobile %} disabled-on-mobile{% endif %}"
+  data-block-id="{{ block.id }}"
+  data-section-id="{{ section_id }}"
+  data-base-price="{{ base_price }}"
+  data-variant-id="{{ current_variant.id }}"
+  data-currency="{{ cart.currency.iso_code }}"
+  data-kit-name="{{ kit_name | escape }}"
+  data-cart-mode="{{ cart_mode }}"
+  data-discount="{{ discount }}"
+  data-discount-code="{{ block.settings.discount_code | escape }}"
+  data-require-choice="{% if block.settings.require_choice %}true{% else %}false{% endif %}"
+  data-text-remaining="{{ block.settings.text_remaining | escape }}"
+  data-text-complete="{{ block.settings.text_complete | escape }}"
+  data-text-error="{{ block.settings.text_error | escape }}"
+  data-text-sold-out="{{ block.settings.text_sold_out | escape }}"
+  style="
+    {% if block.settings.background_color != blank %}--kit-choice-background: {{ block.settings.background_color }};{% endif %}
+    {% if block.settings.text_color != blank %}--kit-choice-text: {{ block.settings.text_color }};{% endif %}
+    {% if block.settings.accent_color != blank %}--kit-choice-accent: {{ block.settings.accent_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.title != blank or block.settings.subtitle != blank -%}
+    <div class="kit-choice__header">
+      {%- if block.settings.title != blank -%}
+        <p class="kit-choice__title">{{ block.settings.title }}</p>
+      {%- endif -%}
+      {%- if block.settings.subtitle != blank -%}
+        <p class="kit-choice__subtitle">{{ block.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="kit-choice__slots">
+    {%- for i in (1..4) -%}
+      {%- liquid
+        assign enabled_key = 'slot_' | append: i | append: '_enabled'
+        assign type_key = 'slot_' | append: i | append: '_type'
+        assign title_key = 'slot_' | append: i | append: '_title'
+        assign qty_key = 'slot_' | append: i | append: '_quantity'
+        assign product_key = 'slot_' | append: i | append: '_product'
+        assign products_key = 'slot_' | append: i | append: '_products'
+        assign source_key = 'slot_' | append: i | append: '_source'
+
+        assign is_enabled = block.settings[enabled_key]
+        assign slot_type = block.settings[type_key] | default: 'choice'
+        assign slot_quantity = block.settings[qty_key] | at_least: 1
+        assign slot_title = block.settings[title_key]
+        assign fixed_product = block.settings[product_key]
+        assign choice_products = block.settings[products_key]
+        assign slot_source = block.settings[source_key] | default: 'variants'
+
+        assign slot_ready = true
+        if slot_type == 'fixed' and fixed_product == blank
+          assign slot_ready = false
+        endif
+        if slot_type == 'choice' and choice_products == blank
+          assign slot_ready = false
+        endif
+      -%}
+
+      {%- if is_enabled and slot_ready == false and request.design_mode -%}
+        <p class="kit-choice__notice">
+          Etapa {{ i }}: escolha
+          {% if slot_type == 'fixed' %}
+            o produto fixo
+          {% else %}
+            a lista de produtos
+          {% endif %}
+          desta etapa nas configurações do bloco.
+        </p>
+      {%- endif -%}
+
+      {%- if is_enabled and slot_ready -%}
+        {%- liquid
+          assign slot_count = slot_count | plus: 1
+          assign slot_heading = slot_title
+          if slot_type == 'choice'
+            assign has_choice = true
+          endif
+
+          if slot_type == 'fixed'
+            assign fixed_variant = fixed_product.selected_or_first_available_variant
+            assign fixed_label = fixed_product.title
+            unless fixed_variant.title contains 'Default Title'
+              assign fixed_label = fixed_label | append: ' - ' | append: fixed_variant.title
+            endunless
+            if slot_heading == blank
+              assign slot_heading = fixed_label
+            endif
+            assign slot_subtotal = fixed_variant.price | times: slot_quantity
+          else
+            # Preço de referência da etapa: a primeira opção disponível da lista.
+            assign placeholder_price = 0
+            if slot_source == 'variants'
+              for candidate in choice_products
+                for candidate_variant in candidate.variants
+                  if placeholder_price == 0 and candidate_variant.available
+                    assign placeholder_price = candidate_variant.price
+                  endif
+                endfor
+              endfor
+            else
+              for candidate in choice_products
+                if placeholder_price == 0 and candidate.available
+                  assign placeholder_price = candidate.selected_or_first_available_variant.price
+                endif
+              endfor
+            endif
+            if placeholder_price == 0
+              assign placeholder_price = choice_products.first.price
+            endif
+            assign slot_subtotal = placeholder_price | times: slot_quantity
+          endif
+
+          assign computed_total = computed_total | plus: slot_subtotal
+        -%}
+
+        <div
+          class="kit-choice__slot"
+          data-kit-slot
+          data-type="{{ slot_type }}"
+          data-quantity="{{ slot_quantity }}"
+          data-title="{{ slot_heading | escape }}"
+          {%- if slot_type == 'choice' %} data-placeholder-price="{{ placeholder_price }}"{% endif -%}
+        >
+          <div class="kit-choice__slot-head">
+            <span class="kit-choice__slot-number" aria-hidden="true">{{ slot_count }}</span>
+            <p class="kit-choice__slot-title">
+              {{- slot_heading -}}
+              {%- if slot_quantity > 1 -%}
+                <span class="kit-choice__slot-qty">{{ slot_quantity }}x</span>
+              {%- endif -%}
+            </p>
+            {%- if slot_type == 'choice' -%}
+              <p class="kit-choice__slot-status" data-kit-status role="status"></p>
+            {%- else -%}
+              <span class="kit-choice__slot-tag">
+                {% render 'icons', id: 'check' %}
+                {{ block.settings.fixed_badge | default: 'Incluso' }}
+              </span>
+            {%- endif -%}
+          </div>
+
+          {%- if slot_type == 'fixed' -%}
+            <div
+              class="kit-choice__fixed{% unless fixed_variant.available %} kit-choice__fixed--sold-out{% endunless %}"
+              data-kit-item
+              data-kit-fixed
+              data-variant-id="{{ fixed_variant.id }}"
+              data-price="{{ fixed_variant.price }}"
+              data-title="{{ fixed_label | escape }}"
+              data-available="{% if fixed_variant.available %}true{% else %}false{% endif %}"
+              data-qty="{{ slot_quantity }}"
+              data-selected="true"
+            >
+              <span class="kit-choice__fixed-media">
+                {%- assign fixed_image = fixed_variant.image | default: fixed_product.featured_image -%}
+                {%- if fixed_image -%}
+                  {{
+                    fixed_image
+                    | image_url: width: 160
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '60, 90, 120, 160',
+                      sizes: '56px',
+                      alt: fixed_label,
+                      class: 'kit-choice__fixed-image'
+                  }}
+                {%- endif -%}
+              </span>
+              <span class="kit-choice__fixed-info">
+                <span class="kit-choice__fixed-title">{{ fixed_label }}</span>
+                <span class="kit-choice__fixed-note">
+                  {%- if fixed_variant.available -%}
+                    {{ slot_quantity }}x {{ block.settings.fixed_note | default: 'já incluso no kit' }}
+                  {%- else -%}
+                    {{ 'products.product.sold_out' | t }}
+                  {%- endif -%}
+                </span>
+              </span>
+            </div>
+          {%- else -%}
+            <ul class="kit-choice__products" role="list">
+              {%- if slot_source == 'variants' -%}
+                {%- assign show_product_title = false -%}
+                {%- if choice_products.size > 1 -%}
+                  {%- assign show_product_title = true -%}
+                {%- endif -%}
+                {%- for candidate in choice_products -%}
+                  {%- for candidate_variant in candidate.variants -%}
+                    {% render 'kit-choice-item',
+                      item_product: candidate,
+                      item_variant: candidate_variant,
+                      show_product_title: show_product_title
+                    %}
+                  {%- endfor -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- for candidate in choice_products -%}
+                  {% render 'kit-choice-item', item_product: candidate, allow_variant_select: true %}
+                {%- endfor -%}
+              {%- endif -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- liquid
+    assign discounted = 100 | minus: discount
+    if cart_mode == 'page'
+      assign kit_total = base_price
+    else
+      assign kit_total = computed_total | times: discounted | divided_by: 100
+    endif
+  -%}
+
+  <div class="kit-choice__footer">
+    {%- if block.settings.show_total -%}
+      <div class="kit-choice__summary">
+        <span class="kit-choice__summary-label">
+          {{ block.settings.total_label | default: 'Total do kit' }}
+        </span>
+        <span class="kit-choice__prices">
+          <s
+            class="kit-choice__compare"
+            data-kit-compare
+            {% if computed_total <= kit_total %}
+              hidden
+            {% endif %}
+          >
+            {{- computed_total | money -}}
+          </s>
+          <strong class="kit-choice__total" data-kit-total>{{ kit_total | money }}</strong>
+        </span>
+      </div>
+    {%- endif -%}
+
+    {%- if block.settings.show_button -%}
+      <button
+        type="button"
+        class="kit-choice__submit wt-button wt-button--primary wt-button--full-width"
+        data-kit-submit
+        {% if block.settings.require_choice and has_choice %}
+          disabled
+        {% endif %}
+      >
+        {% if settings['enable-bag-icon'] %}
+          {% render 'icons', id: 'bag' %}
+        {% endif %}
+        <span data-kit-submit-label>
+          {{- block.settings.button_label | default: 'Adicionar kit ao carrinho' -}}
+        </span>
+        {% render 'button-loading-indicator' %}
+      </button>
+    {%- endif -%}
+
+    <p class="kit-choice__error" data-kit-error role="alert" hidden></p>
+  </div>
+</kit-choice>

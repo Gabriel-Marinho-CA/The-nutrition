@@ -3250,6 +3250,8 @@
             {% render 'kit-builder', block: block, product: product %}
           {%- when 'bundle_deal' -%}
             {% render 'bundle-deal', block: block, product: product, section_id: section.id %}
+          {%- when 'kit_choice' -%}
+            {% render 'kit-choice', block: block, product: product, section_id: section.id %}
           {%- endcase -%}
         {%- endfor -%}
       </div>
@@ -7843,6 +7845,440 @@
           "type": "color",
           "id": "highlight_text_color",
           "label": "Cor do texto da etiqueta"
+        }
+      ]
+    },
+    {
+      "type": "kit_choice",
+      "name": "Kit com escolha de sabor",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Monta o kit em etapas: item fixo (entra sempre) e escolha do cliente (ele seleciona o sabor). Ex.: KIT PERFORMANCE = etapa 1 escolha do sabor do Whey + etapa 2 creatina fixa."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Monte seu kit",
+          "label": "Título"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "default": "Escolha os sabores e leve o kit completo.",
+          "label": "Subtítulo"
+        },
+        {
+          "type": "text",
+          "id": "kit_name",
+          "label": "Nome do kit",
+          "info": "Vai junto de cada item no carrinho. Vazio usa o nome do produto da página."
+        },
+        {
+          "type": "select",
+          "id": "cart_mode",
+          "label": "O que vai para o carrinho",
+          "options": [
+            {
+              "value": "components",
+              "label": "Os itens do kit (uma linha por produto)"
+            },
+            {
+              "value": "page",
+              "label": "O produto desta página (escolhas nas propriedades)"
+            }
+          ],
+          "default": "components",
+          "info": "Use o produto desta página quando o kit já é um produto com preço próprio."
+        },
+        {
+          "type": "range",
+          "id": "discount",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "%",
+          "default": 0,
+          "label": "Desconto exibido",
+          "info": "Só muda o preço mostrado. Para descontar de verdade, use o código abaixo ou um desconto automático. Ignorado quando vai o produto desta página."
+        },
+        {
+          "type": "text",
+          "id": "discount_code",
+          "label": "Código de desconto",
+          "info": "Aplicado na sessão depois de adicionar o kit ao carrinho."
+        },
+        {
+          "type": "checkbox",
+          "id": "require_choice",
+          "default": true,
+          "label": "Exigir as escolhas antes de comprar",
+          "info": "O botão fica bloqueado até todas as etapas de escolha estarem completas."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_total",
+          "default": true,
+          "label": "Mostrar total do kit"
+        },
+        {
+          "type": "text",
+          "id": "total_label",
+          "default": "Total do kit",
+          "label": "Rótulo do total"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_button",
+          "default": true,
+          "label": "Mostrar botão de adicionar ao carrinho"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Adicionar kit ao carrinho",
+          "label": "Texto do botão"
+        },
+        {
+          "type": "header",
+          "content": "Etapa 1"
+        },
+        {
+          "type": "checkbox",
+          "id": "slot_1_enabled",
+          "default": true,
+          "label": "Ativar etapa 1"
+        },
+        {
+          "type": "select",
+          "id": "slot_1_type",
+          "label": "Tipo da etapa 1",
+          "options": [
+            {
+              "value": "choice",
+              "label": "Escolha do cliente"
+            },
+            {
+              "value": "fixed",
+              "label": "Item fixo"
+            }
+          ],
+          "default": "choice"
+        },
+        {
+          "type": "text",
+          "id": "slot_1_title",
+          "default": "Escolha o sabor do Whey",
+          "label": "Título da etapa 1"
+        },
+        {
+          "type": "range",
+          "id": "slot_1_quantity",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "default": 1,
+          "label": "Quantidade da etapa 1"
+        },
+        {
+          "type": "product",
+          "id": "slot_1_product",
+          "label": "Produto fixo da etapa 1",
+          "info": "Usado quando o tipo é Item fixo."
+        },
+        {
+          "type": "product_list",
+          "id": "slot_1_products",
+          "limit": 20,
+          "label": "Produtos da escolha da etapa 1",
+          "info": "Usado quando o tipo é Escolha do cliente."
+        },
+        {
+          "type": "select",
+          "id": "slot_1_source",
+          "label": "Mostrar as opções da etapa 1 por",
+          "options": [
+            {
+              "value": "variants",
+              "label": "Sabor (uma opção por variante)"
+            },
+            {
+              "value": "products",
+              "label": "Produto (com seletor de sabor)"
+            }
+          ],
+          "default": "variants"
+        },
+        {
+          "type": "header",
+          "content": "Etapa 2"
+        },
+        {
+          "type": "checkbox",
+          "id": "slot_2_enabled",
+          "default": true,
+          "label": "Ativar etapa 2"
+        },
+        {
+          "type": "select",
+          "id": "slot_2_type",
+          "label": "Tipo da etapa 2",
+          "options": [
+            {
+              "value": "choice",
+              "label": "Escolha do cliente"
+            },
+            {
+              "value": "fixed",
+              "label": "Item fixo"
+            }
+          ],
+          "default": "fixed"
+        },
+        {
+          "type": "text",
+          "id": "slot_2_title",
+          "default": "Creatina",
+          "label": "Título da etapa 2"
+        },
+        {
+          "type": "range",
+          "id": "slot_2_quantity",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "default": 1,
+          "label": "Quantidade da etapa 2"
+        },
+        {
+          "type": "product",
+          "id": "slot_2_product",
+          "label": "Produto fixo da etapa 2",
+          "info": "Usado quando o tipo é Item fixo."
+        },
+        {
+          "type": "product_list",
+          "id": "slot_2_products",
+          "limit": 20,
+          "label": "Produtos da escolha da etapa 2",
+          "info": "Usado quando o tipo é Escolha do cliente."
+        },
+        {
+          "type": "select",
+          "id": "slot_2_source",
+          "label": "Mostrar as opções da etapa 2 por",
+          "options": [
+            {
+              "value": "variants",
+              "label": "Sabor (uma opção por variante)"
+            },
+            {
+              "value": "products",
+              "label": "Produto (com seletor de sabor)"
+            }
+          ],
+          "default": "variants"
+        },
+        {
+          "type": "header",
+          "content": "Etapa 3"
+        },
+        {
+          "type": "checkbox",
+          "id": "slot_3_enabled",
+          "default": false,
+          "label": "Ativar etapa 3"
+        },
+        {
+          "type": "select",
+          "id": "slot_3_type",
+          "label": "Tipo da etapa 3",
+          "options": [
+            {
+              "value": "choice",
+              "label": "Escolha do cliente"
+            },
+            {
+              "value": "fixed",
+              "label": "Item fixo"
+            }
+          ],
+          "default": "choice"
+        },
+        {
+          "type": "text",
+          "id": "slot_3_title",
+          "default": "Escolha o sabor do Colágeno",
+          "label": "Título da etapa 3"
+        },
+        {
+          "type": "range",
+          "id": "slot_3_quantity",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "default": 1,
+          "label": "Quantidade da etapa 3"
+        },
+        {
+          "type": "product",
+          "id": "slot_3_product",
+          "label": "Produto fixo da etapa 3",
+          "info": "Usado quando o tipo é Item fixo."
+        },
+        {
+          "type": "product_list",
+          "id": "slot_3_products",
+          "limit": 20,
+          "label": "Produtos da escolha da etapa 3",
+          "info": "Usado quando o tipo é Escolha do cliente."
+        },
+        {
+          "type": "select",
+          "id": "slot_3_source",
+          "label": "Mostrar as opções da etapa 3 por",
+          "options": [
+            {
+              "value": "variants",
+              "label": "Sabor (uma opção por variante)"
+            },
+            {
+              "value": "products",
+              "label": "Produto (com seletor de sabor)"
+            }
+          ],
+          "default": "variants"
+        },
+        {
+          "type": "header",
+          "content": "Etapa 4"
+        },
+        {
+          "type": "checkbox",
+          "id": "slot_4_enabled",
+          "default": false,
+          "label": "Ativar etapa 4"
+        },
+        {
+          "type": "select",
+          "id": "slot_4_type",
+          "label": "Tipo da etapa 4",
+          "options": [
+            {
+              "value": "choice",
+              "label": "Escolha do cliente"
+            },
+            {
+              "value": "fixed",
+              "label": "Item fixo"
+            }
+          ],
+          "default": "fixed"
+        },
+        {
+          "type": "text",
+          "id": "slot_4_title",
+          "label": "Título da etapa 4"
+        },
+        {
+          "type": "range",
+          "id": "slot_4_quantity",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "default": 1,
+          "label": "Quantidade da etapa 4"
+        },
+        {
+          "type": "product",
+          "id": "slot_4_product",
+          "label": "Produto fixo da etapa 4",
+          "info": "Usado quando o tipo é Item fixo."
+        },
+        {
+          "type": "product_list",
+          "id": "slot_4_products",
+          "limit": 20,
+          "label": "Produtos da escolha da etapa 4",
+          "info": "Usado quando o tipo é Escolha do cliente."
+        },
+        {
+          "type": "select",
+          "id": "slot_4_source",
+          "label": "Mostrar as opções da etapa 4 por",
+          "options": [
+            {
+              "value": "variants",
+              "label": "Sabor (uma opção por variante)"
+            },
+            {
+              "value": "products",
+              "label": "Produto (com seletor de sabor)"
+            }
+          ],
+          "default": "variants"
+        },
+        {
+          "type": "header",
+          "content": "Textos"
+        },
+        {
+          "type": "text",
+          "id": "text_remaining",
+          "default": "Escolha [count] item(ns)",
+          "label": "Etapa incompleta",
+          "info": "[count] = quanto falta, [total] = escolhidos, [max] = total da etapa."
+        },
+        {
+          "type": "text",
+          "id": "text_complete",
+          "default": "[max] de [max] escolhido(s)",
+          "label": "Etapa completa"
+        },
+        {
+          "type": "text",
+          "id": "text_error",
+          "default": "Escolha os itens de [slot] para continuar.",
+          "label": "Erro de escolha faltando",
+          "info": "[slot] = título da etapa."
+        },
+        {
+          "type": "text",
+          "id": "text_sold_out",
+          "default": "O item [slot] está indisponível no momento.",
+          "label": "Erro de item fixo esgotado"
+        },
+        {
+          "type": "text",
+          "id": "fixed_badge",
+          "default": "Incluso",
+          "label": "Etiqueta do item fixo"
+        },
+        {
+          "type": "text",
+          "id": "fixed_note",
+          "default": "já incluso no kit",
+          "label": "Aviso do item fixo"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.global.colors"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "t:sections.settings.settings.background-color.label"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "t:sections.settings.settings.text-color.label"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Cor de destaque"
         }
       ]
     }

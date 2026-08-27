@@ -1,0 +1,108 @@
+{% comment %}
+  Um card de escolha do kit (`snippets/kit-choice.liquid`).
+
+  Aceita:
+    - item_product: o produto do card
+    - item_variant: a variante do card (quando a etapa lista sabores)
+    - show_product_title: junta o nome do produto ao do sabor (lista com mais de
+      um produto)
+    - allow_variant_select: o card representa o produto inteiro e ganha um
+      seletor de sabor próprio
+{% endcomment %}
+
+{%- liquid
+  assign item_variant = item_variant | default: item_product.selected_or_first_available_variant
+
+  assign has_select = false
+  if allow_variant_select and item_product.variants.size > 1
+    assign has_select = true
+  endif
+
+  assign item_image = item_variant.image | default: item_product.featured_image
+
+  assign is_default_title = false
+  if item_variant.title contains 'Default Title'
+    assign is_default_title = true
+  endif
+
+  assign item_title = item_product.title
+  unless is_default_title
+    assign item_title = item_product.title | append: ' - ' | append: item_variant.title
+  endunless
+
+  assign item_label = item_product.title
+  unless has_select or is_default_title
+    if show_product_title
+      assign item_label = item_title
+    else
+      assign item_label = item_variant.title
+    endif
+  endunless
+
+  assign is_available = item_variant.available
+  if has_select
+    assign is_available = item_product.available
+  endif
+-%}
+
+<li
+  class="kit-choice__product{% unless is_available %} kit-choice__product--sold-out{% endunless %}"
+  data-kit-item
+  data-variant-id="{{ item_variant.id }}"
+  data-price="{{ item_variant.price }}"
+  data-title="{{ item_title | escape }}"
+  data-available="{% if is_available %}true{% else %}false{% endif %}"
+  data-qty="0"
+  data-selected="false"
+>
+  <button
+    type="button"
+    class="kit-choice__product-btn"
+    data-kit-select
+    aria-pressed="false"
+    {% unless is_available %}
+      disabled
+    {% endunless %}
+  >
+    <span class="kit-choice__product-media">
+      {%- if item_image -%}
+        {{
+          item_image
+          | image_url: width: 240
+          | image_tag:
+            loading: 'lazy',
+            widths: '80, 120, 160, 240',
+            sizes: '90px',
+            alt: item_label,
+            class: 'kit-choice__product-image'
+        }}
+      {%- endif -%}
+      <span class="kit-choice__product-count" data-kit-count hidden>0</span>
+    </span>
+    <span class="kit-choice__product-title">{{ item_label }}</span>
+  </button>
+
+  {%- if has_select -%}
+    <select
+      class="kit-choice__product-variants"
+      data-kit-variant-select
+      aria-label="Sabor de {{ item_product.title | escape }}"
+    >
+      {%- for variant in item_product.variants -%}
+        <option
+          value="{{ variant.id }}"
+          data-price="{{ variant.price }}"
+          data-title="{{ item_product.title | append: ' - ' | append: variant.title | escape }}"
+          {% unless variant.available %}
+            disabled
+          {% endunless %}
+          {% if variant.id == item_variant.id %}
+            selected
+          {% endif %}
+        >
+          {{ variant.title }}
+        </option>
+      {%- endfor -%}
+    </select>
+  {%- endif -%}
+</li>
