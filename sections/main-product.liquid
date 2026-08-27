@@ -7953,6 +7953,7 @@
         {
           "type": "select",
           "id": "slot_1_type",
+          "visible_if": "{{ block.settings.slot_1_enabled }}",
           "label": "Tipo da etapa 1",
           "options": [
             {
@@ -7969,12 +7970,14 @@
         {
           "type": "text",
           "id": "slot_1_title",
+          "visible_if": "{{ block.settings.slot_1_enabled }}",
           "default": "Escolha o sabor do Whey",
           "label": "Título da etapa 1"
         },
         {
           "type": "range",
           "id": "slot_1_quantity",
+          "visible_if": "{{ block.settings.slot_1_enabled }}",
           "min": 1,
           "max": 6,
           "step": 1,
@@ -7985,18 +7988,19 @@
           "type": "product",
           "id": "slot_1_product",
           "label": "Produto fixo da etapa 1",
-          "info": "Usado quando o tipo é Item fixo."
+          "info": "Só entra no kit quando o tipo da etapa é Item fixo."
         },
         {
           "type": "product_list",
           "id": "slot_1_products",
           "limit": 20,
           "label": "Produtos da escolha da etapa 1",
-          "info": "Usado quando o tipo é Escolha do cliente."
+          "info": "Só entra no kit quando o tipo da etapa é Escolha do cliente."
         },
         {
           "type": "select",
           "id": "slot_1_source",
+          "visible_if": "{{ block.settings.slot_1_enabled and block.settings.slot_1_type == 'choice' }}",
           "label": "Mostrar as opções da etapa 1 por",
           "options": [
             {
@@ -8023,6 +8027,7 @@
         {
           "type": "select",
           "id": "slot_2_type",
+          "visible_if": "{{ block.settings.slot_2_enabled }}",
           "label": "Tipo da etapa 2",
           "options": [
             {
@@ -8039,12 +8044,14 @@
         {
           "type": "text",
           "id": "slot_2_title",
+          "visible_if": "{{ block.settings.slot_2_enabled }}",
           "default": "Creatina",
           "label": "Título da etapa 2"
         },
         {
           "type": "range",
           "id": "slot_2_quantity",
+          "visible_if": "{{ block.settings.slot_2_enabled }}",
           "min": 1,
           "max": 6,
           "step": 1,
@@ -8055,18 +8062,19 @@
           "type": "product",
           "id": "slot_2_product",
           "label": "Produto fixo da etapa 2",
-          "info": "Usado quando o tipo é Item fixo."
+          "info": "Só entra no kit quando o tipo da etapa é Item fixo."
         },
         {
           "type": "product_list",
           "id": "slot_2_products",
           "limit": 20,
           "label": "Produtos da escolha da etapa 2",
-          "info": "Usado quando o tipo é Escolha do cliente."
+          "info": "Só entra no kit quando o tipo da etapa é Escolha do cliente."
         },
         {
           "type": "select",
           "id": "slot_2_source",
+          "visible_if": "{{ block.settings.slot_2_enabled and block.settings.slot_2_type == 'choice' }}",
           "label": "Mostrar as opções da etapa 2 por",
           "options": [
             {
@@ -8093,6 +8101,7 @@
         {
           "type": "select",
           "id": "slot_3_type",
+          "visible_if": "{{ block.settings.slot_3_enabled }}",
           "label": "Tipo da etapa 3",
           "options": [
             {
@@ -8109,12 +8118,14 @@
         {
           "type": "text",
           "id": "slot_3_title",
+          "visible_if": "{{ block.settings.slot_3_enabled }}",
           "default": "Escolha o sabor do Colágeno",
           "label": "Título da etapa 3"
         },
         {
           "type": "range",
           "id": "slot_3_quantity",
+          "visible_if": "{{ block.settings.slot_3_enabled }}",
           "min": 1,
           "max": 6,
           "step": 1,
@@ -8125,18 +8136,19 @@
           "type": "product",
           "id": "slot_3_product",
           "label": "Produto fixo da etapa 3",
-          "info": "Usado quando o tipo é Item fixo."
+          "info": "Só entra no kit quando o tipo da etapa é Item fixo."
         },
         {
           "type": "product_list",
           "id": "slot_3_products",
           "limit": 20,
           "label": "Produtos da escolha da etapa 3",
-          "info": "Usado quando o tipo é Escolha do cliente."
+          "info": "Só entra no kit quando o tipo da etapa é Escolha do cliente."
         },
         {
           "type": "select",
           "id": "slot_3_source",
+          "visible_if": "{{ block.settings.slot_3_enabled and block.settings.slot_3_type == 'choice' }}",
           "label": "Mostrar as opções da etapa 3 por",
           "options": [
             {
@@ -8163,6 +8175,7 @@
         {
           "type": "select",
           "id": "slot_4_type",
+          "visible_if": "{{ block.settings.slot_4_enabled }}",
           "label": "Tipo da etapa 4",
           "options": [
             {
@@ -8179,11 +8192,13 @@
         {
           "type": "text",
           "id": "slot_4_title",
+          "visible_if": "{{ block.settings.slot_4_enabled }}",
           "label": "Título da etapa 4"
         },
         {
           "type": "range",
           "id": "slot_4_quantity",
+          "visible_if": "{{ block.settings.slot_4_enabled }}",
           "min": 1,
           "max": 6,
           "step": 1,
@@ -8194,18 +8209,19 @@
           "type": "product",
           "id": "slot_4_product",
           "label": "Produto fixo da etapa 4",
-          "info": "Usado quando o tipo é Item fixo."
+          "info": "Só entra no kit quando o tipo da etapa é Item fixo."
         },
         {
           "type": "product_list",
           "id": "slot_4_products",
           "limit": 20,
           "label": "Produtos da escolha da etapa 4",
-          "info": "Usado quando o tipo é Escolha do cliente."
+          "info": "Só entra no kit quando o tipo da etapa é Escolha do cliente."
         },
         {
           "type": "select",
           "id": "slot_4_source",
+          "visible_if": "{{ block.settings.slot_4_enabled and block.settings.slot_4_type == 'choice' }}",
           "label": "Mostrar as opções da etapa 4 por",
           "options": [
             {

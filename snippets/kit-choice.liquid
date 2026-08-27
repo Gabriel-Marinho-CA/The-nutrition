@@ -101,13 +101,17 @@
 
       {%- if is_enabled and slot_ready == false and request.design_mode -%}
         <p class="kit-choice__notice">
-          Etapa {{ i }}: escolha
-          {% if slot_type == 'fixed' %}
-            o produto fixo
-          {% else %}
-            a lista de produtos
-          {% endif %}
-          desta etapa nas configurações do bloco.
+          {%- if slot_type == 'fixed' -%}
+            Etapa {{ i }}: selecione o produto fixo desta etapa.
+            {%- if choice_products != blank %}
+              A lista de produtos preenchida só vale para etapas do tipo Escolha do cliente.
+            {%- endif -%}
+          {%- else -%}
+            Etapa {{ i }}: selecione os produtos da escolha desta etapa.
+            {%- if fixed_product != blank %}
+              O produto fixo preenchido só vale para etapas do tipo Item fixo.
+            {%- endif -%}
+          {%- endif -%}
         </p>
       {%- endif -%}
 
