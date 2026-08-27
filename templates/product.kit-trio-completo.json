@@ -45,17 +45,12 @@
             "size_text_mobile": 100
           }
         },
-        "description_VLX7JN": {
-          "type": "description",
+        "text_hK4cVt": {
+          "type": "text",
           "settings": {
-            "display": "text",
-            "is_open": false,
-            "icon": "check_mark",
-            "icon_advanced_settings": false,
-            "icon_height_desktop": 28,
-            "icon_height": 27,
-            "icon_margin_desktop": 0,
-            "icon_margin": 0
+            "heading": "",
+            "content": "<p>{{ product.description }}</p>",
+            "page": ""
           }
         },
         "feature_tags_ktxUht": {
@@ -340,7 +335,7 @@
       "block_order": [
         "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e",
         "title",
-        "description_VLX7JN",
+        "text_hK4cVt",
         "feature_tags_ktxUht",
         "separator_reBrRK",
         "text_LQ6bM9",
