@@ -153,11 +153,8 @@
             "slot_1_product": "",
             "slot_1_products": [
               "whey-isolado-e-hidrolisado-cacao-405g-the-nutrition",
-              "whey-isolado-e-hidrolisado-cacao-sache-27g-the-nutrition",
               "whey-isolado-e-hidrolisado-strawberry-405g-the-nutrition",
-              "whey-isolado-e-hidrolisado-strawberry-sache-27g-the-nutrition",
-              "whey-isolado-e-hidrolisado-vanilla-cream-405g-the-nutrition",
-              "whey-isolado-e-hidrolisado-vanilla-cream-sache-27g-the-nutrition"
+              "whey-isolado-e-hidrolisado-vanilla-cream-405g-the-nutrition"
             ],
             "slot_1_source": "variants",
             "slot_2_enabled": true,
