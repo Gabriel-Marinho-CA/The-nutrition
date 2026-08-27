@@ -161,8 +161,8 @@
             ],
             "slot_1_source": "products",
             "slot_2_enabled": true,
-            "slot_2_type": "fixed",
-            "slot_2_title": "Creatina",
+            "slot_2_type": "choice",
+            "slot_2_title": "Colágeno",
             "slot_2_quantity": 1,
             "slot_2_product": "",
             "slot_2_products": [
