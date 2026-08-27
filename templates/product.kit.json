@@ -45,6 +45,14 @@
             "size_text_mobile": 100
           }
         },
+        "text_Aiiwtb": {
+          "type": "text",
+          "settings": {
+            "heading": "",
+            "content": "{{ product.description }}",
+            "page": ""
+          }
+        },
         "kit_builder_3FNVnQ": {
           "type": "kit_builder",
           "settings": {
@@ -279,6 +287,7 @@
       "block_order": [
         "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e",
         "title",
+        "text_Aiiwtb",
         "kit_builder_3FNVnQ",
         "feature_tags_ktxUht",
         "separator_reBrRK",
