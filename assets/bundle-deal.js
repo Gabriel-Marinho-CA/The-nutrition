@@ -2,9 +2,10 @@
  * <bundle-deal> — bundle com desconto progressivo da página de produto.
  *
  * Cada `[data-bundle-option]` é um "leve N" com sua própria porcentagem de
- * desconto. Ao escolher uma opção de mais de 1 unidade, abre a lista de
- * produtos vinda do metafield `custom.itens_do_bundle` e a pessoa monta os
+ * desconto. Toda opção abre a lista de produtos vinda do metafield
+ * `custom.itens_do_bundle` (mais o produto da página) e a pessoa monta os
  * sabores (no máximo N itens). O que sobrar do N vira o produto/variante atual.
+ * A opção de 1 unidade já vem com o produto da página escolhido.
  *
  * Tudo é enviado numa única chamada `/cart/add.js` (`items: [...]`) e, se a
  * opção tiver código de desconto, ele é aplicado na sessão antes de abrir o
@@ -34,7 +35,25 @@ if (!customElements.get('bundle-deal')) {
         this.addEventListener('change', this.onChange.bind(this));
         this.listenToVariantChange();
 
+        this.prefillSingleOptions();
         this.update();
+      }
+
+      /**
+       * Opções de 1 unidade já nascem com o produto da página escolhido — a
+       * lista fica ali só para a pessoa trocar de sabor se quiser.
+       */
+      prefillSingleOptions() {
+        this.options.forEach((option) => {
+          if (this.quantityOf(option) !== 1) return;
+
+          const items = this.itemsOf(option);
+          if (!items.length || items.some((item) => this.qtyOf(item) > 0)) return;
+
+          const available = items.filter((item) => item.dataset.available === 'true');
+          const target = available.find((item) => item.hasAttribute('data-bundle-main')) || available[0];
+          if (target) target.dataset.qty = 1;
+        });
       }
 
       disconnectedCallback() {
@@ -53,6 +72,7 @@ if (!customElements.get('bundle-deal')) {
           this.basePrice = variant.price;
           this.variantId = variant.id;
           this.syncMainItems(variant);
+          this.prefillSingleOptions();
           this.update();
         });
       }
@@ -161,7 +181,18 @@ if (!customElements.get('bundle-deal')) {
           // Clique no card soma 1 (dá para repetir o mesmo sabor até o limite).
           // Sem espaço sobrando, o clique zera a linha e libera as vagas.
           const room = this.remainingOf(option);
-          this.setQty(item, room > 0 ? current + 1 : 0, option);
+
+          if (room > 0) {
+            this.setQty(item, current + 1, option);
+          } else if (current > 0) {
+            this.setQty(item, 0);
+          } else if (this.quantityOf(option) === 1) {
+            // Opção de 1 unidade: clicar em outro sabor troca a escolha.
+            this.itemsOf(option).forEach((other) => {
+              other.dataset.qty = 0;
+            });
+            this.setQty(item, 1, option);
+          }
         } else {
           return;
         }
@@ -442,6 +473,7 @@ if (!customElements.get('bundle-deal')) {
             item.dataset.qty = 0;
           });
         });
+        this.prefillSingleOptions();
         this.update();
       }
     }

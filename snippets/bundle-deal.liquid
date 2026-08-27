@@ -2,10 +2,11 @@
   Bundle com desconto progressivo (bloco `bundle_deal` da seção main-product).
 
   Cada opção é um "leve N" com sua própria porcentagem de desconto (configurável
-  no bloco). Quando a opção escolhida leva mais de 1 unidade, o componente abre a
-  lista de produtos do metafield `custom.itens_do_bundle` do produto da página —
-  mais o próprio produto da página — para a pessoa montar os sabores, no máximo
-  N itens (podendo repetir o mesmo item).
+  no bloco). Toda opção abre a lista de produtos do metafield
+  `custom.itens_do_bundle` do produto da página — mais o próprio produto da
+  página — para a pessoa montar os sabores, no máximo N itens (podendo repetir o
+  mesmo item). Na opção de 1 unidade o produto da página já vem escolhido e o
+  clique em outro sabor troca a escolha.
 
   Aceita:
     - block: o bloco `bundle_deal` da seção (quantidades, descontos, textos, cores)
@@ -134,40 +135,42 @@
             </span>
           </label>
 
-          {%- if quantity > 1 -%}
-            <div class="bundle-deal__picker" data-bundle-picker hidden>
-              <div class="bundle-deal__picker-head">
-                <p class="bundle-deal__picker-title">
-                  {{ block.settings.picker_title | default: 'Selecione os Produtos:' }}
-                </p>
-                <p class="bundle-deal__picker-status" data-bundle-status role="status"></p>
-              </div>
-
-              <ul class="bundle-deal__products" role="list">
-                {%- comment -%} O produto da página também entra como opção do combo. {%- endcomment -%}
-                {% render 'bundle-deal-item',
-                  item_product: product,
-                  item_variant: current_variant,
-                  is_main: true
-                %}
-
-                {%- for bundle_product in bundle_products -%}
-                  {%- unless bundle_product.id == product.id -%}
-                    {% render 'bundle-deal-item', item_product: bundle_product %}
-                  {%- endunless -%}
-                {%- endfor -%}
-              </ul>
-
-              {%- if bundle_products == blank and request.design_mode -%}
-                <p class="bundle-deal__picker-empty">
-                  Preencha o metafield de lista de produtos <code>custom.itens_do_bundle</code>
-                  deste produto para oferecer outros sabores nesta opção.
-                </p>
-              {%- endif -%}
-
-              <p class="bundle-deal__rest" data-bundle-rest hidden></p>
+          {%- comment -%}
+            Toda opção abre a lista de produtos — inclusive a de 1 unidade, em que
+            a pessoa escolhe entre o produto da página e os outros sabores.
+          {%- endcomment -%}
+          <div class="bundle-deal__picker" data-bundle-picker hidden>
+            <div class="bundle-deal__picker-head">
+              <p class="bundle-deal__picker-title">
+                {{ block.settings.picker_title | default: 'Selecione os Produtos:' }}
+              </p>
+              <p class="bundle-deal__picker-status" data-bundle-status role="status"></p>
             </div>
-          {%- endif -%}
+
+            <ul class="bundle-deal__products" role="list">
+              {%- comment -%} O produto da página também entra como opção do combo. {%- endcomment -%}
+              {% render 'bundle-deal-item',
+                item_product: product,
+                item_variant: current_variant,
+                is_main: true
+              %}
+
+              {%- for bundle_product in bundle_products -%}
+                {%- unless bundle_product.id == product.id -%}
+                  {% render 'bundle-deal-item', item_product: bundle_product %}
+                {%- endunless -%}
+              {%- endfor -%}
+            </ul>
+
+            {%- if bundle_products == blank and request.design_mode -%}
+              <p class="bundle-deal__picker-empty">
+                Preencha o metafield de lista de produtos <code>custom.itens_do_bundle</code>
+                deste produto para oferecer outros sabores nesta opção.
+              </p>
+            {%- endif -%}
+
+            <p class="bundle-deal__rest" data-bundle-rest hidden></p>
+          </div>
         </div>
       {%- endif -%}
     {%- endfor -%}
