@@ -164,7 +164,7 @@
             "slot_2_type": "choice",
             "slot_2_title": "Escoha o sabor do Colágeno",
             "slot_2_quantity": 1,
-            "slot_2_product": "creatine-monohydrate",
+            "slot_2_product": "",
             "slot_2_products": [
               "colageno-proteico-acai-com-banana-442g-the-nutrition",
               "sache-colageno-proteico-acai-com-banana-26g-the-nutrition",
@@ -176,7 +176,7 @@
               "colageno-tipo-ii"
             ],
             "slot_2_source": "variants",
-            "slot_3_enabled": true,
+            "slot_3_enabled": false,
             "slot_3_type": "fixed",
             "slot_3_title": "Creatina",
             "slot_3_quantity": 1,
