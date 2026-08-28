@@ -131,7 +131,7 @@
           "type": "kit_choice",
           "settings": {
             "title": "Monte seu kit",
-            "subtitle": "Escolha os sabores e leve o kit completo.",
+            "subtitle": "Escolha o sabor de seu Whey e leve o kit completo.",
             "kit_name": "",
             "cart_mode": "components",
             "discount": 0,
@@ -173,7 +173,7 @@
             "slot_4_product": "",
             "slot_4_products": [],
             "slot_4_source": "variants",
-            "text_remaining": "Escolha [count] item(ns)",
+            "text_remaining": "Escolha [count] item",
             "text_complete": "[max] de [max] escolhido(s)",
             "text_error": "Escolha os itens de [slot] para continuar.",
             "text_sold_out": "O item [slot] está indisponível no momento.",
