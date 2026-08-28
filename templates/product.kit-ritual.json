@@ -161,8 +161,7 @@
               "colageno-proteico-acai-com-banana-442g-the-nutrition",
               "colageno-frutas-vermelhas",
               "colageno-proteico-limao-siciliano-com-gengibre-442g-the-nutrition",
-              "colageno-proteico-neutro-442g-the-nutrition",
-              "colageno-tipo-ii"
+              "colageno-proteico-neutro-442g-the-nutrition"
             ],
             "slot_2_source": "variants",
             "slot_3_enabled": false,
@@ -179,7 +178,7 @@
             "slot_4_product": "",
             "slot_4_products": [],
             "slot_4_source": "variants",
-            "text_remaining": "Escolha [count] item(ns)",
+            "text_remaining": "Escolha [count] item",
             "text_complete": "[max] de [max] escolhido(s)",
             "text_error": "Escolha os itens de [slot] para continuar.",
             "text_sold_out": "O item [slot] está indisponível no momento.",
