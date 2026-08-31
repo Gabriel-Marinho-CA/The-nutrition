@@ -147,9 +147,9 @@
             "slot_1_quantity": 1,
             "slot_1_product": "",
             "slot_1_products": [
-              "whey-isolado-e-hidrolisado-cacao-405g-the-nutrition",
-              "whey-isolado-e-hidrolisado-strawberry-405g-the-nutrition",
-              "whey-isolado-e-hidrolisado-vanilla-cream-405g-the-nutrition"
+              "whey-isolado-e-hidrolisado-cacao-405g-the-nutrition-copia-1",
+              "wwhey-isolado-e-hidrolisado-strawberry-405g-the-nutrition",
+              "whey-isolado-e-hidrolisado-vanilla-cream-405g-the-nutrition-copia"
             ],
             "slot_1_source": "variants",
             "slot_2_enabled": true,
@@ -158,10 +158,9 @@
             "slot_2_quantity": 1,
             "slot_2_product": "",
             "slot_2_products": [
-              "colageno-proteico-acai-com-banana-442g-the-nutrition",
-              "colageno-frutas-vermelhas",
-              "colageno-proteico-limao-siciliano-com-gengibre-442g-the-nutrition",
-              "colageno-proteico-neutro-442g-the-nutrition"
+              "colageno-proteico-acai-com-banana-442g-the-nutrition-copia",
+              "ccolageno-proteico-frutas-vermelhas-442g-the-nutrition",
+              "ccolageno-proteico-limao-siciliano-com-gengibre-442g-the-nutrition-copia"
             ],
             "slot_2_source": "variants",
             "slot_3_enabled": false,
