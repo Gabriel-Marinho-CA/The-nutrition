@@ -202,6 +202,7 @@
         },
         "amp_bundles_amp_volume_discount_bundles_GGDLY4": {
           "type": "shopify://apps/amp-bundles/blocks/amp-volume-discount-bundles/7161efe5-6fe7-4f63-bef9-72179702263a",
+          "disabled": true,
           "settings": {
             "product": "{{product}}"
           }
