@@ -147,16 +147,16 @@
             "slot_1_quantity": 1,
             "slot_1_product": "",
             "slot_1_products": [
-              "whey-isolado-e-hidrolisado-cacao-405g-the-nutrition",
-              "whey-isolado-e-hidrolisado-strawberry-405g-the-nutrition",
-              "whey-isolado-e-hidrolisado-vanilla-cream-405g-the-nutrition"
+              "whey-isolado-e-hidrolisado-cacao-405g-the-nutrition-copia-1",
+              "wwhey-isolado-e-hidrolisado-strawberry-405g-the-nutrition",
+              "whey-isolado-e-hidrolisado-vanilla-cream-405g-the-nutrition-copia"
             ],
             "slot_1_source": "variants",
             "slot_2_enabled": true,
             "slot_2_type": "fixed",
             "slot_2_title": "Creatina",
             "slot_2_quantity": 1,
-            "slot_2_product": "creatine-monohydrate",
+            "slot_2_product": "ccreatina-monohidratada-100-pura-300g-the-nutrition",
             "slot_2_products": [],
             "slot_2_source": "variants",
             "slot_3_enabled": false,
