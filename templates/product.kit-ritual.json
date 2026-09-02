@@ -29,7 +29,7 @@
         "amp_bundles_amp_mix_and_match_bundles_JQwG3d": {
           "type": "shopify://apps/amp-bundles/blocks/amp-mix-and-match-bundles/7161efe5-6fe7-4f63-bef9-72179702263a",
           "settings": {
-            "product": "{{product}}"
+            "product": ""
           }
         },
         "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e": {

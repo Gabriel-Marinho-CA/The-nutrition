@@ -26,6 +26,12 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "amp_bundles_amp_mix_and_match_bundles_WGXpBn": {
+          "type": "shopify://apps/amp-bundles/blocks/amp-mix-and-match-bundles/7161efe5-6fe7-4f63-bef9-72179702263a",
+          "settings": {
+            "product": ""
+          }
+        },
         "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e": {
           "type": "separator",
           "disabled": true,
@@ -154,12 +160,6 @@
             "size_text_mobile": 140
           }
         },
-        "amp_bundles_amp_volume_discount_bundles_GGDLY4": {
-          "type": "shopify://apps/amp-bundles/blocks/amp-volume-discount-bundles/7161efe5-6fe7-4f63-bef9-72179702263a",
-          "settings": {
-            "product": "{{product}}"
-          }
-        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -285,6 +285,7 @@
         }
       },
       "block_order": [
+        "amp_bundles_amp_mix_and_match_bundles_WGXpBn",
         "c1ba8695-94d2-40ad-ac06-93ec3b8cf38e",
         "title",
         "text_Aiiwtb",
@@ -296,7 +297,6 @@
         "variant_picker_WQEbez",
         "separator_xgqTJM",
         "price",
-        "amp_bundles_amp_volume_discount_bundles_GGDLY4",
         "buy_buttons",
         "promo_wBVFy3",
         "collapsible_tab_Q7UFgL",
