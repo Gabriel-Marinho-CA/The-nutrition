@@ -148,17 +148,54 @@ class QuantityCounter extends HTMLElement {
     this.decreaseBtn = this.querySelector(".js-counter-decrease");
 
     this.min = parseInt(this.counterEl.min) || 1;
-    this.max = parseInt(this.counterEl.max) || 999;
+    // `max` traz o estoque real da linha (snippets/cart-item-max-quantity.liquid).
+    // `|| 999` engoliria um max="0" legítimo, daí o teste explícito de NaN.
+    const parsedMax = parseInt(this.counterEl.max, 10);
+    this.max = Number.isNaN(parsedMax) ? 999 : parsedMax;
 
     this.increaseBtn.addEventListener("click", this.onIncrease.bind(this));
     this.decreaseBtn.addEventListener("click", this.onDecrease.bind(this));
+    // Digitação direta também precisa do teto. Este listener está no próprio
+    // <input>, então roda antes do handler com debounce do <cart-items>, que só
+    // lê o valor quando o debounce vence.
+    this.counterEl.addEventListener("change", this.onInputChange.bind(this));
   }
 
   onIncrease() {
     const currentValue = parseInt(this.counterEl.value);
     if (currentValue < this.max) {
       this.updateValue(currentValue + 1);
+    } else {
+      this.showMaxMessage();
     }
+  }
+
+  onInputChange() {
+    const value = parseInt(this.counterEl.value, 10);
+    if (Number.isNaN(value) || value <= this.max) return;
+
+    this.counterEl.value = this.max;
+    this.showMaxMessage();
+  }
+
+  // Avisa o cliente em vez de deixar o botão morto — mesma caixa de erro que o
+  // cart.js usa, para não haver duas mensagens concorrentes na linha.
+  showMaxMessage() {
+    const index = this.counterEl.dataset.index;
+    const errorEl =
+      document.getElementById(`Line-item-error-${index}`) ||
+      document.getElementById(`CartDrawer-LineItemError-${index}`);
+
+    if (!errorEl || !window.cartStrings) return;
+
+    const errorText = errorEl.querySelector(".cart-item__error-text");
+    if (errorText) {
+      errorText.innerHTML = window.cartStrings.quantityError.replace(
+        "[quantity]",
+        this.max,
+      );
+    }
+    errorEl.style.display = "flex";
   }
 
   onDecrease() {

@@ -118,10 +118,16 @@ class CartItems extends HTMLElement {
         const quantityElement =
           document.getElementById(`Quantity-${line}`) ||
           document.getElementById(`Drawer-quantity-${line}`);
-        const items = document.querySelectorAll(".cart-item");
+        // A key da linha (variantId:hash) é estável; o índice não é. Os brindes
+        // são adicionados/removidos de forma assíncrona por cart-drawer.js, o
+        // que desloca os índices e faria a checagem comparar a linha errada.
+        const lineKey = quantityElement?.dataset.key;
+        const requestedQuantity = parseInt(quantity, 10);
 
         if (parsedState.errors) {
-          quantityElement.value = quantityElement.getAttribute("value");
+          if (quantityElement) {
+            quantityElement.value = quantityElement.getAttribute("value");
+          }
           this.updateLiveRegions(line, parsedState.errors);
           return;
         }
@@ -150,17 +156,17 @@ class CartItems extends HTMLElement {
               section.selector,
             ) || "";
         });
-        const updatedValue = parsedState.items[line - 1]
-          ? parsedState.items[line - 1].quantity
-          : undefined;
+        const updatedLine = lineKey
+          ? parsedState.items.find((item) => item.key === lineKey)
+          : parsedState.items[line - 1];
+        const updatedValue = updatedLine ? updatedLine.quantity : undefined;
+
+        // Remoção (quantidade 0) não é erro — a linha some do carrinho.
         let message = "";
-        if (
-          items.length === parsedState.items.length &&
-          updatedValue !== parseInt(quantityElement.value)
-        ) {
+        if (requestedQuantity > 0) {
           if (typeof updatedValue === "undefined") {
             message = window.cartStrings.error;
-          } else {
+          } else if (updatedValue !== requestedQuantity) {
             message = window.cartStrings.quantityError.replace(
               "[quantity]",
               updatedValue,
@@ -187,11 +193,16 @@ class CartItems extends HTMLElement {
         }
         publish(PUB_SUB_EVENTS.cartUpdate, { source: "cart-items" });
       })
-      // .catch(() => {
-      //   this.querySelectorAll('.loading-overlay').forEach((overlay) => overlay.classList.add('hidden'));
-      //   const errors = document.getElementById('cart-errors') || document.getElementById('CartDrawer-CartErrors');
-      //   errors.textContent = window.cartStrings.error;
-      // })
+      .catch((error) => {
+        console.error("[cart] Falha ao atualizar a quantidade:", error);
+        this.querySelectorAll(".loading-overlay").forEach((overlay) =>
+          overlay.classList.add("hidden"),
+        );
+        const errors =
+          document.getElementById("cart-errors") ||
+          document.getElementById("CartDrawer-CartErrors");
+        if (errors) errors.textContent = window.cartStrings.error;
+      })
       .finally(() => {
         this.disableLoading(line);
       });
@@ -202,8 +213,11 @@ class CartItems extends HTMLElement {
       document.getElementById(`Line-item-error-${line}`) ||
       document.getElementById(`CartDrawer-LineItemError-${line}`);
     if (lineItemError) {
-      if (message.length > 0) lineItemError.style.display = "flex";
-      lineItemError.querySelector(".cart-item__error-text").innerHTML = message;
+      // Sempre volta para "none" quando não há mensagem; senão um erro antigo
+      // fica na tela (o branch de parsedState.errors não re-renderiza a seção).
+      lineItemError.style.display = message.length > 0 ? "flex" : "none";
+      const errorText = lineItemError.querySelector(".cart-item__error-text");
+      if (errorText) errorText.innerHTML = message;
     }
 
     this.lineItemStatusElement.setAttribute("aria-hidden", true);

@@ -1,0 +1,57 @@
+{% comment %}
+  Imprime o teto real de quantidade de uma linha do carrinho, ou nada quando
+  não existe teto.
+
+  Usage:
+  {%- capture item_max_quantity -%}
+    {%- render 'cart-item-max-quantity', item: item -%}
+  {%- endcapture -%}
+
+  Dois limites entram na conta:
+
+  1. Estoque — só quando a Shopify controla o inventário e a política é `deny`.
+     A mesma variante pode ocupar VÁRIAS linhas do carrinho (o Volume Discount
+     e o Kit Sachês gravam `_tn_amp_*` em properties, e properties diferentes
+     criam linhas separadas). Todas dividem o mesmo estoque, então o teto desta
+     linha é o estoque menos o que as outras linhas já seguram.
+
+  2. Regra de quantidade da variante (`quantity_rule.max`), quando existir.
+
+  Vale o menor dos dois.
+{% endcomment %}
+
+{%- liquid
+  assign has_stock_cap = false
+  assign stock_cap = 0
+
+  if item.variant.inventory_management != blank and item.variant.inventory_policy == 'deny'
+    assign has_stock_cap = true
+    assign variant_total = cart | item_count_for_variant: item.variant.id
+    assign other_lines_quantity = variant_total | minus: item.quantity
+    assign stock_cap = item.variant.inventory_quantity | minus: other_lines_quantity
+
+    if stock_cap < 0
+      assign stock_cap = 0
+    endif
+  endif
+
+  assign has_rule_cap = false
+  assign rule_cap = 0
+
+  if item.variant.quantity_rule.max != null
+    assign has_rule_cap = true
+    assign rule_cap = item.variant.quantity_rule.max
+  endif
+
+  if has_stock_cap and has_rule_cap
+    if rule_cap < stock_cap
+      echo rule_cap
+    else
+      echo stock_cap
+    endif
+  elsif has_stock_cap
+    echo stock_cap
+  elsif has_rule_cap
+    echo rule_cap
+  endif
+-%}

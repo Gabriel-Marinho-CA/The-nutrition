@@ -26,7 +26,19 @@ if (!customElements.get('quantity-input')) {
     }
 
     onInputChange(event) {
+      this.clampToMax();
       this.validateQtyRules();
+    }
+
+    // stepUp() já respeita o atributo max; digitação direta, não.
+    clampToMax() {
+      if (!this.input.max) return;
+
+      const max = parseInt(this.input.max, 10);
+      const value = parseInt(this.input.value, 10);
+      if (Number.isNaN(max) || Number.isNaN(value) || value <= max) return;
+
+      this.input.value = max;
     }
 
     onButtonClick(event) {

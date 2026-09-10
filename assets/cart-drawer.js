@@ -222,19 +222,28 @@ async function bxgySync(cartItems) {
     if (expected === current) continue;
 
     try {
+      let response;
       if (bonusItem) {
         // /cart/change.js exige a key do item (variantId:hash)
-        await fetch('/cart/change.js', {
+        response = await fetch('/cart/change.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: bonusItem.key, quantity: expected }),
         });
       } else if (expected > 0) {
-        await fetch('/cart/add.js', {
+        response = await fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: [{ id: group.bonus, quantity: expected }] }),
         });
+      }
+
+      // fetch não rejeita em 422 (brinde sem estoque, por exemplo) — sem esta
+      // checagem o drawer era recarregado à toa a cada evento de carrinho.
+      if (!response) continue;
+      if (!response.ok) {
+        console.warn('[bxgy] Ajuste do brinde recusado:', await response.text());
+        continue;
       }
       changed = true;
     } catch (e) {
@@ -307,20 +316,27 @@ async function giftTierSync(cartItems) {
     if (current === wanted) continue;
 
     try {
+      let response;
       if (line) {
-        await fetch('/cart/change.js', {
+        response = await fetch('/cart/change.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: line.key, quantity: wanted }),
         });
       } else {
-        await fetch('/cart/add.js', {
+        response = await fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           // _brinde marca a linha para o drawer renderizar como brinde mesmo que
           // o título do produto não contenha "brinde".
           body: JSON.stringify({ items: [{ id: variantId, quantity: wanted, properties: { _brinde: 'true' } }] }),
         });
+      }
+
+      // Idem bxgySync: um 422 (brinde esgotado) não pode contar como alteração.
+      if (!response.ok) {
+        console.warn('[brindes] Ajuste do brinde de nível recusado:', await response.text());
+        continue;
       }
       changed = true;
     } catch (e) {

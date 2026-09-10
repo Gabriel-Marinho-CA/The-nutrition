@@ -32,6 +32,11 @@
  endif
 %}
 
+{%- capture item_max_quantity -%}
+  {%- render 'cart-item-max-quantity', item: item -%}
+{%- endcapture -%}
+{%- assign item_max_quantity = item_max_quantity | strip -%}
+
 <li id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="cart-item wt-cart__item{% if is_service_unavailable %} wt-cart__item--unavailable{% endif %}">
   <picture class="wt-cart__item__thumb">
     <a href="{{ item.url }}" aria-label="{{ item.title }}" tabindex="{{ tab_index }}" class="wt-cart__item__link">
@@ -198,13 +203,14 @@
             <input
               class="js-counter-quantity"
               data-quantity-variant-id="{{ item.variant.id }}"
+              data-key="{{ item.key }}"
               name="updates[]"
               value="{{ item.quantity }}"
               {% # theme-check-disable %}
               data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}"
               min="{{ item.variant.quantity_rule.min }}"
-              {% if item.variant.quantity_rule.max != null %}
-                max="{{ item.variant.quantity_rule.max }}"
+              {% if item_max_quantity != blank %}
+                max="{{ item_max_quantity }}"
               {% endif %}
               step="{{ item.variant.quantity_rule.increment }}"
               {% # theme-check-enable %}
