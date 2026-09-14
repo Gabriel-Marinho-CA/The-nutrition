@@ -120,19 +120,8 @@
           "gift_tier_ibbpHN": {
             "type": "gift_tier",
             "settings": {
-              "minimum_amount": 299,
-              "gift_products": [
-                "chaveiro-porta-whey-branco-50ml"
-              ]
-            }
-          },
-          "gift_tier_mbTzwE": {
-            "type": "gift_tier",
-            "settings": {
-              "minimum_amount": 499,
-              "gift_products": [
-                "par-de-meia-n-38-ao-42"
-              ]
+              "minimum_amount": 450,
+              "gift_products": []
             }
           },
           "gift_tier_Gijqcz": {
@@ -144,23 +133,18 @@
               ]
             }
           },
-          "gift_tier_JXcbp8": {
+          "gift_tier_PGbAUY": {
             "type": "gift_tier",
             "settings": {
-              "minimum_amount": 1000,
-              "gift_products": [
-                "chaveiro-porta-whey-branco-50ml",
-                "garrafa-termica-com-alca-the-nutrition-preta-600ml",
-                "par-de-meia-n-38-ao-42"
-              ]
+              "minimum_amount": 299,
+              "gift_products": []
             }
           }
         },
         "block_order": [
           "gift_tier_ibbpHN",
-          "gift_tier_mbTzwE",
           "gift_tier_Gijqcz",
-          "gift_tier_JXcbp8"
+          "gift_tier_PGbAUY"
         ],
         "settings": {
           "gift_mode": "highest"
