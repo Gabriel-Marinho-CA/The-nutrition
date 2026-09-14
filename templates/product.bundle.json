@@ -396,6 +396,7 @@
     },
     "image_banner_Pry67e": {
       "type": "image-banner",
+      "disabled": true,
       "name": "Banner Brinde",
       "settings": {
         "advanced_heading": false,
