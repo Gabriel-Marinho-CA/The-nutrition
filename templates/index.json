@@ -372,6 +372,7 @@
     },
     "image_banner_GEqLqx": {
       "type": "image-banner",
+      "disabled": true,
       "name": "Banner Brinde",
       "settings": {
         "advanced_heading": false,
