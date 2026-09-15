@@ -12,46 +12,6 @@
     "slideshow_aNJYHw": {
       "type": "slideshow",
       "blocks": {
-        "slide_GX3Uet": {
-          "type": "slide",
-          "settings": {
-            "subheading": "NOVO!",
-            "subheading_disable_on_mobile": false,
-            "subheading_advanced_settings": true,
-            "subheading_text_style": "body",
-            "text_uppercase": true,
-            "letter_spacing": 1,
-            "size_text_desktop": 100,
-            "size_text_mobile": 100,
-            "heading": "Primeira Coleção Feminina da The Nutrition",
-            "heading_disable_on_mobile": false,
-            "size_heading": 100,
-            "size_heading_mobile": 100,
-            "text": "",
-            "text_disable_on_mobile": false,
-            "text_style": "body",
-            "button_select": "link",
-            "button_label": "Conheça as peças exclusivas",
-            "button_disable_on_mobile": false,
-            "button_link": "shopify://collections/activewear",
-            "second_button_select": "primary",
-            "second_button_label": "",
-            "button_disable_on_mobile_second": false,
-            "second_button_link": "",
-            "color-body-text": "{{ settings.colors.background }}",
-            "color-overlay": "",
-            "color-overlay-opacity": 0,
-            "desktop_image": "shopify://shop_images/Desktop_Lancamento_v1_bf8d5456-c0fe-46cd-8669-7e3c3b072cb7.jpg",
-            "desktop_text_vertical_position": "center",
-            "desktop_text_horizontal_position": "left",
-            "container_max_width": 320,
-            "mobile_image": "shopify://shop_images/Mobile_Lancamento.jpg",
-            "mobile_text_vertical_position": "bottom",
-            "mobile_text_horizontal_position": "center",
-            "out-background-color": "",
-            "out-text-color": ""
-          }
-        },
         "slide_4GbpB9": {
           "type": "slide",
           "settings": {
@@ -132,6 +92,46 @@
             "out-text-color": ""
           }
         },
+        "slide_GX3Uet": {
+          "type": "slide",
+          "settings": {
+            "subheading": "NOVO!",
+            "subheading_disable_on_mobile": false,
+            "subheading_advanced_settings": true,
+            "subheading_text_style": "body",
+            "text_uppercase": true,
+            "letter_spacing": 1,
+            "size_text_desktop": 100,
+            "size_text_mobile": 100,
+            "heading": "Primeira Coleção Feminina da The Nutrition",
+            "heading_disable_on_mobile": false,
+            "size_heading": 100,
+            "size_heading_mobile": 100,
+            "text": "",
+            "text_disable_on_mobile": false,
+            "text_style": "body",
+            "button_select": "link",
+            "button_label": "Conheça as peças exclusivas",
+            "button_disable_on_mobile": false,
+            "button_link": "shopify://collections/activewear",
+            "second_button_select": "primary",
+            "second_button_label": "",
+            "button_disable_on_mobile_second": false,
+            "second_button_link": "",
+            "color-body-text": "{{ settings.colors.background }}",
+            "color-overlay": "",
+            "color-overlay-opacity": 0,
+            "desktop_image": "shopify://shop_images/Desktop_Lancamento_v1_bf8d5456-c0fe-46cd-8669-7e3c3b072cb7.jpg",
+            "desktop_text_vertical_position": "center",
+            "desktop_text_horizontal_position": "left",
+            "container_max_width": 320,
+            "mobile_image": "shopify://shop_images/Mobile_Lancamento.jpg",
+            "mobile_text_vertical_position": "bottom",
+            "mobile_text_horizontal_position": "center",
+            "out-background-color": "",
+            "out-text-color": ""
+          }
+        },
         "slide_YrMx4j": {
           "type": "slide",
           "disabled": true,
@@ -175,9 +175,9 @@
         }
       },
       "block_order": [
-        "slide_GX3Uet",
         "slide_4GbpB9",
         "slide_A9RWJY",
+        "slide_GX3Uet",
         "slide_YrMx4j"
       ],
       "custom_css": [
