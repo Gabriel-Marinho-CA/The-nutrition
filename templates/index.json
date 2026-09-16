@@ -12,6 +12,46 @@
     "slideshow_aNJYHw": {
       "type": "slideshow",
       "blocks": {
+        "slide_DDzTNV": {
+          "type": "slide",
+          "settings": {
+            "subheading": "MÊS DO CLIENTE",
+            "subheading_disable_on_mobile": false,
+            "subheading_advanced_settings": true,
+            "subheading_text_style": "subtitle",
+            "text_uppercase": true,
+            "letter_spacing": 1,
+            "size_text_desktop": 110,
+            "size_text_mobile": 100,
+            "heading": "Conheça uma nova escolha para sua rotina.",
+            "heading_disable_on_mobile": false,
+            "size_heading": 90,
+            "size_heading_mobile": 90,
+            "text": "<p>Em setembro, nas compras a partir de R$ 450, você recebe 2 sachês de Colágeno Proteico.</p>",
+            "text_disable_on_mobile": false,
+            "text_style": "body",
+            "button_select": "link",
+            "button_label": "Conheça a The Nutrition",
+            "button_disable_on_mobile": false,
+            "button_link": "shopify://collections/all",
+            "second_button_select": "primary",
+            "second_button_label": "",
+            "button_disable_on_mobile_second": false,
+            "second_button_link": "",
+            "color-body-text": "{{ settings.colors.background }}",
+            "color-overlay": "",
+            "color-overlay-opacity": 0,
+            "desktop_image": "shopify://shop_images/Desktop_mes_do_cliente.jpg",
+            "desktop_text_vertical_position": "top",
+            "desktop_text_horizontal_position": "center",
+            "container_max_width": 1600,
+            "mobile_image": "shopify://shop_images/Mobile_mes_do_cliente.png",
+            "mobile_text_vertical_position": "bottom",
+            "mobile_text_horizontal_position": "center",
+            "out-background-color": "",
+            "out-text-color": ""
+          }
+        },
         "slide_4GbpB9": {
           "type": "slide",
           "settings": {
@@ -175,6 +215,7 @@
         }
       },
       "block_order": [
+        "slide_DDzTNV",
         "slide_4GbpB9",
         "slide_A9RWJY",
         "slide_GX3Uet",
@@ -192,7 +233,7 @@
         "auto-rotate": true,
         "cursor_navigation": false,
         "cursor_size": 44,
-        "slide_height": "fixed_height",
+        "slide_height": "adapt_to_first_image",
         "desktop_fixed_height": 400,
         "mobile_fixed_height": 400,
         "heading_color": "",
