@@ -42,7 +42,7 @@
             "color-overlay": "",
             "color-overlay-opacity": 0,
             "desktop_image": "shopify://shop_images/Desktop_mes_do_cliente.jpg",
-            "desktop_text_vertical_position": "top",
+            "desktop_text_vertical_position": "center",
             "desktop_text_horizontal_position": "left",
             "container_max_width": 360,
             "mobile_image": "shopify://shop_images/Mobile_mes_do_cliente.png",
