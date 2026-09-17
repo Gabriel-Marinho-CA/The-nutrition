@@ -125,28 +125,10 @@
                 "2-saches-de-colageno-proteico-the-nutrition"
               ]
             }
-          },
-          "gift_tier_Gijqcz": {
-            "type": "gift_tier",
-            "settings": {
-              "minimum_amount": 799,
-              "gift_products": [
-                "garrafa-termica-com-alca-the-nutrition-preta-600ml"
-              ]
-            }
-          },
-          "gift_tier_PGbAUY": {
-            "type": "gift_tier",
-            "settings": {
-              "minimum_amount": 299,
-              "gift_products": []
-            }
           }
         },
         "block_order": [
-          "gift_tier_ibbpHN",
-          "gift_tier_Gijqcz",
-          "gift_tier_PGbAUY"
+          "gift_tier_ibbpHN"
         ],
         "settings": {
           "gift_mode": "highest"
