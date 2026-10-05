@@ -14,6 +14,7 @@
       "blocks": {
         "slide_4GbpB9": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "subheading": "IT'S ABOUT HEALTH",
             "subheading_disable_on_mobile": false,
@@ -94,6 +95,7 @@
         },
         "slide_GX3Uet": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "subheading": "NOVO!",
             "subheading_disable_on_mobile": false,
