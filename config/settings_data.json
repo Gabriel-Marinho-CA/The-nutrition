@@ -116,20 +116,6 @@
     "sections": {
       "cart-drawer": {
         "type": "cart-drawer",
-        "blocks": {
-          "gift_tier_ibbpHN": {
-            "type": "gift_tier",
-            "settings": {
-              "minimum_amount": 450,
-              "gift_products": [
-                "2-saches-de-colageno-proteico-the-nutrition"
-              ]
-            }
-          }
-        },
-        "block_order": [
-          "gift_tier_ibbpHN"
-        ],
         "settings": {
           "gift_mode": "highest"
         }
